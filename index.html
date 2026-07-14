@@ -200,6 +200,9 @@
     .footer-grid{grid-template-columns:repeat(3,1fr)}
     .timeline-strip{padding-left:36px}
     .timeline-item{gap:16px}.timeline-item .time-badge{min-width:50px;font-size:16px}
+    .flow-strip{flex-direction:column;align-items:center!important}
+    .flow-strip>div:not(.flow-card){display:none!important}
+    .flow-strip .flow-card{width:100%;max-width:400px!important}
   }
   @media(max-width:600px){
     .nav-links a:not(.nav-cta){display:none}
@@ -217,6 +220,7 @@
   <ul class="nav-links">
     <li><a href="#crew">The crew</a></li>
     <li><a href="#services">Superpowers</a></li>
+    <li><a href="#close-onboard">Close &amp; onboard</a></li>
     <li><a href="#tiers">Pricing</a></li>
     <li><a href="#hero" class="nav-cta">Start free — forever</a></li>
   </ul>
@@ -269,8 +273,8 @@
   <!-- SERVICES -->
   <section id="services">
     <div class="section-inner text-center">
-      <p class="eyebrow reveal">Powers at your disposal</p>
-      <h2 class="headline-md reveal">Six superpowers. <span class="em">zero extra hires.</span></h2>
+      <p class="eyebrow reveal">Seven superpowers</p>
+      <h2 class="headline-md reveal">Seven superpowers. <span class="em">zero extra hires.</span></h2>
       <div class="service-grid">
         <div class="service-card reveal">
           <div class="s-icon">📞</div>
@@ -302,8 +306,61 @@
           <h4>Know your numbers cold.</h4>
           <p>which jobs make money. which ones bleed it. cash flow, margins, and what is coming next month — in plain english, not spreadsheet hieroglyphics.</p>
         </div>
+        <div class="service-card reveal d2">
+          <div class="s-icon">🤝</div>
+          <h4>Close deals without the chase.</h4>
+          <p>from verbal handshake to signed agreement, deposit paid, and job scheduled — without a single "just following up" email. DocuSign does the signing. we handle everything around it.</p>
+        </div>
       </div>
-      <a href="#" class="btn-comic reveal" style="margin-top:40px">Unlock all six — start free</a>
+      <a href="#" class="btn-comic reveal" style="margin-top:40px">Unlock all seven — start free</a>
+    </div>
+  </section>
+
+  <!-- CLOSE & ONBOARD -->
+  <section id="close-onboard">
+    <div class="section-inner text-center">
+      <p class="eyebrow reveal">From yes to signed</p>
+      <h2 class="headline-md reveal">From conversation to <span class="em">signed customer.</span></h2>
+      <p class="body-text reveal" style="margin:16px auto 48px;text-align:center">Most contractors lose momentum between "sounds good" and "where do I sign." Tiberius closes that gap — preparing your approved agreements, sending them through DocuSign, and tracking every signature until the work is ready to begin.</p>
+
+      <!-- 5-STEP FLOW -->
+      <div class="flow-strip reveal" style="display:flex;align-items:flex-start;justify-content:center;gap:12px;flex-wrap:wrap;max-width:1100px;margin:0 auto">
+        <div class="flow-card" style="flex:1;min-width:170px;max-width:200px;background:var(--white);border:2.5px solid var(--gray-900);border-radius:var(--radius);box-shadow:var(--shadow-comic-sm);padding:22px 16px;text-align:center;position:relative">
+          <div style="font-size:32px;margin-bottom:10px">💬</div>
+          <h4 style="font-family:var(--font-display);font-size:18px;letter-spacing:.5px;margin-bottom:6px">Customer says yes.</h4>
+          <p style="font-size:13px;color:var(--gray-500);line-height:1.5">Prospect agrees to move forward — in person, on the phone, or in chat.</p>
+        </div>
+        <div style="display:flex;align-items:center;font-size:24px;color:var(--gray-400);padding-top:30px;flex-shrink:0">→</div>
+        <div class="flow-card" style="flex:1;min-width:170px;max-width:200px;background:var(--white);border:2.5px solid var(--gray-900);border-radius:var(--radius);box-shadow:var(--shadow-comic-sm);padding:22px 16px;text-align:center">
+          <div style="font-size:32px;margin-bottom:10px">📄</div>
+          <h4 style="font-family:var(--font-display);font-size:18px;letter-spacing:.5px;margin-bottom:6px">Alfred prepares it.</h4>
+          <p style="font-size:13px;color:var(--gray-500);line-height:1.5">Selects the right template, fills in the details, presents it for your review.</p>
+        </div>
+        <div style="display:flex;align-items:center;font-size:24px;color:var(--gray-400);padding-top:30px;flex-shrink:0">→</div>
+        <div class="flow-card" style="flex:1;min-width:170px;max-width:200px;background:var(--white);border:2.5px solid var(--gray-900);border-radius:var(--radius);box-shadow:var(--shadow-comic-sm);padding:22px 16px;text-align:center">
+          <div style="font-size:32px;margin-bottom:10px">✍️</div>
+          <h4 style="font-family:var(--font-display);font-size:18px;letter-spacing:.5px;margin-bottom:6px">DocuSign delivers.</h4>
+          <p style="font-size:13px;color:var(--gray-500);line-height:1.5">The agreement goes out through your DocuSign — the same system your attorney uses.</p>
+        </div>
+        <div style="display:flex;align-items:center;font-size:24px;color:var(--gray-400);padding-top:30px;flex-shrink:0">→</div>
+        <div class="flow-card" style="flex:1;min-width:170px;max-width:200px;background:var(--white);border:2.5px solid var(--gray-900);border-radius:var(--radius);box-shadow:var(--shadow-comic-sm);padding:22px 16px;text-align:center">
+          <div style="font-size:32px;margin-bottom:10px">👁️</div>
+          <h4 style="font-family:var(--font-display);font-size:18px;letter-spacing:.5px;margin-bottom:6px">Ariadne tracks it.</h4>
+          <p style="font-size:13px;color:var(--gray-500);line-height:1.5">Opened? Signed? Declined? Ariadne monitors every status and follows up.</p>
+        </div>
+        <div style="display:flex;align-items:center;font-size:24px;color:var(--gray-400);padding-top:30px;flex-shrink:0">→</div>
+        <div class="flow-card" style="flex:1;min-width:170px;max-width:200px;background:var(--white);border:2.5px solid var(--gray-900);border-radius:var(--radius);box-shadow:var(--shadow-comic-sm);padding:22px 16px;text-align:center">
+          <div style="font-size:32px;margin-bottom:10px">🚀</div>
+          <h4 style="font-family:var(--font-display);font-size:18px;letter-spacing:.5px;margin-bottom:6px">Work begins.</h4>
+          <p style="font-size:13px;color:var(--gray-500);line-height:1.5">Deposit requested. Job scheduled. Crew notified. Onboarding started — automatically.</p>
+        </div>
+      </div>
+
+      <!-- DIFFERENTIATOR CARD -->
+      <div class="reveal d1" style="margin-top:48px;background:#FFFDF5;border:3px solid var(--amber-400);border-radius:var(--radius);box-shadow:var(--shadow-comic);padding:32px 24px;max-width:700px;margin-left:auto;margin-right:auto">
+        <p style="font-family:var(--font-display);font-size:28px;letter-spacing:.5px;color:var(--gray-900);margin-bottom:8px">Tiberius doesn&apos;t just answer customers. It moves the work forward.</p>
+        <p style="font-size:15px;color:var(--gray-700);font-style:italic">Other agents talk about the work. Tiberius advances it.</p>
+      </div>
     </div>
   </section>
 
