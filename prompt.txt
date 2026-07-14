@@ -1,0 +1,49 @@
+Rebuild /opt/data/work/tiberius-ai-codex/index.html from scratch. Complete rewrite of the tiberius.ai single-page landing site.
+
+BRAND: Tiberius AI - AI operations for the trades. Solo AI agent named Alfred. No crew.
+
+DESIGN: Bebas Neue headlines, Inter body. White bg, blue #2563EB primary, amber #F59E0B accents, emerald #10B981 emphasis. Comic-book buttons (5px 5px 0 #111827 shadow, 2.5px solid border, 12px radius). Sentence case headlines with emerald emphasis phrases. H1: clamp(46px, 8vw, 88px). Fixed nav with blur backdrop. Scroll reveal animations. Responsive at 900px and 600px breakpoints.
+
+SECTIONS (in order):
+
+1. NAV: How Alfred Works | Capabilities | DocuSign Workflow | Pricing | CTA: Start free
+
+2. HERO: Eyebrow "AI OPERATIONS FOR THE TRADES". Headline "From missed call to signed job without the second shift." Body about Alfred answering leads, gathering details, preparing quotes, sending DocuSign agreements, scheduling, keeping invoices moving. Demo chat bubble: "Alfred, follow up with the Henderson quote. If they sign, request the deposit and schedule the job." with checkmarks below. Tagline "Other AI agents talk about the work. Alfred advances it." CTA: Put Alfred to Work + See How It Works.
+
+3. PROBLEM: "You did not start a business to become the office staff." About the second shift - missed calls, unsent quotes, scheduling, unpaid invoices. Alfred handles the work surrounding the work.
+
+4. THREE PILLARS (3 cards): Capture the opportunity (answer calls, qualify, collect details, flag urgent, book, summarize). Close the job (follow up estimates, draft quotes, prepare agreements, DocuSign send, track signatures, request deposits). Keep the money moving (track invoices, friendly reminders, escalate tone, alert when needed, summarize payments).
+
+5. VOICE COMMANDS: "Tell Alfred what needs to happen." 5 example commands as styled quotes. Tagline about Alfred preparing work and asking for approval.
+
+6. DOCUSIGN 6-STEP FLOW: "From sounds good to signed and scheduled." Horizontal flow: Customer ready -> Alfred prepares -> You review -> DocuSign delivers -> Alfred watches -> Job moves forward. Differentiator: "Tiberius does not just answer customers. It advances the work."
+
+7. CONTROL: "Your business still runs your way." 7 checkmark items about what you control (services, prices, auto-send, approval gates, handoff, system access, usage limits).
+
+8. DAY IN THE LIFE TIMELINE: 6 entries from 7am morning brief through 6pm end-of-day summary. Each entry has time, title, description, and what Alfred did.
+
+9. BUILD MODE (Legend): "Need something built? Ask Alfred." Example commands. Flow: conversation -> shape idea -> present plan with scope/cost/credits -> approve -> build -> preview -> revisions. Key point: Alfred does not begin paid work until you approve.
+
+10. ADVANCED WORK: Build Credits system. No silent overages. Monthly allowance included. Overages require approval.
+
+11. SYSTEMS: "One conversation up front. Powerful systems behind it." List of connected tools. "Talk to Alfred. Alfred coordinates the rest."
+
+12. START SMALL: 7 items you can start with. "Trust is earned one completed task at a time."
+
+13. GETTING STARTED (4 steps numbered): Tell Alfred about business, Connect what you use, Review how Alfred operates, Put Alfred to work.
+
+14. PRICING (3 tiers):
+- Sidekick $0/month free forever: Alfred chat, advice, limited drafting, basic templates, identify missed opportunities, small usage allowance, no connected actions, no credit card. Button: Meet Alfred Free
+- Hero $249/month (MOST POPULAR badge): Alfred as operations agent, calls/messages, lead qualification, appointment booking, quote prep, DocuSign workflows, deposit/invoice reminders, daily summaries, approval controls, guided onboarding, monthly operational usage. Button: Put Alfred to Work
+- Legend $349/month: Everything in Hero plus Build Mode, website/landing pages, ad creative, offer development, business research, advanced workflows, higher allowance, Build Credits, private previews, multi-user, custom reporting, priority support. Button: Unlock Build Mode
+Guarantee: No long-term contract. Additional usage never charged without approval.
+
+15. FAQ: 12 Q&As using details/summary elements. Topics: chatbot distinction, approval requirements, pricing control, DocuSign account needed, Build Credits explained, no surprise charges, website included with Legend, no code required, existing website compatibility, existing system compatibility, uncertainty handling, data separation.
+
+16. FINAL CTA: "The phone is ringing. The quote is waiting. The invoice is aging." Meet Alfred copy. Buttons: Put Alfred to Work + Talk to a Human First. Start free. No credit card.
+
+17. FOOTER: TIBERIUS.AI with 4 columns (Product, Trades, Company, Support). Copyright 2026. "Built for the people who build, repair, and keep everything else running."
+
+TECHNICAL: Single HTML file. All CSS inline in style tag. Reuse design system from existing index.html. Mobile responsive. Scroll reveal animations. FAQ as details/summary. Section backgrounds alternate white/light-gray. Write COMPLETE file - every section fully written, no placeholders, no truncation.
+
+Read the existing /opt/data/work/tiberius-ai-codex/index.html first to extract the EXACT CSS design system (color vars, button styles, reveal animations, responsive breakpoints, nav, footer styles), then rebuild with new content while keeping those styles intact.
