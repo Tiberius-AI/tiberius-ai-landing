@@ -1,7 +1,7 @@
 {
   "artifact_file_count_excluding_manifest": 69,
-  "artifact_tree_sha256_excluding_manifest": "bb0cbc46841f1fd6b367690aab7acbc2080599df698e1d1f3421e7e2d41d80be",
-  "build_command": "npm ci && npm run lint && npm run build",
+  "artifact_tree_sha256_excluding_manifest": "007ce1364d6c23531f62357b82fcf1831787b6a3b1d773d2914d3d91afbc7dd2",
+  "build_command": "npm ci && node scripts/orb-variation-contract.test.cjs && node scripts/orb-contract.test.cjs && npm run lint && npm run build",
   "build_configuration": {
     "assetPrefix": "/alfred",
     "basePath": "/alfred",
@@ -21,7 +21,7 @@
     "file": "index.html"
   },
   "source_branch": "deploy/alfred-path-source",
-  "source_commit": "9ab6fbafa79721950ff7386f6423f0371ad4d8b0",
+  "source_commit": "6d0cacde9d457bfea9e753e46e600e0cadf19e39",
   "source_repository": "https://github.com/Tiberius-AI/tiberius",
   "toolchain": {
     "next": "16.3.0",
