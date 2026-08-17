@@ -1,7 +1,8 @@
 {
-  "artifact_file_count_excluding_manifest": 69,
-  "artifact_tree_sha256_excluding_manifest": "007ce1364d6c23531f62357b82fcf1831787b6a3b1d773d2914d3d91afbc7dd2",
-  "build_command": "npm ci && node scripts/orb-variation-contract.test.cjs && node scripts/orb-contract.test.cjs && npm run lint && npm run build",
+  "artifact_file_count_excluding_manifest": 93,
+  "artifact_tree_digest_recipe": "sha256(sorted(relative_posix_path + NUL + sha256(file_bytes).digest()))",
+  "artifact_tree_sha256_excluding_manifest": "95efc00e219694eac3cb15ed61d5a63cd63b6e3d518f60d42f2b3f418be62601",
+  "build_command": "npm ci && access/microphone/orb/orb-variation/orientation contracts && npm run lint && npm run build",
   "build_configuration": {
     "assetPrefix": "/alfred",
     "basePath": "/alfred",
@@ -20,8 +21,8 @@
     "description": "Replaced Next redirect error document with a static redirect to /alfred/login/.",
     "file": "index.html"
   },
-  "source_branch": "deploy/alfred-path-source",
-  "source_commit": "6d0cacde9d457bfea9e753e46e600e0cadf19e39",
+  "source_branch": "deploy/controlled-access-source-t_e0c3c5e3",
+  "source_commit": "d1aa5d3150f95c022499fdd712208c37e702532e",
   "source_repository": "https://github.com/Tiberius-AI/tiberius",
   "toolchain": {
     "next": "16.3.0",
