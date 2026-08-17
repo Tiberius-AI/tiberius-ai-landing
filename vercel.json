@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/alfred-router/:path*",
+      "destination": "/api/alfred-router?path=:path*"
+    }
+  ]
+}
