@@ -1,8 +1,8 @@
 {
   "artifact_file_count_excluding_manifest": 93,
   "artifact_tree_digest_recipe": "sha256(sorted(relative_posix_path + NUL + sha256(file_bytes).digest()))",
-  "artifact_tree_sha256_excluding_manifest": "cd135175c77e93ccbc16a5da9819ae72eb05cc97a1e4bcd587b0186cecab1f5f",
-  "build_command": "npm ci && access/microphone/orb/orb-variation/orientation contracts && npm run lint && npm run build",
+  "artifact_tree_sha256_excluding_manifest": "03510aa628fb16709f9d52865f94a4bb8789b5a7cea64ea7c1456ecf73257d39",
+  "build_command": "npm ci && focused/full tests and contracts && npm run lint && npm run build",
   "build_configuration": {
     "assetPrefix": "/alfred",
     "basePath": "/alfred",
@@ -18,12 +18,12 @@
   "dashboard_path": "apps/dashboard",
   "package_lock_sha256": "5bc8b877686716af7faebba32c2bd5516ef5144d61529f193bc71670e0b585d8",
   "post_build_transform": {
-    "description": "Replaced Next redirect error document with a static redirect to /alfred/login/.",
+    "description": "Preserved reviewed static redirect to /alfred/login/.",
     "file": "index.html"
   },
   "public_api_router_url": "/api/alfred-router",
-  "source_branch": "fix/public-api-proxy-t_cfeaf9ac",
-  "source_commit": "fb3b1432f9b87148171de66d36b253b0ebb97163",
+  "source_branch": "solo/controlled-access-repairs",
+  "source_commit": "df0aaffda30c18f15f7344f90c06e2412765e03b",
   "source_repository": "https://github.com/Tiberius-AI/tiberius",
   "toolchain": {
     "next": "16.3.0",
