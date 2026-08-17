@@ -3,7 +3,7 @@ const path = require("node:path");
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
-const { getPath, isAllowedRoute, selectRequestHeaders } = require("../api/alfred-router.js");
+const { getPath, isAllowedRoute, selectRequestHeaders, proxyErrorCode } = require("../api/alfred-router.js");
 
 const vercel = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "vercel.json"), "utf8"));
 test("routes every same-origin proxy subpath to the single Vercel function", () => {
@@ -84,4 +84,10 @@ test("rejects malformed Vercel client identity rather than forwarding spoofed va
     "server-edge-key",
   );
   assert.equal(selected["x-tiberius-client-ip"], undefined);
+});
+
+test("reports only a bounded transport code for proxy diagnostics", () => {
+  assert.equal(proxyErrorCode({ cause: { code: "UND_ERR_CONNECT_TIMEOUT" } }), "UND_ERR_CONNECT_TIMEOUT");
+  assert.equal(proxyErrorCode({ cause: { code: "secret=value with spaces" } }), "unknown");
+  assert.equal(proxyErrorCode(new Error("contains sensitive request data")), "unknown");
 });

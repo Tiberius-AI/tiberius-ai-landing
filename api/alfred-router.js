@@ -84,6 +84,11 @@ async function readBoundedBody(req, maxBytes = 6 * 1024 * 1024) {
   return Buffer.concat(chunks);
 }
 
+function proxyErrorCode(error) {
+  const code = error && error.cause && error.cause.code;
+  return typeof code === "string" && /^[A-Z0-9_]{1,64}$/.test(code) ? code : "unknown";
+}
+
 async function handler(req, res) {
   const path = getPath(req);
   if (!isAllowedRoute(req.method, path)) {
@@ -113,7 +118,7 @@ async function handler(req, res) {
     if (error && error.statusCode === 413) {
       return res.status(413).json({ detail: "Request body too large" });
     }
-    console.error("Alfred router proxy failed", error instanceof Error ? error.message : "unknown error");
+    console.error("Alfred router proxy failed", proxyErrorCode(error));
     return res.status(502).json({ detail: "Service unavailable" });
   }
 }
@@ -122,5 +127,6 @@ module.exports = handler;
 module.exports.getPath = getPath;
 module.exports.isAllowedRoute = isAllowedRoute;
 module.exports.selectRequestHeaders = selectRequestHeaders;
+module.exports.proxyErrorCode = proxyErrorCode;
 module.exports.readBoundedBody = readBoundedBody;
 module.exports.config = { api: { bodyParser: false } };
