@@ -1,3 +1,4 @@
+const { isIP } = require("node:net");
 const { URL, URLSearchParams } = require("node:url");
 
 const UUID = "[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}";
@@ -31,6 +32,10 @@ function selectRequestHeaders(headers, edgeKey) {
     if (typeof value === "string" && value.length > 0) selected[name] = value;
   }
   selected["x-tiberius-edge-key"] = edgeKey;
+  const forwarded = typeof headers["x-forwarded-for"] === "string"
+    ? headers["x-forwarded-for"].split(",", 1)[0].trim()
+    : "";
+  if (isIP(forwarded)) selected["x-tiberius-client-ip"] = forwarded;
   return selected;
 }
 

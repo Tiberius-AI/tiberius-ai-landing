@@ -61,6 +61,8 @@ test("forwards only bounded browser headers and injects the server-only edge key
       host: "attacker.example",
       "x-tiberius-edge-key": "browser-spoof",
       "x-forwarded-host": "attacker.example",
+      "x-forwarded-for": "198.51.100.24",
+      "x-tiberius-client-ip": "192.0.2.77",
     },
     "server-edge-key",
   );
@@ -69,5 +71,17 @@ test("forwards only bounded browser headers and injects the server-only edge key
     "content-type": "application/json",
     accept: "application/json",
     "x-tiberius-edge-key": "server-edge-key",
+    "x-tiberius-client-ip": "198.51.100.24",
   });
+});
+
+test("rejects malformed Vercel client identity rather than forwarding spoofed values", () => {
+  const selected = selectRequestHeaders(
+    {
+      "x-forwarded-for": "not-an-ip",
+      "x-tiberius-client-ip": "192.0.2.77",
+    },
+    "server-edge-key",
+  );
+  assert.equal(selected["x-tiberius-client-ip"], undefined);
 });
