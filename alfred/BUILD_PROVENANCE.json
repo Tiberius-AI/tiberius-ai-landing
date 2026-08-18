@@ -1,8 +1,8 @@
 {
   "artifact_file_count_excluding_manifest": 93,
   "artifact_tree_digest_recipe": "sha256(sorted(relative_posix_path + NUL + sha256(file_bytes).digest()))",
-  "artifact_tree_sha256_excluding_manifest": "bce4ccb5bc10069ddf4df3541715585d43b6250a6d204bfbf8f155af40b5afc7",
-  "build_command": "npm ci && npm run lint && npm run build",
+  "artifact_tree_sha256_excluding_manifest": "e6ab55242f73af8802178267ab968cf0410b9c242f4e77d022ec911199a77cb0",
+  "build_command": "npm ci && dashboard contracts including container export contract && npm run lint && npm run build",
   "build_configuration": {
     "assetPrefix": "/alfred",
     "basePath": "/alfred",
@@ -23,7 +23,7 @@
   },
   "public_api_router_url": "/api/alfred-router",
   "source_branch": "integration/alfred-first-login-production",
-  "source_commit": "011919666788b32025359f0f2fee90b577091408",
+  "source_commit": "93f6cddb2f5845a5802edec4dec5b20b4bf051a5",
   "source_repository": "https://github.com/Tiberius-AI/tiberius",
   "toolchain": {
     "next": "16.3.0",
