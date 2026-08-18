@@ -6,12 +6,19 @@ const assert = require("node:assert/strict");
 const { getPath, isAllowedRoute, selectRequestHeaders, proxyErrorCode } = require("../api/alfred-router.js");
 
 const vercel = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "vercel.json"), "utf8"));
+const proxySource = fs.readFileSync(path.join(__dirname, "..", "api", "alfred-router.js"), "utf8");
 test("routes every same-origin proxy subpath to the single Vercel function", () => {
   assert.deepEqual(vercel.rewrites, [
     { source: "/api/alfred-router/:path*", destination: "/api/alfred-router?path=:path*" },
   ]);
   assert.equal(getPath({ query: { path: "api/access/requests" } }), "/api/access/requests");
   assert.equal(getPath({ query: { path: ["api", "me"] } }), "/api/me");
+});
+
+test("allows long reasoning-model requests to finish through the production proxy", () => {
+  const timeout = Number(proxySource.match(/AbortSignal\.timeout\((\d+)\)/)?.[1] || 0);
+  assert.ok(timeout >= 80000, `proxy timeout too short: ${timeout}`);
+  assert.ok(vercel.functions?.["api/alfred-router.js"]?.maxDuration >= 90);
 });
 
 test("allows only the dashboard's exact public and authenticated API routes", () => {

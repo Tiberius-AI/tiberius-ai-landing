@@ -1,4 +1,9 @@
 {
+  "functions": {
+    "api/alfred-router.js": {
+      "maxDuration": 90
+    }
+  },
   "rewrites": [
     {
       "source": "/api/alfred-router/:path*",

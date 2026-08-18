@@ -107,7 +107,7 @@ async function handler(req, res) {
       headers: selectRequestHeaders(req.headers, edgeKey),
       body,
       redirect: "manual",
-      signal: AbortSignal.timeout(25000),
+      signal: AbortSignal.timeout(80000),
     });
     const payload = Buffer.from(await upstream.arrayBuffer());
     const contentType = upstream.headers.get("content-type");
