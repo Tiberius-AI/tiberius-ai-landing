@@ -1,6 +1,6 @@
 {
   "artifact_file_count_excluding_manifest": 93,
-  "artifact_tree_sha256_excluding_manifest": "421cb2142c9c4d34cbc7f234f59cbc3508119ffc7f4be30c2e319e556bf95afc",
+  "artifact_tree_sha256_excluding_manifest": "9fce73c11c01dbb6fc75710f5d5b85485556891492e31188dc14a5ec56e11415",
   "build_command": "npm ci && node scripts/native-document-draft-contract.test.cjs && npm run lint && npm run build",
   "build_configuration": {
     "assetPrefix": "/alfred",
@@ -15,7 +15,6 @@
     "NEXT_PUBLIC_API_ROUTER_URL"
   ],
   "dashboard_path": "apps/dashboard",
-  "deployment_target": "vercel-static-export",
   "package_lock_sha256": "5bc8b877686716af7faebba32c2bd5516ef5144d61529f193bc71670e0b585d8",
   "post_build_transform": {
     "description": "Replaced Next redirect error document with a static redirect to /alfred/login/.",
