@@ -1,6 +1,6 @@
 {
   "artifact_file_count_excluding_manifest": 93,
-  "artifact_tree_sha256_excluding_manifest": "6ddabfa58b257071e38416e6bc7c659b21491d43d54408020e77e0c1c32a6af7",
+  "artifact_tree_sha256_excluding_manifest": "9fce73c11c01dbb6fc75710f5d5b85485556891492e31188dc14a5ec56e11415",
   "build_command": "npm ci && node scripts/native-document-draft-contract.test.cjs && npm run lint && npm run build",
   "build_configuration": {
     "assetPrefix": "/alfred",
