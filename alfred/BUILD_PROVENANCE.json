@@ -1,6 +1,6 @@
 {
-  "artifact_file_count_excluding_manifest": 127,
-  "artifact_tree_sha256_excluding_manifest": "aa70ac2bcffafa0ca00f7163a34a63255e0fd5c063c52f3f90e11e73a48ef27b",
+  "artifact_file_count_excluding_manifest": 136,
+  "artifact_tree_sha256_excluding_manifest": "fadcf9257cd8af2e404d26cd4ff6b758111f4c73dad9b012eb5160770038ca5b",
   "build_command": "node scripts/native-document-draft-contract.test.cjs && npm run lint && npm run build",
   "build_configuration": {
     "assetPrefix": "/alfred",
@@ -22,7 +22,7 @@
     "file": "index.html"
   },
   "source_branch": "feature/alfred-hermes-canary",
-  "source_commit": "59dc8d14f2e66f2bff44a7b96168f0c985e41846",
+  "source_commit": "3fdd3df435a390875d7b47bed2471a7c986cb54b",
   "source_repository": "https://github.com/Tiberius-AI/tiberius",
   "toolchain": {
     "next": "16.3.0",
