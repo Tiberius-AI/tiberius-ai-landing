@@ -89,6 +89,19 @@ function proxyErrorCode(error) {
   return typeof code === "string" && /^[A-Z0-9_]{1,64}$/.test(code) ? code : "unknown";
 }
 
+async function fetchUpstream(url, options, attempts = 3) {
+  let lastError;
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      return await fetch(url, options);
+    } catch (error) {
+      lastError = error;
+      if (attempt < attempts) await new Promise((resolve) => setTimeout(resolve, 150 * attempt));
+    }
+  }
+  throw lastError;
+}
+
 async function handler(req, res) {
   const path = getPath(req);
   if (!isAllowedRoute(req.method, path)) {
@@ -102,7 +115,7 @@ async function handler(req, res) {
 
   try {
     const body = await readBoundedBody(req);
-    const upstream = await fetch(`${getUpstreamOrigin()}${path}${getSearch(req)}`, {
+    const upstream = await fetchUpstream(`${getUpstreamOrigin()}${path}${getSearch(req)}`, {
       method: req.method,
       headers: selectRequestHeaders(req.headers, edgeKey),
       body,
@@ -129,4 +142,5 @@ module.exports.isAllowedRoute = isAllowedRoute;
 module.exports.selectRequestHeaders = selectRequestHeaders;
 module.exports.proxyErrorCode = proxyErrorCode;
 module.exports.readBoundedBody = readBoundedBody;
+module.exports.fetchUpstream = fetchUpstream;
 module.exports.config = { api: { bodyParser: false } };

@@ -3,7 +3,7 @@ const path = require("node:path");
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
-const { getPath, isAllowedRoute, selectRequestHeaders, proxyErrorCode } = require("../api/alfred-router.js");
+const { getPath, isAllowedRoute, selectRequestHeaders, proxyErrorCode, fetchUpstream } = require("../api/alfred-router.js");
 
 const vercel = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "vercel.json"), "utf8"));
 const proxySource = fs.readFileSync(path.join(__dirname, "..", "api", "alfred-router.js"), "utf8");
@@ -97,4 +97,21 @@ test("reports only a bounded transport code for proxy diagnostics", () => {
   assert.equal(proxyErrorCode({ cause: { code: "UND_ERR_CONNECT_TIMEOUT" } }), "UND_ERR_CONNECT_TIMEOUT");
   assert.equal(proxyErrorCode({ cause: { code: "secret=value with spaces" } }), "unknown");
   assert.equal(proxyErrorCode(new Error("contains sensitive request data")), "unknown");
+});
+
+test("retries transient upstream transport failures with a strict bound", async () => {
+  let attempts = 0;
+  const originalFetch = global.fetch;
+  global.fetch = async () => {
+    attempts += 1;
+    if (attempts < 3) throw Object.assign(new Error("temporary"), { cause: { code: "ECONNRESET" } });
+    return new Response("ok", { status: 200 });
+  };
+  try {
+    const response = await fetchUpstream("https://example.test/health", {}, 3);
+    assert.equal(response.status, 200);
+    assert.equal(attempts, 3);
+  } finally {
+    global.fetch = originalFetch;
+  }
 });
