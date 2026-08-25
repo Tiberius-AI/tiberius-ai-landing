@@ -1,6 +1,6 @@
 {
-  "artifact_file_count_excluding_manifest": 98,
-  "artifact_tree_sha256_excluding_manifest": "e24c4b49ccb21336dedd06ea9cbc4a363114271ad97dec5b786e87c55245782b",
+  "artifact_file_count_excluding_manifest": 110,
+  "artifact_tree_sha256_excluding_manifest": "bf45ba865aa17c769fff88e1da48f19ca8e320c4174fa28137e7fd16ea17cfde",
   "build_command": "npm ci && node scripts/native-document-draft-contract.test.cjs && npm run lint && npm run build",
   "build_configuration": {
     "assetPrefix": "/alfred",
@@ -21,8 +21,8 @@
     "description": "Replaced Next redirect error document with a static redirect to /alfred/login/ and retained the prior release's hashed static assets for cached-HTML compatibility.",
     "file": "index.html"
   },
-  "source_branch": "release/alfred-native-task-dogfood-candidate",
-  "source_commit": "007876238f3fa702c123f12fb9accbf2171731f0",
+  "source_branch": "feature/alfred-hermes-canary",
+  "source_commit": "e68b951c5275989ed27bdf17c14918e0c50fcd7e",
   "source_repository": "https://github.com/Tiberius-AI/tiberius",
   "toolchain": {
     "next": "16.3.0",
