@@ -34,6 +34,11 @@ test("allows only the dashboard's exact public and authenticated API routes", ()
     ["POST", "/api/actions/drafts"],
     ["PATCH", "/api/actions/00000000-0000-0000-0000-000000000001/draft"],
     ["POST", "/api/actions/00000000-0000-0000-0000-000000000001/approve"],
+    ["GET", "/api/integrations/docusign/status"],
+    ["GET", "/api/integrations/docusign/callback"],
+    ["POST", "/api/integrations/docusign/connect"],
+    ["POST", "/api/actions/00000000-0000-0000-0000-000000000001/docusign/draft"],
+    ["POST", "/api/actions/00000000-0000-0000-0000-000000000001/docusign/sender-view"],
   ];
   for (const [method, path] of allowed) {
     assert.equal(isAllowedRoute(method, path), true, `${method} ${path}`);

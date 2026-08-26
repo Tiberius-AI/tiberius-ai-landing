@@ -18,6 +18,9 @@ const ROUTES = [
   ["GET", new RegExp(`^/api/actions/${UUID}$`)],
   ["PATCH", new RegExp(`^/api/actions/${UUID}/draft$`)],
   ["POST", new RegExp(`^/api/actions/${UUID}/(?:request-review|reject|approve)$`)],
+  ["GET", /^\/api\/integrations\/docusign\/(?:status|callback)$/],
+  ["POST", /^\/api\/integrations\/docusign\/connect$/],
+  ["POST", new RegExp(`^/api/actions/${UUID}/docusign/(?:draft|sender-view)$`)],
 ];
 
 function isAllowedRoute(method, path) {
