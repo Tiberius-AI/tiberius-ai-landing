@@ -92,6 +92,20 @@ function proxyErrorCode(error) {
   return typeof code === "string" && /^[A-Z0-9_]{1,64}$/.test(code) ? code : "unknown";
 }
 
+function safeCallbackLocation(path, upstream) {
+  if (path !== "/api/integrations/docusign/callback") return undefined;
+  const raw = upstream.headers.get("location");
+  if (!raw) return undefined;
+  try {
+    const parsed = new URL(raw);
+    if (parsed.origin !== "https://www.tiberius.ai" || parsed.pathname !== "/alfred/dashboard/actions/") return undefined;
+    if ([...parsed.searchParams.keys()].some((key) => !["action", "docusign"].includes(key))) return undefined;
+    return parsed.toString();
+  } catch {
+    return undefined;
+  }
+}
+
 async function fetchUpstream(url, options, attempts = 3) {
   let lastError;
   for (let attempt = 1; attempt <= attempts; attempt += 1) {
@@ -128,6 +142,8 @@ async function handler(req, res) {
     const payload = Buffer.from(await upstream.arrayBuffer());
     const contentType = upstream.headers.get("content-type");
     if (contentType) res.setHeader("content-type", contentType);
+    const callbackLocation = safeCallbackLocation(path, upstream);
+    if (callbackLocation) res.setHeader("location", callbackLocation);
     res.setHeader("cache-control", "no-store");
     return res.status(upstream.status).send(payload);
   } catch (error) {
@@ -146,4 +162,5 @@ module.exports.selectRequestHeaders = selectRequestHeaders;
 module.exports.proxyErrorCode = proxyErrorCode;
 module.exports.readBoundedBody = readBoundedBody;
 module.exports.fetchUpstream = fetchUpstream;
+module.exports.safeCallbackLocation = safeCallbackLocation;
 module.exports.config = { api: { bodyParser: false } };

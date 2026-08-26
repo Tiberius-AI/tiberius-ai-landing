@@ -3,7 +3,7 @@ const path = require("node:path");
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
-const { getPath, isAllowedRoute, selectRequestHeaders, proxyErrorCode, fetchUpstream } = require("../api/alfred-router.js");
+const { getPath, isAllowedRoute, selectRequestHeaders, proxyErrorCode, fetchUpstream, safeCallbackLocation } = require("../api/alfred-router.js");
 
 const vercel = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "vercel.json"), "utf8"));
 const proxySource = fs.readFileSync(path.join(__dirname, "..", "api", "alfred-router.js"), "utf8");
@@ -102,6 +102,17 @@ test("reports only a bounded transport code for proxy diagnostics", () => {
   assert.equal(proxyErrorCode({ cause: { code: "UND_ERR_CONNECT_TIMEOUT" } }), "UND_ERR_CONNECT_TIMEOUT");
   assert.equal(proxyErrorCode({ cause: { code: "secret=value with spaces" } }), "unknown");
   assert.equal(proxyErrorCode(new Error("contains sensitive request data")), "unknown");
+});
+
+test("forwards only the exact same-origin DocuSign callback destination", () => {
+  const response = (location) => ({ headers: new Headers({ location }) });
+  assert.equal(
+    safeCallbackLocation("/api/integrations/docusign/callback", response("https://www.tiberius.ai/alfred/dashboard/actions/?docusign=connected")),
+    "https://www.tiberius.ai/alfred/dashboard/actions/?docusign=connected",
+  );
+  assert.equal(safeCallbackLocation("/api/me", response("https://www.tiberius.ai/alfred/dashboard/actions/")), undefined);
+  assert.equal(safeCallbackLocation("/api/integrations/docusign/callback", response("https://attacker.example/")), undefined);
+  assert.equal(safeCallbackLocation("/api/integrations/docusign/callback", response("https://www.tiberius.ai/alfred/dashboard/actions/?next=https://attacker.example")), undefined);
 });
 
 test("retries transient upstream transport failures with a strict bound", async () => {
