@@ -22,7 +22,7 @@
     "file": "index.html"
   },
   "source_branch": "feature/alfred-hermes-canary",
-  "source_commit": "98e8e47e56c0ca2f60c7fac6cbc493bedec44bc7",
+  "source_commit": "98e8e471378c521ef812905e81401f64fd5a688f",
   "source_repository": "https://github.com/Tiberius-AI/tiberius",
   "toolchain": {
     "next": "16.3.0",
