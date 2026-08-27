@@ -2,6 +2,7 @@ const { isIP } = require("node:net");
 const { URL, URLSearchParams } = require("node:url");
 
 const UUID = "[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}";
+const FORGE_FALLBACK_ORIGIN = "https://tiberius-forge.tail794cda.ts.net:8443";
 const ROUTES = [
   ["POST", /^\/api\/access\/(?:requests|join)$/],
   ["GET", /^\/api\/me$/],
@@ -119,6 +120,19 @@ async function fetchUpstream(url, options, attempts = 3) {
   throw lastError;
 }
 
+async function fetchConfiguredUpstream(pathAndSearch, options) {
+  const origins = [...new Set([getUpstreamOrigin(), FORGE_FALLBACK_ORIGIN])];
+  let lastError;
+  for (const origin of origins) {
+    try {
+      return await fetchUpstream(`${origin}${pathAndSearch}`, options);
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  throw lastError;
+}
+
 async function handler(req, res) {
   const path = getPath(req);
   if (!isAllowedRoute(req.method, path)) {
@@ -132,7 +146,7 @@ async function handler(req, res) {
 
   try {
     const body = await readBoundedBody(req);
-    const upstream = await fetchUpstream(`${getUpstreamOrigin()}${path}${getSearch(req)}`, {
+    const upstream = await fetchConfiguredUpstream(`${path}${getSearch(req)}`, {
       method: req.method,
       headers: selectRequestHeaders(req.headers, edgeKey),
       body,
@@ -162,5 +176,6 @@ module.exports.selectRequestHeaders = selectRequestHeaders;
 module.exports.proxyErrorCode = proxyErrorCode;
 module.exports.readBoundedBody = readBoundedBody;
 module.exports.fetchUpstream = fetchUpstream;
+module.exports.fetchConfiguredUpstream = fetchConfiguredUpstream;
 module.exports.safeCallbackLocation = safeCallbackLocation;
 module.exports.config = { api: { bodyParser: false } };

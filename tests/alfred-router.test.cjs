@@ -3,7 +3,7 @@ const path = require("node:path");
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
-const { getPath, isAllowedRoute, selectRequestHeaders, proxyErrorCode, fetchUpstream, safeCallbackLocation } = require("../api/alfred-router.js");
+const { getPath, isAllowedRoute, selectRequestHeaders, proxyErrorCode, fetchUpstream, fetchConfiguredUpstream, safeCallbackLocation } = require("../api/alfred-router.js");
 
 const vercel = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "vercel.json"), "utf8"));
 const proxySource = fs.readFileSync(path.join(__dirname, "..", "api", "alfred-router.js"), "utf8");
@@ -129,5 +129,27 @@ test("retries transient upstream transport failures with a strict bound", async 
     assert.equal(attempts, 3);
   } finally {
     global.fetch = originalFetch;
+  }
+});
+
+test("falls back to the allowlisted Forge origin after the configured origin is unreachable", async () => {
+  const originalFetch = global.fetch;
+  const originalOrigin = process.env.TIBERIUS_FUNNEL_ORIGIN;
+  const urls = [];
+  process.env.TIBERIUS_FUNNEL_ORIGIN = "https://stale.example";
+  global.fetch = async (url) => {
+    urls.push(url);
+    if (url.startsWith("https://stale.example")) throw Object.assign(new Error("down"), { cause: { code: "ENOTFOUND" } });
+    return new Response("unauthorized", { status: 401 });
+  };
+  try {
+    const response = await fetchConfiguredUpstream("/api/me", {});
+    assert.equal(response.status, 401);
+    assert.equal(urls.length, 4);
+    assert.equal(urls.at(-1), "https://tiberius-forge.tail794cda.ts.net:8443/api/me");
+  } finally {
+    global.fetch = originalFetch;
+    if (originalOrigin === undefined) delete process.env.TIBERIUS_FUNNEL_ORIGIN;
+    else process.env.TIBERIUS_FUNNEL_ORIGIN = originalOrigin;
   }
 });
