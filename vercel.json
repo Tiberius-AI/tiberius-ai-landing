@@ -1,13 +1,21 @@
 {
-  "functions": {
-    "api/alfred-router.js": {
-      "maxDuration": 90
-    }
-  },
-  "rewrites": [
-    {
-      "source": "/api/alfred-router/:path*",
-      "destination": "/api/alfred-router?path=:path*"
-    }
-  ]
+    "functions": {
+          "api/alfred-router.js": {
+                  "maxDuration": 90
+          }
+    },
+    "rewrites": [
+          {
+                  "source": "/api/alfred-router/:path*",
+                  "destination": "/api/alfred-router?path=:path*"
+          },
+          {
+                  "source": "/dashboard",
+                  "destination": "https://tiberius-dashboard-39st.vercel.app/dashboard"
+          },
+          {
+                  "source": "/dashboard/:path*",
+                  "destination": "https://tiberius-dashboard-39st.vercel.app/dashboard/:path*"
+          }
+    ]
 }
