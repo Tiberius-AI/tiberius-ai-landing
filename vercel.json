@@ -6,6 +6,22 @@
     },
     "rewrites": [
           {
+                  "source": "/privacy",
+                  "destination": "/privacy.html"
+          },
+          {
+                  "source": "/terms",
+                  "destination": "/terms.html"
+          },
+          {
+                  "source": "/sms-terms",
+                  "destination": "/sms-terms.html"
+          },
+          {
+                  "source": "/sms-consent",
+                  "destination": "/sms-consent.html"
+          },
+          {
                   "source": "/api/alfred-router/:path*",
                   "destination": "/api/alfred-router?path=:path*"
           },

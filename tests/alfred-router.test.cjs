@@ -8,7 +8,7 @@ const { getPath, isAllowedRoute, selectRequestHeaders, proxyErrorCode, fetchUpst
 const vercel = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "vercel.json"), "utf8"));
 const proxySource = fs.readFileSync(path.join(__dirname, "..", "api", "alfred-router.js"), "utf8");
 test("routes every same-origin proxy subpath to the single Vercel function", () => {
-  assert.deepEqual(vercel.rewrites, [
+  assert.deepEqual(vercel.rewrites.filter(({ source }) => source.startsWith("/api/")), [
     { source: "/api/alfred-router/:path*", destination: "/api/alfred-router?path=:path*" },
   ]);
   assert.equal(getPath({ query: { path: "api/access/requests" } }), "/api/access/requests");
