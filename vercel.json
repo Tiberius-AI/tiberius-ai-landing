@@ -1,37 +1,49 @@
 {
-    "functions": {
-          "api/alfred-router.js": {
-                  "maxDuration": 90
-          }
+  "functions": {
+    "api/alfred-router.js": {
+      "maxDuration": 90
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/nb",
+      "destination": "/?loc=nb"
     },
-    "rewrites": [
-          {
-                  "source": "/privacy",
-                  "destination": "/privacy.html"
-          },
-          {
-                  "source": "/terms",
-                  "destination": "/terms.html"
-          },
-          {
-                  "source": "/sms-terms",
-                  "destination": "/sms-terms.html"
-          },
-          {
-                  "source": "/sms-consent",
-                  "destination": "/sms-consent.html"
-          },
-          {
-                  "source": "/api/alfred-router/:path*",
-                  "destination": "/api/alfred-router?path=:path*"
-          },
-          {
-                  "source": "/dashboard",
-                  "destination": "https://tiberius-dashboard-39st.vercel.app/dashboard"
-          },
-          {
-                  "source": "/dashboard/:path*",
-                  "destination": "https://tiberius-dashboard-39st.vercel.app/dashboard/:path*"
-          }
-    ]
+    {
+      "source": "/tx",
+      "destination": "/?loc=tx"
+    },
+    {
+      "source": "/alfred-ai",
+      "destination": "/alfred-ai/index.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacy.html"
+    },
+    {
+      "source": "/terms",
+      "destination": "/terms.html"
+    },
+    {
+      "source": "/sms-terms",
+      "destination": "/sms-terms.html"
+    },
+    {
+      "source": "/sms-consent",
+      "destination": "/sms-consent.html"
+    },
+    {
+      "source": "/api/alfred-router/:path*",
+      "destination": "/api/alfred-router?path=:path*"
+    },
+    {
+      "source": "/dashboard",
+      "destination": "https://tiberius-dashboard-39st.vercel.app/dashboard"
+    },
+    {
+      "source": "/dashboard/:path*",
+      "destination": "https://tiberius-dashboard-39st.vercel.app/dashboard/:path*"
+    }
+  ]
 }
