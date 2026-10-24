@@ -102,9 +102,9 @@ button, input, select {
 }
 
 .brand-logo-img {
-  height: 54px;
+  height: 68px;
   width: auto;
-  max-width: 270px;
+  max-width: 290px;
   object-fit: contain;
   display: block;
 }
@@ -2634,9 +2634,9 @@ button, input, select {
     justify-content: flex-start;
   }
   .brand-logo-img {
-    height: 44px;
+    height: 56px;
     width: auto;
-    max-width: 230px;
+    max-width: 245px;
     object-fit: contain;
   }
   .eyebrow-divider {
