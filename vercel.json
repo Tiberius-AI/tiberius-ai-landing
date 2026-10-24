@@ -18,6 +18,10 @@
       "destination": "/alfred-ai/index.html"
     },
     {
+      "source": "/contact",
+      "destination": "/contact.html"
+    },
+    {
       "source": "/privacy",
       "destination": "/privacy.html"
     },

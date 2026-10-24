@@ -33,182 +33,182 @@ const GEO_SMS_MAP = {
 const DEMO_SITES = [
   {
     id: 'remodel-1',
-    title: 'Aether Architectural Remodeling (Dark Luxury)',
+    title: 'Win $75k–$250k+ Remodel Jobs Without Wasting Trips on Unqualified Leads',
     category: 'remodel-trades',
-    categoryLabel: 'Remodeling & Trades',
+    categoryLabel: 'HIGH-TICKET REMODELING',
     industryPreset: 'Home Services & Contracting (Remodel, Roof, Trades)',
-    domain: 'aether-remodel.tiberiussmartsites.com',
+    domain: 'hillcountrycustomremodel.com',
     image: '/demos/remodel-1.webp',
-    ratingText: '★ 5.0 Google Verified (142 Reviews)',
+    ratingText: '★ Filters Out Tire-Kickers',
     description:
-      'Flagship dark-obsidian architectural design-build Smart Site featuring an interactive 3D LiDAR transformation slider, instant photo quote dock, and remodel ROI calculator.',
+      'Positions you as the #1 premier builder in your market so homeowners stop shopping you against the cheapest guy in a truck. Texts new leads in 3 seconds and collects project details before you ever drive out.',
     chips: [
-      'Interactive Photo Quote Dock',
-      'Before/After 3D Slider',
-      '3-Sec Missed-Call SMS',
-      '5.0★ Authority Bento'
+      '✓ Pre-Screens Budgets Automatically',
+      '✓ Collects Job Photos by Text',
+      '✓ Rescues Missed Job-Site Calls',
+      '✓ Ranks #1 for Custom Remodels'
     ],
     smsOverlay: {
       badge: '⚡ 2.1s AI Text Reply',
       message:
-        '"Hi Mark! Saw your kitchen + patio photo upload. Turnkey builds in your neighborhood run $85k–$135k. Want a free 3D scan this Thursday at 2 PM?"',
+        '"Hi Mark! Saw your kitchen + patio photo. Full custom builds in your neighborhood run $85k–$135k. Want to schedule an on-site walkthrough this Thursday at 2 PM?"',
       outcome: '✓ Booked $110k Estimate'
     },
     highlights: [
-      'Interactive Before/After Architectural Scanline Slider',
-      'Single-Card Instant Photo Quote & Equity Lift Calculator',
-      '5.0-Star Verified Authority Bento with Owner Direct Response',
-      '24/7 AI SMS Concierge + Office-Hours Manual Handover Mode'
+      'Pre-screens homeowner budgets and timelines before you ever roll a truck',
+      'Collects kitchen, bath, or exterior photos directly by text message',
+      'Showcases verified 5-star homeowner reviews to justify premium pricing',
+      'Answers missed job-site calls in 3 seconds and books qualified walkthroughs'
     ]
   },
   {
     id: 'remodel-2',
-    title: 'Aether Suburban Estates & Whole-Home Remodel',
+    title: "See the Homeowner's Kitchen or Bath on Your Phone Before You Roll a Truck",
     category: 'remodel-trades',
-    categoryLabel: 'Remodeling & Trades',
+    categoryLabel: 'KITCHEN & BATH REMODELING',
     industryPreset: 'Home Services & Contracting (Remodel, Roof, Trades)',
-    domain: 'suburban-estates.tiberiussmartsites.com',
+    domain: 'ridgelineremodeling.com',
     image: '/demos/remodel-2.webp',
-    ratingText: '★ 5.0 Google Verified (98 Reviews)',
+    ratingText: '★ Zero Wasted Estimate Drives',
     description:
-      'Warm daylight architectural remodel & exterior transformation Smart Site built for high-ticket residential contractors, roofing, custom decks, and exterior trades.',
+      'Instead of letting quote forms sit in an email inbox for hours, your site immediately starts a text conversation with the homeowner, asks them to text 2–3 photos of their space, and books qualified walkthroughs.',
     chips: [
-      'Daylight Editorial Theme',
-      'Manual Drag Comparison',
-      'Instant Ballpark Estimator',
-      'Automated Review Engine'
+      '✓ Homeowners Text You Room Photos',
+      '✓ 3-Second Speed-to-Lead via SMS',
+      '✓ Automated 5-Star Google Reviews',
+      '✓ Beats Big-Box Competitors Online'
     ],
     smsOverlay: {
       badge: '⚡ 2.6s Missed-Call Rescue',
       message:
-        '"Hey Sarah! Sorry we missed your call on the job site. Are you looking for an exterior facade remodel, roofing, or a custom addition quote?"',
+        '"Hey Sarah! Sorry we missed your call on the job site. Text us 2–3 photos of the kitchen or bath you want to remodel and we can get your estimate started!"',
       outcome: '✓ Saved Missed Call Lead'
     },
     highlights: [
-      'Warm Editorial Daylight Aesthetic for Suburban Homeowners',
-      'Interactive Drag-to-Inspect Before/After Property Transformations',
-      'Automated Post-Walkthrough 5-Star Google Review Request Flow',
-      '3-Pane Back-Office Conversation Room for Crew & Estimators'
+      'Starts a live text conversation within 3 seconds of any quote request',
+      'Prompts homeowners to text 2–3 photos of their current kitchen or bath',
+      'Automatically follows up after completed jobs to stack 5-star Google reviews',
+      'Keeps every text, call, and photo organized in one simple mobile inbox'
     ]
   },
   {
     id: 'pest-control',
-    title: 'Lone Star Shield Pest & Termite Control',
+    title: 'Never Lose a High-Profit Emergency Repair Call to Voicemail Again',
     category: 'remodel-trades',
-    categoryLabel: 'Remodeling & Trades',
+    categoryLabel: 'HVAC, PLUMBING & ELECTRICAL',
     industryPreset: 'Home Services & Contracting (Remodel, Roof, Trades)',
-    domain: 'lonestarshield-pest.tiberiussmartsites.com',
+    domain: 'lonestarhvacpros.com',
     image: '/demos/pest-control.webp',
-    ratingText: '★ 4.9 Google Verified (412 Reviews)',
+    ratingText: '★ Captures 24/7 Emergency Jobs',
     description:
-      'High-urgency same-day pest, bark scorpion & termite control Smart Site featuring an AI Bug/Damage Photo ID Estimator, upfront treatment calculator, and instant route dispatch.',
+      "When a customer's AC goes out at 9 PM or you're tied up under a house, they won't wait for a callback. Your Smart Site texts them back in 3 seconds flat, locks in the dispatch, and keeps them from calling the next company on Google.",
     chips: [
-      'AI Bug & Damage Photo ID',
-      'Upfront Pricing Calculator',
-      'Same-Day Route Dispatch',
-      '3-Sec Missed-Call SMS'
+      '✓ Books After-Hours Emergency Calls',
+      '✓ Instant Missed-Call Text Rescue',
+      '✓ Turns Repairs Into Maintenance Plans',
+      '✓ Outranks Local Franchises on Google'
     ],
     smsOverlay: {
-      badge: '⚡ 1.8s Shield AI Dispatch',
+      badge: '⚡ 1.8s Emergency Dispatch',
       message:
-        '"Hi Sarah! Saw your photo. That is a Central TX bark scorpion entry gap. Full weep-hole seal + perimeter barrier is $160 initial. Want our 2 PM route slot today?"',
-      outcome: '✓ Same-Day Route Booked'
+        '"Hi Sarah! Sorry we missed your call. Our techs are on a service run. Do you need same-day emergency service? Reply YES to lock in our next open truck slot!"',
+      outcome: '✓ Same-Day Dispatch Booked'
     },
     highlights: [
-      'Snap-a-Photo AI Pest, Mud Tube & Entry Point Identification Dock',
-      'Interactive Quarterly vs. One-Time Knockdown Pricing Calculator',
-      'TPCL #089412 Protocol Cards with Kid & Pet Safety Specs',
-      'Instant 1-to-1 SMS Route Dispatch & 412+ Verified Review Engine'
+      'Captures high-profit night and weekend emergency calls automatically via text',
+      'Locks in the customer before they call the next company on Google',
+      'Collects photos of the issue or equipment label so your tech arrives prepared',
+      'Automatically converts one-time repairs into recurring maintenance plans'
     ]
   },
   {
     id: 'tree-service',
-    title: 'IronOak Tree Service, Crane Removal & Land Clearing',
+    title: 'Rescue Missed Calls on Loud Job Sites & Give Ballpark Quotes From Photos',
     category: 'remodel-trades',
-    categoryLabel: 'Remodeling & Trades',
+    categoryLabel: 'ROOFING, TREE & EXTERIOR PROS',
     industryPreset: 'Home Services & Contracting (Remodel, Roof, Trades)',
-    domain: 'ironoaktree.tiberiussmartsites.com',
+    domain: 'ironcladtreeservice.com',
     image: '/demos/tree-service.webp',
-    ratingText: '★ 5.0 Google Verified (285 Reviews)',
+    ratingText: '★ Built for Busy Crews',
     description:
-      'ISA Certified Arborist, zero-impact crane removal & forestry mulching Smart Site with an Instant Tree/Canopy Photo Ballpark Estimator and interactive acreage cost calculator.',
+      "When you're on a roof or running equipment, every missed call is money walking away. Our AI texts missed callers immediately, asks them to snap a photo of their tree, roof, or yard, and sends the ready-to-close job straight to your phone.",
     chips: [
-      'Tree & Canopy Photo Quote',
-      'Acreage & Crane Calculator',
-      'Texas Oak Wilt Protocol',
-      '24/7 Storm SMS Rescue'
+      "✓ Replies While You're on the Job",
+      '✓ Customers Text Yard & Roof Photos',
+      '✓ Stacks 20–100+ 5-Star Reviews',
+      '✓ Dominates Local "Near Me" Maps'
     ],
     smsOverlay: {
-      badge: '⚡ 2.2s Arborist AI Reply',
+      badge: '⚡ 2.2s Job-Site Text Rescue',
       message:
-        '"Howdy! Based on your photo of the 50ft live oak overhanging the roof, crane-assisted removal + stump grinding runs $2,400–$3,200. Want our ISA Arborist out tomorrow?"',
-      outcome: '✓ $2,850 Crane Job Booked'
+        '"Howdy! Sorry we missed your call while the crew is running equipment. Snap and text a quick photo of the tree or roof issue and we will text back a ballpark right away!"',
+      outcome: '✓ $2,850 Job Booked via SMS'
     },
     highlights: [
-      'Instant Tree, Overhang & Acreage Photo Ballpark Estimator',
-      'Interactive Tree Scale, Drop-Zone & Land Clearing Cost Calculator',
-      'ISA Certified Arborist & Texas Oak Wilt Containment Credentials',
-      '24/7 Emergency Storm Damage Missed-Call SMS Text Rescue'
+      'Instantly texts back callers when you are on a loud roof or running equipment',
+      'Has customers text photos of their tree, roof, or yard for fast ballpark quotes',
+      'Sends 1-tap Google review invites after every job to dominate local search',
+      'Captures 24/7 storm damage leads while competitors let calls go to voicemail'
     ]
   },
   {
     id: 'pro-services',
-    title: 'Roam & Root Home Loans, CPA & Advisory',
+    title: "Pre-Qualify Clients & Fill Your Consultation Calendar While You're in Meetings",
     category: 'pro-services',
-    categoryLabel: 'CPA, Mortgage & Pro Services',
+    categoryLabel: 'MORTGAGE, CPA & PRO SERVICES',
     industryPreset: 'Professional Services (Mortgage, CPA, Legal, Real Estate)',
-    domain: 'roamandroot-loans.tiberiussmartsites.com',
+    domain: 'roamandrootadvisors.com',
     image: '/demos/pro-services.webp',
-    ratingText: '★ 5.0 Client Rating (215+ Closings)',
+    ratingText: '★ Zero Phone Tag',
     description:
-      'Editorial warm-paper financial & professional services Smart Site featuring a live interactive rate & payment explorer, 60-second pre-qual quiz, and instant SMS advisor.',
+      'Answers client questions 24/7, follows up with loan or tax inquiries in seconds via text, and books qualified appointments directly onto your calendar so you never lose a client while sitting in a meeting.',
     chips: [
-      'Live Rate & ROI Table',
-      '3-Mode AI Pre-Qual Dock',
-      'SAFE Act / TCPA Compliant',
-      'Direct Calendar Dispatch'
+      '✓ Books Consultations on Autopilot',
+      '✓ Pre-Qualifies Clients via Text',
+      '✓ Instant Reply During Meetings',
+      '✓ Automates Past-Client Referrals'
     ],
     smsOverlay: {
-      badge: '⚡ 1.9s Advisor SMS',
+      badge: '⚡ 1.9s Client Text Reply',
       message:
-        '"Hi David! Based on a $525k purchase in Comal County with 10% down, your estimated P&I is ~$2,790/mo. Want your custom PDF rate sheet texted over?"',
-      outcome: '✓ Pre-Qual Application Started'
+        '"Hi David! Thanks for reaching out. Based on a $525k purchase with 10% down, your estimated payment is ~$2,790/mo. Want to grab a 15-min call tomorrow at 2 PM?"',
+      outcome: '✓ Consultation Booked'
     },
     highlights: [
-      'Low-Saturation Warm Paper Editorial Design System',
-      'Interactive Scenario & Payment Comparison Table',
-      'Embedded 3-Mode Conversational AI Pre-Qualification Concierge',
-      'Built-In 1-to-1 TCPA & Professional Compliance Guardrails'
+      'Pre-qualifies prospective clients and answers common questions 24/7 via text',
+      'Eliminates phone tag by booking qualified consultations straight to your calendar',
+      'Replies immediately when you are in client meetings or after business hours',
+      'Automates 5-star Google reviews and referral check-ins with past clients'
     ]
   },
   {
     id: 'local-cafe',
-    title: 'Opa’s Hill Country Bakery, Cafe & Main Street Shop',
+    title: 'Capture High-Margin Catering & Custom Orders Without Stepping Away From the Counter',
     category: 'local-shops',
-    categoryLabel: 'Local Cafes & Shops',
+    categoryLabel: 'CAFES, BAKERIES & LOCAL SHOPS',
     industryPreset: 'Local Storefront, Cafe, Bakery or Restaurant',
-    domain: 'opasbakery-nb.tiberiussmartsites.com',
+    domain: 'opashillcountrybakery.com',
     image: '/demos/local-cafe.webp',
-    ratingText: '★ 5.0 Google Rating (412 Local Reviews)',
+    ratingText: '★ More Orders & Repeat Regulars',
     description:
-      'High-converting local storefront, cafe & catering Smart Site with 3-second SMS hot-box pre-ordering, catering quote concierge, and 1-tap Google review velocity.',
+      'Handles custom cake orders, catering requests, and everyday customer questions automatically via text while your team takes care of the line out the door, and turns happy customers into 5-star Google reviews.',
     chips: [
-      'SMS Skip-the-Line Ordering',
-      'Event & Office Catering AI',
-      '412+ 5-Star Google Reviews',
-      'Main Street Geo-SEO'
+      '✓ Takes Catering & Custom Orders 24/7',
+      '✓ Ranks #1 for Local Search & ChatGPT',
+      '✓ Automated 5-Star Review Engine',
+      '✓ Brings Customers Back With VIP Texts'
     ],
     smsOverlay: {
       badge: '⚡ 2.3s Catering & Order AI',
       message:
-        '"Guten Morgen! We can have 2 dozen warm brisket kolaches + a 96oz espresso tote ready at 7:30 AM ($74 total). Reply YES to lock in pickup!"',
+        '"Good morning! We can have 2 dozen warm brisket kolaches + a 96oz coffee tote ready at 7:30 AM ($74 total). Reply YES to lock in your pickup time!"',
       outcome: '✓ $145 Catering Order + 5★ Review'
     },
     highlights: [
-      'Mouthwatering Daily Bake Sheet & Local Story Showcase',
-      'Instant Text-to-Reserve & Corporate Catering Quote Concierge',
-      'Automated VIP Text Club & 5-Star Google Review Booster',
-      'Built to Rank #1 in Local Map Pack Searches'
+      'Captures high-margin corporate catering, event, and custom orders 24/7 by text',
+      'Answers everyday hours, menu, and availability questions without tying up staff',
+      'Turns happy daily customers into hundreds of 5-star Google reviews automatically',
+      'Brings regulars back on slow days with VIP text specials'
     ]
   }
 ];
@@ -219,12 +219,12 @@ const VSL_CHAPTERS = [
     timecodeDisplay: '00:42 / 05:12',
     progressPct: 25,
     tag: 'CHAPTER 1 • 0:00 • SMART SITE + INSTANT SMS',
-    heading: '1. Custom AI Smart Site + Instant SMS Quote Dock',
-    desc: 'Instead of a dead brochure website where 92% of visitors leave without calling, your Smart Site features an interactive photo/project estimator and AI concierge that texts the customer within 3 seconds of their question.',
+    heading: '1. Custom AI Smart Site + 3-Second Text Follow-Up',
+    desc: 'Instead of a brochure website where 92% of visitors leave without calling, your Smart Site starts a live text conversation within 3 seconds, collects job photos, and books qualified estimates automatically.',
     image: 'demos/remodel-1.webp',
     bullets: [
-      '✓ Custom scrollytelling & before/after visual proof built for your exact niche',
-      '✓ Embedded Instant SMS Quote Dock captures name, mobile number & project scope',
+      '✓ Custom-built for your business to pre-screen leads and showcase your best work',
+      '✓ Starts an instant 3-second text conversation to capture name, phone & project details',
       '✓ Works on autopilot 24/7, or pauses automatically during office hours so your team can reply'
     ]
   },
@@ -233,13 +233,13 @@ const VSL_CHAPTERS = [
     timecodeDisplay: '01:54 / 05:12',
     progressPct: 50,
     tag: 'CHAPTER 2 • 1:18 • 5-STAR GOOGLE REVIEW ENGINE',
-    heading: '2. Automated 5-Star Google Review Engine & Authority Bento',
-    desc: 'Every happy customer receives a polite, conversational text right after their job or visit with a direct 1-tap Google review link, while your site showcases your verified 5.0-star reviews in a luxury Bento grid.',
+    heading: '2. Automated 5-Star Google Review Engine',
+    desc: 'Every happy customer receives a polite, conversational text right after their job or visit with a direct 1-tap Google review link, while your site highlights your best 5-star reviews upfront.',
     image: 'demos/local-cafe.webp',
     bullets: [
       '✓ 1-Tap SMS review invites sent automatically after completed jobs or visits',
-      '✓ TOS-safe sentiment routing alerts you privately if a customer ever has an issue',
-      '✓ Live 5.0-Star Verified Authority Bento with LocalBusiness JSON-LD SEO schema'
+      '✓ Private feedback routing alerts you directly if a customer ever has an issue',
+      '✓ Helps you outrank local competitors on Google Maps and local search'
     ]
   },
   {
@@ -355,6 +355,20 @@ function initGeoDetection() {
       savedLoc = null;
     }
     applyGeoLocation(savedLoc || 'national', false);
+  }
+
+  // Only show footer debug/location controls if ?debug=true is in the URL
+  const debugControls = document.getElementById('footer-debug-controls');
+  if (debugControls) {
+    const isDebug = params.get('debug') === 'true';
+    debugControls.hidden = !isDebug;
+    if (isDebug) {
+      debugControls.querySelectorAll('[data-debug-loc]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          applyGeoLocation(btn.getAttribute('data-debug-loc'), true);
+        });
+      });
+    }
   }
 }
 
@@ -472,7 +486,7 @@ function openLeadModal({ demoId = null, presetOwnership = null } = {}) {
     const foundDemo = DEMO_SITES.find((d) => d.id === demoId);
     state.selectedDemo = foundDemo ? foundDemo.id : demoId;
     if (foundDemo && demoPill && demoNameEl) {
-      demoNameEl.textContent = foundDemo.title;
+      demoNameEl.textContent = foundDemo.categoryLabel;
       demoPill.hidden = false;
     }
   } else {
@@ -686,16 +700,22 @@ function renderDemoShowcase(filterKey = 'all') {
           </div>
 
           <div class="iphone-sms-overlay">
-            <div class="mini-iphone-header">
-              <span>📱 iPhone AI Text Rescue</span>
-              <span>${site.smsOverlay.badge}</span>
+            <div class="mini-iphone-pill">
+              <span class="mini-pill-dot"></span>
+              <span>💬 3-Sec AI Text Reply • Hover to View</span>
             </div>
-            <div class="mini-sms-bubble">
-              ${site.smsOverlay.message}
-            </div>
-            <div class="mini-sms-meta">
-              <span>Tiberius AI Concierge</span>
-              <span>${site.smsOverlay.outcome}</span>
+            <div class="mini-iphone-expanded">
+              <div class="mini-iphone-header">
+                <span>📱 iPhone AI Text</span>
+                <span>${site.smsOverlay.badge}</span>
+              </div>
+              <div class="mini-sms-bubble">
+                ${site.smsOverlay.message}
+              </div>
+              <div class="mini-sms-meta">
+                <span>Tiberius AI</span>
+                <span>${site.smsOverlay.outcome}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -903,14 +923,18 @@ function initStep2Controls() {
     });
   }
 
-  // Pricing Card Plan Selection -> Scrolls to Booking / Opens Modal with that plan
+  // Pricing Card Plan Selection -> Scrolls to Booking (if Step 2 unlocked) or Opens Modal with that plan
   document.querySelectorAll('.js-select-plan').forEach((btn) => {
     btn.addEventListener('click', () => {
       const plan = btn.getAttribute('data-plan');
       selectOwnershipPill(plan);
-      const bookingBlock = document.getElementById('booking-and-sms-trigger');
-      if (bookingBlock) {
-        bookingBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (state.step2Unlocked) {
+        const bookingBlock = document.getElementById('booking-and-sms-trigger');
+        if (bookingBlock) {
+          bookingBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      } else {
+        openLeadModal({ presetOwnership: plan });
       }
     });
   });
