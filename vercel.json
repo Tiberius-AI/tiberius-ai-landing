@@ -18,6 +18,14 @@
       "destination": "/alfred-ai/index.html"
     },
     {
+      "source": "/recon",
+      "destination": "/recon/index.html"
+    },
+    {
+      "source": "/tiberius-recon",
+      "destination": "/recon/index.html"
+    },
+    {
       "source": "/contact",
       "destination": "/contact.html"
     },
