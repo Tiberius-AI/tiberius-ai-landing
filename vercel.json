@@ -22,6 +22,14 @@
       "destination": "/recon/index.html"
     },
     {
+      "source": "/recon/briefing",
+      "destination": "/recon/briefing.html"
+    },
+    {
+      "source": "/recon/command",
+      "destination": "/recon/command.html"
+    },
+    {
       "source": "/tiberius-recon",
       "destination": "/recon/index.html"
     },
