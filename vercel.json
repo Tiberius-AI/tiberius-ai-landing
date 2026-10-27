@@ -22,12 +22,56 @@
       "destination": "/recon/index.html"
     },
     {
+      "source": "/recon/login",
+      "destination": "/recon/login.html"
+    },
+    {
+      "source": "/recon/admin",
+      "destination": "/recon/login.html"
+    },
+    {
       "source": "/recon/briefing",
       "destination": "/recon/briefing.html"
     },
     {
       "source": "/recon/command",
       "destination": "/recon/command.html"
+    },
+    {
+      "source": "/login",
+      "destination": "/recon/login.html"
+    },
+    {
+      "source": "/login.html",
+      "destination": "/recon/login.html"
+    },
+    {
+      "source": "/login.js",
+      "destination": "/recon/login.js"
+    },
+    {
+      "source": "/briefing",
+      "destination": "/recon/briefing.html"
+    },
+    {
+      "source": "/briefing.html",
+      "destination": "/recon/briefing.html"
+    },
+    {
+      "source": "/briefing.js",
+      "destination": "/recon/briefing.js"
+    },
+    {
+      "source": "/command",
+      "destination": "/recon/command.html"
+    },
+    {
+      "source": "/command.html",
+      "destination": "/recon/command.html"
+    },
+    {
+      "source": "/command.js",
+      "destination": "/recon/command.js"
     },
     {
       "source": "/tiberius-recon",
