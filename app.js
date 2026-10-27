@@ -260,14 +260,14 @@ const VSL_CHAPTERS = [
     time: '3:45',
     timecodeDisplay: '04:38 / 05:12',
     progressPct: 100,
-    tag: 'CHAPTER 4 • 3:45 • FLEXIBLE OWNERSHIP MATRIX',
-    heading: '4. Lease ($297/mo), Rent-to-Own ($300/mo), or Buy Outright',
-    desc: 'Most agencies charge $5,000+ upfront or hold your website hostage forever. With Tiberius Smart Sites, you can lease for $297/mo, build 100% equity via Rent-to-Own, or own your GitHub & Vercel code on Day 1.',
+    tag: 'CHAPTER 4 • 3:45 • TWO SIMPLE WAYS TO OWN',
+    heading: '4. 12-Month Rent-to-Own ($297/mo) or Buy It Outright ($2,400)',
+    desc: 'Most agencies charge $5,000+ upfront or hold your website hostage forever. With Tiberius Smart Sites, every dollar goes toward ownership: pay monthly for 12 months with Rent-to-Own ($297/mo) or buy it outright from Day 1 ($2,400).',
     image: 'demos/pro-services.webp',
     bullets: [
-      '✓ $297/mo All-In Monthly Lease: Zero huge upfront fee, hosting & AI included',
-      '✓ $300/mo Rent-to-Own: $200/mo goes directly toward paying off your custom site code',
-      '✓ Buy Outright: Own 100% of your GitHub & Vercel source code on Day 1'
+      '✓ $297/mo 12-Month Rent-to-Own: $0 setup fee, then you own your website outright after 12 months',
+      '✓ $2,400 Buy It Outright: You own your website from Day 1 with zero monthly lease payments',
+      '✓ Keep our optional $100/mo Web & AI Care Plan after payoff, or move your website to your own hosting account'
     ]
   }
 ];
@@ -276,7 +276,7 @@ const VSL_CHAPTERS = [
 const state = {
   locationTag: 'national',
   selectedIndustry: '',
-  selectedOwnership: '$297/mo Lease',
+  selectedOwnership: '$297/mo 12-Month Rent-to-Own',
   selectedDemo: null,
   activeFilter: 'all',
   step2Unlocked: false,
@@ -626,7 +626,7 @@ function initModalHandlers() {
         name,
         phone,
         email,
-        ownershipPreference: state.selectedOwnership || '$297/mo Lease',
+        ownershipPreference: state.selectedOwnership || '$297/mo 12-Month Rent-to-Own',
         locationTag: state.locationTag || 'default',
         selectedDemo: state.selectedDemo || null,
         timestamp: new Date().toISOString()
