@@ -38,6 +38,22 @@
       "destination": "/recon/command.html"
     },
     {
+      "source": "/recon/inbox",
+      "destination": "/recon/inbox.html"
+    },
+    {
+      "source": "/inbox",
+      "destination": "/recon/inbox.html"
+    },
+    {
+      "source": "/inbox.html",
+      "destination": "/recon/inbox.html"
+    },
+    {
+      "source": "/inbox.js",
+      "destination": "/recon/inbox.js"
+    },
+    {
       "source": "/login",
       "destination": "/recon/login.html"
     },
