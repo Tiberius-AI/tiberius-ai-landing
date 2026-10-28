@@ -153,5 +153,11 @@
       "source": "/dashboard/:path*",
       "destination": "https://tiberius-dashboard-39st.vercel.app/dashboard/:path*"
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/recon/cron-morning",
+      "schedule": "45 11 * * *"
+    }
   ]
 }
