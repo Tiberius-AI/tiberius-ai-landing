@@ -42,6 +42,34 @@
       "destination": "/recon/inbox.html"
     },
     {
+      "source": "/recon/onboarding",
+      "destination": "/recon/onboarding.html"
+    },
+    {
+      "source": "/recon/welcome",
+      "destination": "/recon/onboarding.html"
+    },
+    {
+      "source": "/recon/afterpay",
+      "destination": "/recon/onboarding.html"
+    },
+    {
+      "source": "/recon/setup",
+      "destination": "/recon/onboarding.html"
+    },
+    {
+      "source": "/onboarding",
+      "destination": "/recon/onboarding.html"
+    },
+    {
+      "source": "/onboarding.html",
+      "destination": "/recon/onboarding.html"
+    },
+    {
+      "source": "/onboarding.js",
+      "destination": "/recon/onboarding.js"
+    },
+    {
       "source": "/inbox",
       "destination": "/recon/inbox.html"
     },
