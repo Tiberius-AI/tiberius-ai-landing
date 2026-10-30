@@ -289,6 +289,61 @@ const state = {
 window.__TIBERIUS_LEADS__ = window.__TIBERIUS_LEADS__ || [];
 window.DEMO_SITES = DEMO_SITES;
 
+const STRIPE_SMART_SITE_LINKS = {
+  rentToOwn297: 'https://buy.stripe.com/dRm7sMggXc5leDkbnv2sM0q',
+  buyOutright2400: 'https://buy.stripe.com/4gM7sM9Szd9p2UC4Z72sM0r',
+  buyOutrightWithCare: 'https://buy.stripe.com/14A00kaWD1qH66Obnv2sM0s',
+  carePlan100: 'https://buy.stripe.com/aFabJ2aWD3yP52K3V32sM0t'
+};
+
+window.STRIPE_SMART_SITE_LINKS = STRIPE_SMART_SITE_LINKS;
+
+function extractCleanEmail(rawInput) {
+  if (!rawInput) return '';
+  const match = String(rawInput).match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+  return match ? match[0] : '';
+}
+
+function buildStripeHref(baseUrl, emailVal) {
+  const cleanEmail = extractCleanEmail(emailVal);
+  if (!cleanEmail) return baseUrl;
+  const sep = baseUrl.includes('?') ? '&' : '?';
+  return `${baseUrl}${sep}prefilled_email=${encodeURIComponent(cleanEmail)}`;
+}
+
+function applyStripeEmailPrefill(rawEmailInput) {
+  const cleanEmail = extractCleanEmail(rawEmailInput);
+  state.leadEmail = cleanEmail || state.leadEmail || '';
+
+  const rentCta = document.getElementById('stripe-cta-rent-to-own');
+  const buyCta = document.getElementById('stripe-cta-buy-outright');
+  const careCta = document.getElementById('stripe-cta-care-plan');
+  const step2RentCta = document.getElementById('step2-stripe-rent-link');
+  const step2BuyCta = document.getElementById('step2-stripe-buy-link');
+  const careCheckbox = document.getElementById('buy-outright-care-checkbox');
+  const includeCare = Boolean(careCheckbox && careCheckbox.checked);
+
+  const buyBaseUrl = includeCare
+    ? STRIPE_SMART_SITE_LINKS.buyOutrightWithCare
+    : STRIPE_SMART_SITE_LINKS.buyOutright2400;
+
+  if (rentCta) {
+    rentCta.href = buildStripeHref(STRIPE_SMART_SITE_LINKS.rentToOwn297, state.leadEmail);
+  }
+  if (buyCta) {
+    buyCta.href = buildStripeHref(buyBaseUrl, state.leadEmail);
+  }
+  if (careCta) {
+    careCta.href = buildStripeHref(STRIPE_SMART_SITE_LINKS.carePlan100, state.leadEmail);
+  }
+  if (step2RentCta) {
+    step2RentCta.href = buildStripeHref(STRIPE_SMART_SITE_LINKS.rentToOwn297, state.leadEmail);
+  }
+  if (step2BuyCta) {
+    step2BuyCta.href = buildStripeHref(buyBaseUrl, state.leadEmail);
+  }
+}
+
 /* ============================================================================
    1. SILENT URL AD VARIATIONS (?loc=nb | ?v=nb | ?loc=tx | ?v=tx | ?loc=national)
    ============================================================================ */
@@ -546,6 +601,7 @@ function unlockStep2View({ lead = null, scrollIntoView = true } = {}) {
     if (bName && !bName.value && lead.name) bName.value = lead.name;
     if (bPhone && !bPhone.value && lead.phone) bPhone.value = lead.phone;
     if (smsPhone && !smsPhone.value && lead.phone) smsPhone.value = lead.phone;
+    if (lead.email) applyStripeEmailPrefill(lead.email);
   }
 
   if (scrollIntoView && step2Section) {
@@ -939,6 +995,53 @@ function initStep2Controls() {
     });
   });
 
+  // Buy Outright + Optional $100/mo Care Plan Checkbox Toggle
+  const careCheckbox = document.getElementById('buy-outright-care-checkbox');
+  const buyLabelEl = document.getElementById('stripe-label-buy-outright');
+  const buyPeriodEl = document.getElementById('buy-outright-price-period');
+  const buyTaglineEl = document.getElementById('buy-outright-tagline');
+  const step2BuyCta = document.getElementById('step2-stripe-buy-link');
+
+  function syncBuyOutrightCareMode() {
+    const includeCare = Boolean(careCheckbox && careCheckbox.checked);
+    if (buyLabelEl) {
+      buyLabelEl.textContent = includeCare
+        ? 'Buy Outright ($2,400) + $100/mo Care Plan →'
+        : 'Buy My Website Outright for $2,400 →';
+    }
+    if (buyPeriodEl) {
+      buyPeriodEl.textContent = includeCare ? 'one-time + $100/mo care' : 'one-time';
+    }
+    if (buyTaglineEl) {
+      buyTaglineEl.innerHTML = includeCare
+        ? '<strong>You own it from Day 1 + All Hosting, AI &amp; Texting Covered</strong>'
+        : '<strong>You own it from Day 1</strong>';
+    }
+    if (step2BuyCta) {
+      step2BuyCta.textContent = includeCare
+        ? '⚡ Buy Outright + $100/mo Care Plan →'
+        : '⚡ Buy Website Outright ($2,400) →';
+    }
+    applyStripeEmailPrefill(state.leadEmail || '');
+  }
+
+  if (careCheckbox) {
+    careCheckbox.addEventListener('change', syncBuyOutrightCareMode);
+  }
+
+  // Hydrate saved lead email for Stripe prefill if available
+  try {
+    const savedLeadRaw = localStorage.getItem('tiberius_latest_lead');
+    if (savedLeadRaw) {
+      const savedLead = JSON.parse(savedLeadRaw);
+      if (savedLead && savedLead.email) {
+        applyStripeEmailPrefill(savedLead.email);
+      }
+    }
+  } catch (_err) {
+    // Ignore storage restrictions
+  }
+
   // Direct Booking Calendar Day & Time Pills
   document.querySelectorAll('#booking-day-pills .day-pill').forEach((pill) => {
     pill.addEventListener('click', () => {
@@ -1024,6 +1127,38 @@ function initStep2Controls() {
   }
 }
 
+function initStripeCheckoutReturn() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('checkout') !== 'success') return;
+
+  const planCode = (params.get('plan') || 'rent_to_own_297').toLowerCase();
+  const banner = document.getElementById('checkout-success-banner');
+  const titleEl = document.getElementById('checkout-success-title');
+  const descEl = document.getElementById('checkout-success-desc');
+
+  const PLAN_LABELS = {
+    rent_to_own_297: '12-Month Rent-to-Own ($297/mo)',
+    buy_outright_2400: 'Buy It Outright ($2,400 — 100% Day-1 Ownership)',
+    buy_outright_with_care: 'Buy It Outright ($2,400) + $100/mo Web & AI Care Plan',
+    care_plan_100: '$100/mo Web & AI Care Plan'
+  };
+
+  const planLabel = PLAN_LABELS[planCode] || PLAN_LABELS.rent_to_own_297;
+
+  if (titleEl) {
+    titleEl.textContent = `Welcome to Tiberius Smart Sites™! Your ${planLabel} Is Confirmed.`;
+  }
+  if (descEl) {
+    descEl.textContent =
+      'Your Stripe checkout is complete and your 7-day custom build slot is locked in. Pick your 15-minute kickoff call slot below so we can review your custom mockup, or click Auto-Scan Website to preload your business details right now.';
+  }
+  if (banner) {
+    banner.hidden = false;
+  }
+
+  unlockStep2View({ scrollIntoView: true });
+}
+
 /* ============================================================================
    BOOT
    ============================================================================ */
@@ -1033,4 +1168,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initModalHandlers();
   initShowcaseControls();
   initStep2Controls();
+  initStripeCheckoutReturn();
 });

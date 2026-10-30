@@ -243,6 +243,23 @@
          =================================================================== -->
     <section class="step-2-unlocked-section" id="step-2-unlocked" hidden>
       <div class="container">
+        <!-- Post-Checkout Stripe Success Banner (Shown automatically when ?checkout=success is in URL) -->
+        <div class="checkout-success-banner" id="checkout-success-banner" hidden>
+          <div class="checkout-success-badge">✓ STRIPE PAYMENT CONFIRMED • 7-DAY SMART SITE LAUNCH INITIATED</div>
+          <h3 id="checkout-success-title">Welcome to Tiberius Smart Sites™! Your Build Slot Is Locked In.</h3>
+          <p id="checkout-success-desc">
+            We’ve received your Stripe confirmation and our build team is preparing your custom AI Smart Site, 3-second missed-call text rescue, and 5-star Google review engine. Pick your 15-minute kickoff call slot below or auto-scan your existing website now.
+          </p>
+          <div class="checkout-success-actions">
+            <a href="#booking-and-sms-trigger" class="plan-select-btn plan-select-btn-green plan-stripe-link">
+              📅 Pick Your 15-Min Kickoff Slot Below ↓
+            </a>
+            <a href="/recon/onboarding?smart_site=1" class="plan-secondary-btn plan-stripe-link">
+              🧠 Optional: Auto-Scan Existing Website &amp; Shop Dossier →
+            </a>
+          </div>
+        </div>
+
         <div class="unlocked-banner-pill">
           <span class="unlocked-check">✓</span>
           <span id="unlocked-personal-greeting">STEP 2 UNLOCKED: Full 5-Minute Interactive Walkthrough &amp; Ownership Pricing Matrix</span>
@@ -333,6 +350,31 @@
                 <span>Why we never hold your website hostage. You own your website outright</span>
               </div>
             </button>
+          </div>
+        </div>
+
+        <!-- Fast-Track Stripe Checkout Bar inside Step 2 -->
+        <div class="step2-stripe-fasttrack" id="step2-stripe-fasttrack">
+          <div class="fasttrack-copy">
+            <span class="eyebrow-tag">INSTANT STRIPE CHECKOUT • GO LIVE IN 7 DAYS</span>
+            <h3>Ready to Lock In Your Custom Smart Site Right Now?</h3>
+            <p>Skip the wait and secure your 7-day build slot immediately via Stripe, or book a 15-minute live demo below first.</p>
+          </div>
+          <div class="fasttrack-actions">
+            <a
+              id="step2-stripe-rent-link"
+              href="https://buy.stripe.com/dRm7sMggXc5leDkbnv2sM0q"
+              class="plan-select-btn plan-select-btn-green plan-stripe-link"
+            >
+              💳 Start 12-Month Rent-to-Own ($297/mo) →
+            </a>
+            <a
+              id="step2-stripe-buy-link"
+              href="https://buy.stripe.com/4gM7sM9Szd9p2UC4Z72sM0r"
+              class="plan-select-btn plan-stripe-link"
+            >
+              ⚡ Buy Website Outright ($2,400) →
+            </a>
           </div>
         </div>
 
@@ -544,9 +586,19 @@
                 <li><span>✓</span> Automated 5-star Google review requests and back-office lead inbox</li>
                 <li><span>✓</span> After month 12, your $297 payment ends; keep our optional $100/mo Web &amp; AI Care Plan or manage hosting yourself</li>
               </ul>
-              <button type="button" class="plan-select-btn plan-select-btn-green js-select-plan" data-plan="$297/mo 12-Month Rent-to-Own">
-                Start Rent-to-Own at $297/mo
-              </button>
+              <div class="plan-cta-stack">
+                <a
+                  id="stripe-cta-rent-to-own"
+                  href="https://buy.stripe.com/dRm7sMggXc5leDkbnv2sM0q"
+                  data-stripe-base="https://buy.stripe.com/dRm7sMggXc5leDkbnv2sM0q"
+                  class="plan-select-btn plan-select-btn-green plan-stripe-link"
+                >
+                  <span id="stripe-label-rent-to-own">Start Rent-to-Own at $297/mo →</span>
+                </a>
+                <button type="button" class="plan-secondary-btn js-select-plan" data-plan="$297/mo 12-Month Rent-to-Own">
+                  Or Watch 5-Min Walkthrough &amp; Book Live Demo ↓
+                </button>
+              </div>
             </div>
 
             <!-- Card 2: Buy It Outright -->
@@ -555,10 +607,10 @@
                 <span class="plan-badge">100% DAY-1 WEBSITE OWNERSHIP</span>
                 <h3>Buy It Outright</h3>
                 <div class="plan-price">
-                  <span class="price-amount">$2,400</span>
-                  <span class="price-period">one-time</span>
+                  <span class="price-amount" id="buy-outright-price-amount">$2,400</span>
+                  <span class="price-period" id="buy-outright-price-period">one-time</span>
                 </div>
-                <p class="plan-tagline"><strong>You own it from Day 1</strong></p>
+                <p class="plan-tagline" id="buy-outright-tagline"><strong>You own it from Day 1</strong></p>
               </div>
               <ul class="plan-features">
                 <li><span>✓</span> You own your website from Day 1 with zero monthly lease payments</li>
@@ -567,10 +619,46 @@
                 <li><span>✓</span> Add our optional $100/mo Web &amp; AI Care Plan to cover hosting, texting lines, and AI usage, or connect your own accounts</li>
                 <li><span>✓</span> Save $1,164 compared to the 12-month payment plan</li>
               </ul>
-              <button type="button" class="plan-select-btn js-select-plan" data-plan="$2,400 Buy It Outright">
-                Buy My Website Outright for $2,400
-              </button>
+
+              <label class="care-plan-toggle-box" for="buy-outright-care-checkbox">
+                <input type="checkbox" id="buy-outright-care-checkbox" />
+                <span>
+                  <strong>Include Optional $100/mo Web &amp; AI Care Plan</strong>
+                  <small>Covers high-speed hosting, dedicated texting number, carrier registration &amp; AI usage</small>
+                </span>
+              </label>
+
+              <div class="plan-cta-stack">
+                <a
+                  id="stripe-cta-buy-outright"
+                  href="https://buy.stripe.com/4gM7sM9Szd9p2UC4Z72sM0r"
+                  data-stripe-standalone="https://buy.stripe.com/4gM7sM9Szd9p2UC4Z72sM0r"
+                  data-stripe-with-care="https://buy.stripe.com/14A00kaWD1qH66Obnv2sM0s"
+                  class="plan-select-btn plan-stripe-link"
+                >
+                  <span id="stripe-label-buy-outright">Buy My Website Outright for $2,400 →</span>
+                </a>
+                <button type="button" class="plan-secondary-btn js-select-plan" data-plan="$2,400 Buy It Outright">
+                  Or Watch 5-Min Walkthrough &amp; Book Live Demo ↓
+                </button>
+              </div>
             </div>
+          </div>
+
+          <!-- Standalone $100/mo Web & AI Care Plan Strip -->
+          <div class="care-plan-standalone-strip" id="care-plan-strip">
+            <div class="care-strip-copy">
+              <strong>Already own your Smart Site outright or finished your 12-month term?</strong>
+              <span>Keep high-speed managed hosting, dedicated texting lines, 3-second AI usage, and routine edits active month-to-month.</span>
+            </div>
+            <a
+              id="stripe-cta-care-plan"
+              href="https://buy.stripe.com/aFabJ2aWD3yP52K3V32sM0t"
+              data-stripe-base="https://buy.stripe.com/aFabJ2aWD3yP52K3V32sM0t"
+              class="care-strip-btn plan-stripe-link"
+            >
+              Activate $100/mo Web &amp; AI Care Plan →
+            </a>
           </div>
         </div>
 
