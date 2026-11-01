@@ -565,6 +565,38 @@ function closeLeadModal() {
   document.body.style.overflow = '';
 }
 
+function applySelectedPlanHighlight(ownershipValue) {
+  const raw = String(ownershipValue || state.selectedOwnership || '$297/mo 12-Month Rent-to-Own');
+  const isBuyOutright =
+    raw.toLowerCase().includes('2,400') ||
+    raw.toLowerCase().includes('2400') ||
+    raw.toLowerCase().includes('outright');
+
+  const canonicalPlan = isBuyOutright
+    ? '$2,400 Buy It Outright'
+    : '$297/mo 12-Month Rent-to-Own';
+
+  state.selectedOwnership = canonicalPlan;
+
+  const rentCard = document.getElementById('pricing-card-rent');
+  const buyCard = document.getElementById('pricing-card-buy');
+  const rentBadge = document.getElementById('selected-badge-rent');
+  const buyBadge = document.getElementById('selected-badge-buy');
+
+  if (rentCard) {
+    rentCard.classList.toggle('is-user-selected', !isBuyOutright);
+  }
+  if (buyCard) {
+    buyCard.classList.toggle('is-user-selected', isBuyOutright);
+  }
+  if (rentBadge) {
+    rentBadge.hidden = isBuyOutright;
+  }
+  if (buyBadge) {
+    buyBadge.hidden = !isBuyOutright;
+  }
+}
+
 function selectOwnershipPill(ownershipValue) {
   state.selectedOwnership = ownershipValue;
   document.querySelectorAll('.ownership-pill').forEach((pill) => {
@@ -572,6 +604,7 @@ function selectOwnershipPill(ownershipValue) {
     pill.classList.toggle('is-selected', isMatch);
     pill.setAttribute('aria-checked', isMatch ? 'true' : 'false');
   });
+  applySelectedPlanHighlight(ownershipValue);
 }
 
 function unlockStep2View({ lead = null, scrollIntoView = true } = {}) {
@@ -584,23 +617,26 @@ function unlockStep2View({ lead = null, scrollIntoView = true } = {}) {
     step2Section.hidden = false;
   }
 
+  if (lead && lead.ownershipPreference) {
+    applySelectedPlanHighlight(lead.ownershipPreference);
+  }
+
   if (greetingEl && lead && lead.name) {
     const firstName = lead.name.trim().split(' ')[0];
-    greetingEl.textContent = `WELCOME, ${firstName.toUpperCase()}! STEP 2 UNLOCKED: Your 5-Min Walkthrough & ${lead.ownershipPreference} Options`;
+    const planText = lead.ownershipPreference || state.selectedOwnership;
+    greetingEl.textContent = `WELCOME, ${firstName.toUpperCase()}! STEP 2 UNLOCKED: Your 5-Min Walkthrough & ${planText} Options`;
   }
 
   if (toggleBtn) {
     toggleBtn.textContent = '✓ Step 2 Unlocked (Jump to Walkthrough)';
   }
 
-  // Pre-fill booking form if lead data exists
+  // Pre-fill 24/7 AI text support phone input if lead data exists
   if (lead) {
-    const bName = document.getElementById('booking-name');
-    const bPhone = document.getElementById('booking-phone');
-    const smsPhone = document.getElementById('sms-test-phone');
-    if (bName && !bName.value && lead.name) bName.value = lead.name;
-    if (bPhone && !bPhone.value && lead.phone) bPhone.value = lead.phone;
-    if (smsPhone && !smsPhone.value && lead.phone) smsPhone.value = lead.phone;
+    const textSupportPhone = document.getElementById('text-support-phone-input');
+    if (textSupportPhone && !textSupportPhone.value && lead.phone) {
+      textSupportPhone.value = lead.phone;
+    }
     if (lead.email) applyStripeEmailPrefill(lead.email);
   }
 
@@ -608,6 +644,57 @@ function unlockStep2View({ lead = null, scrollIntoView = true } = {}) {
     setTimeout(() => {
       step2Section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }, 100);
+  }
+}
+
+function hydrateWatchPageLeadContext() {
+  const params = new URLSearchParams(window.location.search);
+  let savedLead = null;
+  try {
+    const raw = localStorage.getItem('tiberius_latest_lead');
+    if (raw) savedLead = JSON.parse(raw);
+  } catch (_err) {
+    savedLead = null;
+  }
+
+  const urlName = params.get('name');
+  const urlPhone = params.get('phone');
+  const urlEmail = params.get('email');
+  const urlIndustry = params.get('industry');
+  const urlPlan = params.get('plan');
+  const urlDemo = params.get('demo');
+
+  const hasUrlLeadParams = Boolean(urlName || urlPhone || urlEmail || urlIndustry || urlPlan);
+
+  const mergedLead = {
+    industry:
+      urlIndustry ||
+      (savedLead && savedLead.industry) ||
+      'Home Services & Contracting (Remodel, Roof, Trades)',
+    name: urlName || (savedLead && savedLead.name) || '',
+    phone: urlPhone || (savedLead && savedLead.phone) || '',
+    email: urlEmail || (savedLead && savedLead.email) || '',
+    ownershipPreference:
+      urlPlan ||
+      (savedLead && savedLead.ownershipPreference) ||
+      '$297/mo 12-Month Rent-to-Own',
+    locationTag: state.locationTag || (savedLead && savedLead.locationTag) || 'national',
+    selectedDemo: urlDemo || (savedLead && savedLead.selectedDemo) || null,
+    timestamp: (savedLead && savedLead.timestamp) || new Date().toISOString()
+  };
+
+  if (hasUrlLeadParams) {
+    try {
+      localStorage.setItem('tiberius_latest_lead', JSON.stringify(mergedLead));
+    } catch (_err) {
+      // Ignore storage errors
+    }
+  }
+
+  applySelectedPlanHighlight(mergedLead.ownershipPreference);
+
+  if (mergedLead.name || mergedLead.phone || mergedLead.email) {
+    unlockStep2View({ lead: mergedLead, scrollIntoView: false });
   }
 }
 
@@ -668,7 +755,7 @@ function initModalHandlers() {
     });
   });
 
-  // Slide 2: Form Submit -> Close modal, unlock Step 2, log/webhook lead payload
+  // Slide 2: Form Submit -> Save inputs to localStorage/URL params, fire webhook, and redirect to watch.html
   const leadForm = document.getElementById('modal-lead-form');
   if (leadForm) {
     leadForm.addEventListener('submit', async (e) => {
@@ -697,20 +784,37 @@ function initModalHandlers() {
         // Ignore storage errors
       }
 
-      // Close modal & unlock Step 2 immediately for zero-friction UX
-      closeLeadModal();
-      unlockStep2View({ lead: leadPayload, scrollIntoView: true });
+      // Build URL parameters for Step 2 (watch.html)
+      const watchParams = new URLSearchParams();
+      watchParams.set('industry', leadPayload.industry);
+      watchParams.set('name', leadPayload.name);
+      watchParams.set('phone', leadPayload.phone);
+      watchParams.set('email', leadPayload.email);
+      watchParams.set('plan', leadPayload.ownershipPreference);
+      if (leadPayload.locationTag && leadPayload.locationTag !== 'default' && leadPayload.locationTag !== 'national') {
+        watchParams.set('loc', leadPayload.locationTag);
+      }
+      if (leadPayload.selectedDemo) {
+        watchParams.set('demo', leadPayload.selectedDemo);
+      }
 
-      // Fire non-blocking webhook POST to /api/lead
+      // Fire non-blocking webhook POST to /api/lead with keepalive before redirecting
       try {
-        await fetch('/api/lead', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(leadPayload)
-        });
+        await Promise.race([
+          fetch('/api/lead', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(leadPayload),
+            keepalive: true
+          }),
+          new Promise((resolve) => setTimeout(resolve, 350))
+        ]);
       } catch (_err) {
         // Non-blocking fallback
       }
+
+      closeLeadModal();
+      window.location.href = `watch.html?${watchParams.toString()}`;
     });
   }
 }
@@ -950,7 +1054,7 @@ function initStep2Controls() {
   const previewToggle = document.getElementById('preview-step-2-toggle');
   if (previewToggle) {
     previewToggle.addEventListener('click', () => {
-      unlockStep2View({ scrollIntoView: true });
+      window.location.href = 'watch.html';
     });
   }
 
@@ -979,15 +1083,17 @@ function initStep2Controls() {
     });
   }
 
-  // Pricing Card Plan Selection -> Scrolls to Booking (if Step 2 unlocked) or Opens Modal with that plan
+  // Pricing Card Plan Selection -> Highlights plan & Scrolls to 24/7 AI Text Support (on watch.html) or Opens Modal
   document.querySelectorAll('.js-select-plan').forEach((btn) => {
     btn.addEventListener('click', () => {
       const plan = btn.getAttribute('data-plan');
       selectOwnershipPill(plan);
-      if (state.step2Unlocked) {
-        const bookingBlock = document.getElementById('booking-and-sms-trigger');
-        if (bookingBlock) {
-          bookingBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const textSupportBlock = document.getElementById('text-us-support');
+      if (textSupportBlock) {
+        textSupportBlock.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const qInput = document.getElementById('text-support-question-input');
+        if (qInput) {
+          setTimeout(() => qInput.focus(), 450);
         }
       } else {
         openLeadModal({ presetOwnership: plan });
@@ -1029,7 +1135,7 @@ function initStep2Controls() {
     careCheckbox.addEventListener('change', syncBuyOutrightCareMode);
   }
 
-  // Hydrate saved lead email for Stripe prefill if available
+  // Hydrate saved lead email & phone for Stripe prefill and 24/7 AI Text Support
   try {
     const savedLeadRaw = localStorage.getItem('tiberius_latest_lead');
     if (savedLeadRaw) {
@@ -1037,92 +1143,115 @@ function initStep2Controls() {
       if (savedLead && savedLead.email) {
         applyStripeEmailPrefill(savedLead.email);
       }
+      const textSupportPhone = document.getElementById('text-support-phone-input');
+      if (textSupportPhone && !textSupportPhone.value && savedLead && savedLead.phone) {
+        textSupportPhone.value = savedLead.phone;
+      }
     }
   } catch (_err) {
     // Ignore storage restrictions
   }
 
-  // Direct Booking Calendar Day & Time Pills
-  document.querySelectorAll('#booking-day-pills .day-pill').forEach((pill) => {
-    pill.addEventListener('click', () => {
-      state.bookingDay = pill.getAttribute('data-day');
-      document.querySelectorAll('#booking-day-pills .day-pill').forEach((p) => {
-        p.classList.toggle('is-selected', p === pill);
-      });
-    });
-  });
+  // 24/7 Live AI Text Us Support Section (Zero Sales Calls)
+  const textUsPrimaryBtn = document.getElementById('text-us-primary-btn');
+  const textSupportForm = document.getElementById('text-support-form');
+  const textQuestionInput = document.getElementById('text-support-question-input');
+  const textPhoneInput = document.getElementById('text-support-phone-input');
+  const textSupportThread = document.getElementById('text-support-thread');
+  const textSupportConfirmMsg = document.getElementById('text-support-confirm-msg');
 
-  document.querySelectorAll('#booking-time-pills .time-pill').forEach((pill) => {
-    pill.addEventListener('click', () => {
-      state.bookingTime = pill.getAttribute('data-time');
-      document.querySelectorAll('#booking-time-pills .time-pill').forEach((p) => {
-        p.classList.toggle('is-selected', p === pill);
-      });
-    });
-  });
+  function getAiSupportReply(questionText) {
+    const q = (questionText || '').toLowerCase();
+    if (q.includes('7-day') || q.includes('build') || q.includes('call') || q.includes('work')) {
+      return 'Zero phone tag! Right after checkout, you get a quick 3-minute digital onboarding link (or drop your current website URL so we auto-scan it). Our team builds your custom Smart Site + 3-second AI text engine and texts you a live preview link within 7 days.';
+    }
+    if (q.includes('297') || q.includes('2,400') || q.includes('2400') || q.includes('rent') || q.includes('buy') || q.includes('difference')) {
+      return 'With $297/mo Rent-to-Own, there is $0 upfront and all hosting + AI texting are included while you pay—after 12 payments, you own 100% of the site forever. With $2,400 Buy Outright, you own 100% from Day 1 and save $1,164 vs. the 12-month path.';
+    }
+    if (q.includes('guarantee') || q.includes('refund') || q.includes('30-day') || q.includes('risk')) {
+      return 'You are 100% covered by our Zero-Risk 30-Day Money-Back Guarantee. Start on the $297/mo Rent-to-Own plan today, test your live Smart Site and AI text agent for 30 days, and if you aren’t thrilled, just text us and we refund your $297 in full—no hard feelings.';
+    }
+    if (q.includes('100') || q.includes('care')) {
+      return 'The optional $100/mo Web & AI Care Plan covers high-speed cloud hosting, 24/7 AI missed-call & web-chat SMS fees, 5-star review automation, and unlimited text/photo edits. (During the 12-month Rent-to-Own period, all of this is already included in your $297/mo!)';
+    }
+    return 'Great question! We build and launch your custom Smart Site + 24/7 AI Text Agent in 7 days with zero sales calls, backed by our 30-Day 100% Money-Back Guarantee. I just logged your question and dispatched a live text thread to your phone so you can reply anytime 24/7!';
+  }
 
-  // Direct Booking Submit
-  const bookingForm = document.getElementById('direct-booking-form');
-  if (bookingForm) {
-    bookingForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const name = document.getElementById('booking-name').value.trim();
-      const phone = document.getElementById('booking-phone').value.trim();
-      const confirmMsg = document.getElementById('booking-confirmation-msg');
+  async function dispatchTextSupportQuestion(questionText) {
+    if (!questionText) return;
+    const phoneVal = (textPhoneInput && textPhoneInput.value.trim()) || '';
 
-      const bookingPayload = {
-        source: 'step-2-direct-booking',
-        name,
-        phone,
-        day: state.bookingDay,
-        time: state.bookingTime,
-        ownershipPreference: state.selectedOwnership,
-        locationTag: state.locationTag
-      };
+    if (textSupportThread) {
+      const userBubble = document.createElement('div');
+      userBubble.className = 'text-support-msg text-support-msg-user';
+      userBubble.textContent = questionText;
+      textSupportThread.appendChild(userBubble);
+    }
 
-      window.__TIBERIUS_LEADS__.push(bookingPayload);
-      if (confirmMsg) {
-        confirmMsg.hidden = false;
-        confirmMsg.textContent = `✓ Locked In! Your 15-Minute Demo Call is confirmed for ${state.bookingDay} at ${state.bookingTime}. Confirmation SMS dispatched to ${phone}.`;
+    const aiReply = getAiSupportReply(questionText);
+
+    setTimeout(() => {
+      if (textSupportThread) {
+        const aiBubble = document.createElement('div');
+        aiBubble.className = 'text-support-msg text-support-msg-ai';
+        aiBubble.innerHTML = `<strong>Tiberius AI Agent (Instant 24/7 Reply):</strong> ${aiReply}`;
+        textSupportThread.appendChild(aiBubble);
       }
+      if (textSupportConfirmMsg) {
+        textSupportConfirmMsg.hidden = false;
+        textSupportConfirmMsg.textContent = phoneVal
+          ? `✓ Instant AI reply posted above & live SMS thread dispatched to ${phoneVal}! (Notice how fast that answered? Your Smart Site includes this exact 24/7 AI agent for your customers.)`
+          : '✓ Instant AI reply posted above! Enter your mobile number anytime to move this conversation to your phone via SMS.';
+      }
+    }, 650);
 
-      try {
-        await fetch('/api/lead', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(bookingPayload)
-        });
-      } catch (_err) {
-        // Ignore network error
+    const supportPayload = {
+      source: 'step-2-24-7-ai-text-support',
+      question: questionText,
+      phone: phoneVal,
+      ownershipPreference: state.selectedOwnership,
+      locationTag: state.locationTag,
+      timestamp: new Date().toISOString()
+    };
+
+    window.__TIBERIUS_LEADS__.push(supportPayload);
+    try {
+      await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(supportPayload)
+      });
+    } catch (_err) {
+      // Non-blocking fallback
+    }
+  }
+
+  if (textUsPrimaryBtn) {
+    textUsPrimaryBtn.addEventListener('click', () => {
+      if (textQuestionInput) {
+        textQuestionInput.focus();
+        textQuestionInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
   }
 
-  // Instant 3-Second AI Text Test Trigger
-  const smsForm = document.getElementById('instant-sms-test-form');
-  if (smsForm) {
-    smsForm.addEventListener('submit', (e) => {
+  document.querySelectorAll('.text-quick-pill').forEach((pill) => {
+    pill.addEventListener('click', () => {
+      const q = pill.getAttribute('data-question') || pill.textContent.trim();
+      if (textQuestionInput) {
+        textQuestionInput.value = q;
+      }
+      dispatchTextSupportQuestion(q);
+    });
+  });
+
+  if (textSupportForm) {
+    textSupportForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const phone = document.getElementById('sms-test-phone').value.trim();
-      const niche = document.getElementById('sms-test-niche').value;
-      const consoleBody = document.getElementById('sms-console-body');
-      if (!consoleBody) return;
-
-      consoleBody.innerHTML = `
-        <div class="console-line">[0.0s] 📞 Simulating missed customer call from ${phone} (${niche})...</div>
-      `;
-
-      setTimeout(() => {
-        consoleBody.innerHTML += `
-          <div class="console-line">[0.9s] 🧠 Tiberius AI drafting custom ${niche} response...</div>
-        `;
-      }, 650);
-
-      setTimeout(() => {
-        consoleBody.innerHTML += `
-          <div class="console-line console-highlight">[2.4s] ⚡ SMS DELIVERED TO ${phone}: "Hi! Sorry we missed your call. We're with a customer right now. How can we help with your ${niche.toLowerCase()} needs today?"</div>
-        `;
-      }, 1500);
+      const q = textQuestionInput ? textQuestionInput.value.trim() : '';
+      if (!q) return;
+      if (textQuestionInput) textQuestionInput.value = '';
+      dispatchTextSupportQuestion(q);
     });
   }
 }
@@ -1150,7 +1279,7 @@ function initStripeCheckoutReturn() {
   }
   if (descEl) {
     descEl.textContent =
-      'Your Stripe checkout is complete and your 7-day custom build slot is locked in. Pick your 15-minute kickoff call slot below so we can review your custom mockup, or click Auto-Scan Website to preload your business details right now.';
+      'Your Stripe checkout is complete and your 7-day custom build slot is locked in—with zero phone calls needed. Click Auto-Scan Website to preload your business details right now, or message our 24/7 Live AI Text Agent below anytime.';
   }
   if (banner) {
     banner.hidden = false;
@@ -1168,5 +1297,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initModalHandlers();
   initShowcaseControls();
   initStep2Controls();
+  hydrateWatchPageLeadContext();
   initStripeCheckoutReturn();
 });
