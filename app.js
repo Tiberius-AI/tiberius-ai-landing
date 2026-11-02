@@ -621,23 +621,17 @@ function unlockStep2View({ lead = null, scrollIntoView = true } = {}) {
     applySelectedPlanHighlight(lead.ownershipPreference);
   }
 
-  if (greetingEl && lead && lead.name) {
-    const firstName = lead.name.trim().split(' ')[0];
-    const planText = lead.ownershipPreference || state.selectedOwnership;
-    greetingEl.textContent = `WELCOME, ${firstName.toUpperCase()}! STEP 2 UNLOCKED: Your 5-Min Walkthrough & ${planText} Options`;
+  if (greetingEl) {
+    greetingEl.textContent = 'STEP 2 UNLOCKED • LIVE DEMO SENT TO YOUR PHONE';
   }
 
   if (toggleBtn) {
     toggleBtn.textContent = '✓ Step 2 Unlocked (Jump to Walkthrough)';
   }
 
-  // Pre-fill 24/7 AI text support phone input if lead data exists
-  if (lead) {
-    const textSupportPhone = document.getElementById('text-support-phone-input');
-    if (textSupportPhone && !textSupportPhone.value && lead.phone) {
-      textSupportPhone.value = lead.phone;
-    }
-    if (lead.email) applyStripeEmailPrefill(lead.email);
+  // Hydrate saved lead email for Stripe prefill
+  if (lead && lead.email) {
+    applyStripeEmailPrefill(lead.email);
   }
 
   if (scrollIntoView && step2Section) {
@@ -1014,9 +1008,114 @@ function initShowcaseControls() {
 }
 
 /* ============================================================================
-   4. UNLOCKED STEP 2 VIEW: CHAPTER PLAYER, PRICING & LIVE SMS SIMULATOR
+   4. UNLOCKED STEP 2 VIEW: LIVE WALKTHROUGH VIDEO + STYLED ON-PLAYER CAPTIONS
    ============================================================================ */
-function selectVslChapter(idx) {
+const VSL_CAPTIONS = [
+  { start: 0.0, end: 2.6, html: 'Very cool—glad you made it over to <span class="vsl-cap-gold">Step 2!</span>' },
+  { start: 2.6, end: 5.5, html: 'Since you just filled out that quick form on the last page,' },
+  { start: 5.5, end: 10.2, html: 'keep an eye on your phone right now—you’re about to get a <span class="vsl-cap-green">live text message</span> from our system.' },
+  { start: 10.2, end: 13.2, html: 'I wanted you to see that firsthand before we even dive in,' },
+  { start: 13.2, end: 20.3, html: 'because what’s happening on your phone right now is the <span class="vsl-cap-gold">exact instant speed</span> your customers experience on your site.' },
+  { start: 20.3, end: 25.3, html: 'Thing is, most local business websites have a <span class="vsl-cap-gold">massive problem</span> that nobody talks about.' },
+  { start: 25.3, end: 29.8, html: 'They are expensive <span class="vsl-cap-gold">digital brochures</span> sitting on the internet collecting dust.' },
+  { start: 29.8, end: 35.3, html: 'Business owners either pay thousands of dollars upfront for a pretty design that does nothing—or worse,' },
+  { start: 35.3, end: 41.1, html: 'they get trapped paying every single month to some <span class="vsl-cap-gold">GoHighLevel reseller</span> on a cookie-cutter template' },
+  { start: 41.1, end: 44.8, html: 'that just sits there, hoping somebody fills out a 10-line contact form.' },
+  { start: 44.8, end: 49.6, html: 'Think about what actually happens during a normal workday when you’re out on a job site,' },
+  { start: 49.6, end: 54.8, html: 'driving between estimates, or finally sitting down with your family for dinner.' },
+  { start: 54.8, end: 60.5, html: 'A homeowner finds your business on Google, clicks on your site, and has <span class="vsl-cap-gold">one quick question</span> before they book.' },
+  { start: 60.5, end: 64.5, html: 'Nobody wants to fill out an email form and wait <span class="vsl-cap-gold">two days</span> for a reply.' },
+  { start: 64.5, end: 67.5, html: 'If they cannot get an answer and get on your schedule <span class="vsl-cap-green">right away</span>,' },
+  { start: 67.5, end: 73.0, html: 'they bounce right back to Google, call the next contractor on the list, and <span class="vsl-cap-gold">that job is gone for good.</span>' },
+  { start: 73.0, end: 79.5, html: 'Even worse, when you do knock a job out of the park, you get busy and forget to chase down the <span class="vsl-cap-gold">Google review.</span>' },
+  { start: 79.5, end: 86.5, html: 'So a competitor with half your experience ends up outranking you on Google Maps simply because they have more <span class="vsl-cap-gold">5-star reviews.</span>' },
+  { start: 86.5, end: 92.1, html: 'Once you see how many high-ticket jobs quietly leak out of a traditional website every single week,' },
+  { start: 92.1, end: 94.6, html: 'it completely changes how you look at your business.' },
+  { start: 94.6, end: 100.5, html: 'That is why we engineered <span class="vsl-cap-gold">Tiberius Smart Sites</span> from the ground up as true <span class="vsl-cap-green">functional websites.</span>' },
+  { start: 100.5, end: 103.8, html: 'When you switch to a <span class="vsl-cap-green">functional website</span> built the Tiberius way,' },
+  { start: 103.8, end: 107.8, html: 'your site stops acting like a poster on the wall—' },
+  { start: 107.8, end: 112.6, html: 'and starts working like your sharpest <span class="vsl-cap-gold">24/7 sales rep, receptionist, and reputation manager</span> rolled into one.' },
+  { start: 112.6, end: 116.8, html: 'It starts with <span class="vsl-cap-gold">superior AI lead capture</span> built by Tiberius.' },
+  { start: 116.8, end: 121.4, html: 'The very second a visitor lands on your page, your site <span class="vsl-cap-green">actively engages with them.</span>' },
+  { start: 121.4, end: 125.7, html: 'It qualifies the scope of their project and captures their details <span class="vsl-cap-green">on the spot</span>—' },
+  { start: 125.7, end: 128.1, html: 'instead of waiting on a boring contact form.' },
+  { start: 128.1, end: 133.0, html: 'Plus, you have an <span class="vsl-cap-gold">AI voice receptionist</span> ready to pick up the phone whenever your hands are full,' },
+  { start: 133.0, end: 136.7, html: 'answering customer questions and <span class="vsl-cap-green">booking appointments</span> straight onto your calendar' },
+  { start: 136.7, end: 139.6, html: 'while your competitors are still letting calls roll to voicemail.' },
+  { start: 139.6, end: 143.8, html: 'Then comes the <span class="vsl-cap-gold">follow-up magic</span>—and this is the part that totally kicks ass!' },
+  { start: 143.8, end: 149.6, html: 'Seriously, this is where business owners see the <span class="vsl-cap-green">biggest jump in booked jobs</span> right out of the gate.' },
+  { start: 149.6, end: 157.9, html: 'Huge numbers of estimates go cold simply because nobody has the bandwidth to call and text every prospect 5 or 6 times while running a crew.' },
+  { start: 157.9, end: 164.1, html: 'Just like the text that hit your phone a minute ago, our functional websites handle all of that <span class="vsl-cap-gold">follow-up magic automatically.</span>' },
+  { start: 164.1, end: 169.0, html: 'Every web inquiry, every single conversation, and every pending quote gets nurtured' },
+  { start: 169.0, end: 174.0, html: 'with natural, well-timed <span class="vsl-cap-green">text and email check-ins</span> until they book the job on your schedule.' },
+  { start: 174.0, end: 177.7, html: 'You never have to wake up at midnight wondering who you forgot to call back.' },
+  { start: 177.7, end: 179.8, html: 'Oh, wait a sec—almost forgot!' },
+  { start: 179.8, end: 184.9, html: 'You need more <span class="vsl-cap-gold">5-star reviews</span>, right? Well, we got you covered, and we’re going to town!' },
+  { start: 184.9, end: 192.8, html: 'To keep the whole engine feeding itself every month, we build <span class="vsl-cap-green">automated 5-star review generation</span> right into your daily workflow.' },
+  { start: 192.8, end: 198.5, html: 'The moment you wrap up a job, a quick automated request goes straight to your customer’s phone asking how everything went.' },
+  { start: 198.5, end: 204.7, html: 'Happy customers get guided directly to your Google Business Profile to drop a <span class="vsl-cap-gold">5-star review in 30 seconds flat,</span>' },
+  { start: 204.7, end: 211.0, html: 'while any private concerns get routed <span class="vsl-cap-green">straight to you first</span>, so you can make things right before they touch the public internet.' },
+  { start: 211.0, end: 215.8, html: 'As those <span class="vsl-cap-gold">5-star reviews</span> stack up week after week, Google pushes your business higher up the local Map Pack,' },
+  { start: 215.8, end: 220.3, html: 'sending even more <span class="vsl-cap-green">high-intent traffic</span> right back into your site.' },
+  { start: 220.3, end: 222.4, html: 'I mean, how cool is that? Okay—' },
+  { start: 222.4, end: 228.5, html: 'here is the <span class="vsl-cap-gold">biggest advantage</span> of building the Tiberius way instead of signing up with a typical marketing agency.' },
+  { start: 228.5, end: 232.8, html: 'Most <span class="vsl-cap-gold">GoHighLevel resellers</span>—and those guys are everywhere, right?—' },
+  { start: 232.8, end: 236.6, html: 'what they do is <span class="vsl-cap-gold">lock you into renting</span> their template forever.' },
+  { start: 236.6, end: 240.9, html: 'You pay them month after month for years, and the second you decide to stop paying,' },
+  { start: 240.9, end: 244.9, html: 'they pull the plug and <span class="vsl-cap-gold">hold your website hostage</span>—leaving you with nothing.' },
+  { start: 244.9, end: 250.0, html: 'Absolutely nothing. And quite frankly, that does suck. But get this:' },
+  { start: 250.0, end: 254.9, html: 'What we at Tiberius believe is that you should actually <span class="vsl-cap-green">own your digital real estate,</span>' },
+  { start: 254.9, end: 258.8, html: 'because your <span class="vsl-cap-gold">Tiberius Smart Site</span> is an investment in your business growth.' },
+  { start: 258.8, end: 262.6, html: 'And that is why we give you <span class="vsl-cap-green">two simple paths to complete ownership.</span>' },
+  { start: 262.6, end: 267.8, html: 'One: you can buy your custom Smart Site outright from Day 1 for <span class="vsl-cap-green">$2,400</span>,' },
+  { start: 267.8, end: 272.2, html: 'which <span class="vsl-cap-gold">saves you over $1,100</span> and eliminates monthly lease payments completely.' },
+  { start: 272.2, end: 275.8, html: 'Or two: if you want to keep more cash in your pocket upfront,' },
+  { start: 275.8, end: 280.7, html: 'you can start on our <span class="vsl-cap-gold">12-month Rent-to-Own plan</span> for just <span class="vsl-cap-green">$297 a month.</span>' },
+  { start: 280.7, end: 284.2, html: 'With Rent-to-Own, we launch your custom build in <span class="vsl-cap-green">7 days.</span>' },
+  { start: 284.2, end: 290.2, html: 'You can buy it out anytime you want, and after 12 payments, <span class="vsl-cap-gold">that website is 100% yours to keep.</span>' },
+  { start: 290.2, end: 293.7, html: 'Best of all, this is a <span class="vsl-cap-green">completely risk-free investment.</span>' },
+  { start: 293.7, end: 298.3, html: 'Every build is backed by our <span class="vsl-cap-green">🛡️ 30-Day 100% Money-Back Guarantee.</span>' },
+  { start: 298.3, end: 302.1, html: 'And that’s for both plans—doesn’t matter, <span class="vsl-cap-gold">your investment is safe.</span>' },
+  { start: 302.1, end: 306.4, html: 'For example, you can start with the <span class="vsl-cap-green">$297 Rent-to-Own plan</span> today,' },
+  { start: 306.4, end: 310.0, html: 'let us build and launch your custom functional website in <span class="vsl-cap-gold">7 days,</span>' },
+  { start: 310.0, end: 312.8, html: 'and test-drive the entire system for a <span class="vsl-cap-green">full month.</span>' },
+  { start: 312.8, end: 316.9, html: 'If you are not thrilled with the build and the leads it captures in your first 30 days,' },
+  { start: 316.9, end: 321.4, html: 'we <span class="vsl-cap-green">refund your $297 in full</span> with no hard feelings.' },
+  { start: 321.4, end: 324.5, html: 'But deep down, you know that’s not going to happen, right?' },
+  { start: 324.5, end: 329.7, html: '<span class="vsl-cap-gold">Tiberius is the best</span>, and you’re going to see some serious move-the-needle results—no doubt about it.' },
+  { start: 329.7, end: 334.4, html: 'When you combine <span class="vsl-cap-gold">functional websites</span> with superior AI lead capture,' },
+  { start: 334.4, end: 339.0, html: 'relentless follow-up magic, <span class="vsl-cap-gold">automated 5-star reviews</span>, and <span class="vsl-cap-green">true ownership,</span>' },
+  { start: 339.0, end: 345.6, html: 'you stop chasing leads by hand and let your website <span class="vsl-cap-green">fill your calendar</span>—while you focus on what you do best.' },
+  { start: 345.6, end: 348.5, html: 'So here is all you need to do <span class="vsl-cap-gold">right now:</span>' },
+  { start: 348.5, end: 353.3, html: 'Look right below this video, where we already highlighted the option you picked on the last page.' },
+  { start: 353.3, end: 360.6, html: 'Choose whether you want to start on the <span class="vsl-cap-green">$297/mo Rent-to-Own plan</span>, or buy your site outright to <span class="vsl-cap-gold">save over $1,100.</span>' },
+  { start: 360.6, end: 363.7, html: 'And after that, just <span class="vsl-cap-green">click the button below</span> to lock in your build.' },
+  { start: 363.7, end: 368.1, html: 'Now, the second you complete that checkout, <span class="vsl-cap-gold">two things happen immediately:</span>' },
+  { start: 368.1, end: 375.3, html: 'First, you’ll go straight to a quick <span class="vsl-cap-green">2-minute onboarding page</span> where we grab your logo, service areas, and calendar preferences' },
+  { start: 375.3, end: 378.2, html: 'so you do not have to lift a finger on the tech side.' },
+  { start: 378.2, end: 382.4, html: 'Second, my team gets to work right away, and within the next <span class="vsl-cap-green">7 days,</span>' },
+  { start: 382.4, end: 386.9, html: 'we will hand you the keys to your brand-new <span class="vsl-cap-gold">functional website</span>—completely live,' },
+  { start: 386.9, end: 391.5, html: 'wired up to your phone, and backed by our full <span class="vsl-cap-green">30-Day Money-Back Guarantee.</span>' },
+  { start: 391.5, end: 397.0, html: 'So that’s it! Go ahead and <span class="vsl-cap-green">click your plan right below this video right now</span>, and let’s get your site built.' },
+  { start: 397.0, end: 400.5, html: 'Thank you, and I will see you on the other side!' },
+  { start: 400.5, end: 445.0, html: '👇 <span class="vsl-cap-gold">Select Your Plan Below</span> (<span class="vsl-cap-green">$297/mo Rent-to-Own</span> or <span class="vsl-cap-green">$2,400 Buy Outright</span>) • 30-Day Money-Back Guarantee' }
+];
+
+const VSL_CHAPTER_BREAKPOINTS = [
+  { idx: 0, start: 0, label: 'CHAPTER 1 OF 4 • INSTANT SMS + FUNCTIONAL SITES' },
+  { idx: 1, start: 112.8, label: 'CHAPTER 2 OF 4 • AI LEAD CAPTURE & FOLLOW-UP MAGIC' },
+  { idx: 2, start: 180.0, label: 'CHAPTER 3 OF 4 • AUTOMATED 5-STAR REVIEW ENGINE' },
+  { idx: 3, start: 228.7, label: 'CHAPTER 4 OF 4 • $297/MO RENT-TO-OWN & 30-DAY GUARANTEE' }
+];
+
+function formatVslTime(sec) {
+  const s = Math.max(0, Math.floor(sec || 0));
+  const m = Math.floor(s / 60);
+  const rem = s % 60;
+  return `${String(m).padStart(2, '0')}:${String(rem).padStart(2, '0')}`;
+}
+
+function selectVslChapter(idx, { seekVideo = false } = {}) {
   const chapter = VSL_CHAPTERS[idx] || VSL_CHAPTERS[0];
   state.activeChapterIdx = idx;
 
@@ -1026,6 +1125,7 @@ function selectVslChapter(idx) {
     btn.setAttribute('aria-selected', active ? 'true' : 'false');
   });
 
+  const videoEl = document.getElementById('watch-walkthrough-video');
   const statusPill = document.getElementById('vsl-playing-indicator');
   const timecodeEl = document.getElementById('vsl-timecode-display');
   const tagEl = document.getElementById('vsl-chapter-tag');
@@ -1035,10 +1135,22 @@ function selectVslChapter(idx) {
   const imgEl = document.getElementById('vsl-chapter-img');
   const scrubberFill = document.getElementById('vsl-scrubber-fill');
 
-  if (statusPill) {
-    statusPill.textContent = `${state.vslPlaying ? '🔊 UNMUTED WALKTHROUGH' : '⏸ PAUSED'} • CHAPTER ${idx + 1} OF 4`;
+  if (videoEl && seekVideo) {
+    const bp = VSL_CHAPTER_BREAKPOINTS[idx] || VSL_CHAPTER_BREAKPOINTS[0];
+    try {
+      videoEl.currentTime = bp.start;
+      videoEl.play().catch(() => {});
+    } catch (_err) {
+      // Ignore seek before metadata ready
+    }
   }
-  if (timecodeEl) timecodeEl.textContent = chapter.timecodeDisplay;
+
+  const bpMeta = VSL_CHAPTER_BREAKPOINTS[idx] || VSL_CHAPTER_BREAKPOINTS[0];
+  if (statusPill) {
+    const isPlaying = videoEl ? !videoEl.paused : state.vslPlaying;
+    statusPill.textContent = `${isPlaying ? '🔊 PLAYING WALKTHROUGH' : '⏸ PAUSED'} • ${bpMeta.label}`;
+  }
+  if (!videoEl && timecodeEl) timecodeEl.textContent = chapter.timecodeDisplay;
   if (tagEl) tagEl.textContent = chapter.tag;
   if (headingEl) headingEl.textContent = chapter.heading;
   if (descEl) descEl.textContent = chapter.desc;
@@ -1058,15 +1170,119 @@ function initStep2Controls() {
     });
   }
 
-  // Chapter buttons
+  // Live Video + Styled On-Player VSL Captions Synchronization
+  const videoEl = document.getElementById('watch-walkthrough-video');
+  const playOverlay = document.getElementById('watch-video-play-overlay');
+  const captionStage = document.getElementById('vsl-styled-caption-stage');
+  const captionBox = document.getElementById('vsl-styled-caption-box');
+  const ccToggleBtn = document.getElementById('vsl-cc-toggle-btn');
+  const ccToggleLabel = document.getElementById('vsl-cc-toggle-label');
+  const timecodeEl = document.getElementById('vsl-timecode-display');
+  const statusPill = document.getElementById('vsl-playing-indicator');
+
+  let lastCaptionHtml = '';
+  let captionsEnabled = true;
+
+  function syncNativeTrackVisibility() {
+    if (!videoEl || !videoEl.textTracks) return;
+    for (let i = 0; i < videoEl.textTracks.length; i += 1) {
+      // Keep native browser track hidden while custom styled captions are visible on stage
+      videoEl.textTracks[i].mode = 'hidden';
+    }
+  }
+
+  function updateVslCaptionForTime(t) {
+    if (!captionBox) return;
+    let activeCue = null;
+    for (let i = 0; i < VSL_CAPTIONS.length; i += 1) {
+      const cue = VSL_CAPTIONS[i];
+      if (t >= cue.start && t <= cue.end) {
+        activeCue = cue;
+        break;
+      }
+    }
+    if (!activeCue && t < VSL_CAPTIONS[0].start) {
+      activeCue = VSL_CAPTIONS[0];
+    }
+    const nextHtml = activeCue ? activeCue.html : '';
+    if (nextHtml && nextHtml !== lastCaptionHtml) {
+      captionBox.innerHTML = nextHtml;
+      lastCaptionHtml = nextHtml;
+    }
+
+    // Sync active chapter button based on current playback timestamp
+    let chapterIdx = 0;
+    for (let i = VSL_CHAPTER_BREAKPOINTS.length - 1; i >= 0; i -= 1) {
+      if (t >= VSL_CHAPTER_BREAKPOINTS[i].start) {
+        chapterIdx = VSL_CHAPTER_BREAKPOINTS[i].idx;
+        break;
+      }
+    }
+    if (chapterIdx !== state.activeChapterIdx) {
+      selectVslChapter(chapterIdx, { seekVideo: false });
+    }
+
+    // Update timecode display (6:40 spoken walkthrough length or full video duration)
+    if (timecodeEl) {
+      const totalDur = videoEl && Number.isFinite(videoEl.duration) && videoEl.duration > 0 ? Math.min(videoEl.duration, 400) : 400;
+      timecodeEl.textContent = `${formatVslTime(t)} / ${formatVslTime(totalDur)}`;
+    }
+  }
+
+  if (videoEl) {
+    syncNativeTrackVisibility();
+    videoEl.addEventListener('loadedmetadata', () => {
+      syncNativeTrackVisibility();
+      updateVslCaptionForTime(videoEl.currentTime || 0);
+    });
+    videoEl.addEventListener('timeupdate', () => {
+      updateVslCaptionForTime(videoEl.currentTime || 0);
+    });
+    videoEl.addEventListener('seeking', () => {
+      updateVslCaptionForTime(videoEl.currentTime || 0);
+    });
+    videoEl.addEventListener('play', () => {
+      state.vslPlaying = true;
+      if (playOverlay) playOverlay.classList.add('is-hidden');
+      const bp = VSL_CHAPTER_BREAKPOINTS[state.activeChapterIdx] || VSL_CHAPTER_BREAKPOINTS[0];
+      if (statusPill) statusPill.textContent = `🔊 PLAYING WALKTHROUGH • ${bp.label}`;
+    });
+    videoEl.addEventListener('pause', () => {
+      state.vslPlaying = false;
+      const bp = VSL_CHAPTER_BREAKPOINTS[state.activeChapterIdx] || VSL_CHAPTER_BREAKPOINTS[0];
+      if (statusPill) statusPill.textContent = `⏸ PAUSED • ${bp.label}`;
+    });
+  }
+
+  if (playOverlay && videoEl) {
+    playOverlay.addEventListener('click', () => {
+      playOverlay.classList.add('is-hidden');
+      videoEl.muted = false;
+      videoEl.play().catch(() => {});
+    });
+  }
+
+  if (ccToggleBtn && captionStage) {
+    ccToggleBtn.addEventListener('click', () => {
+      captionsEnabled = !captionsEnabled;
+      ccToggleBtn.classList.toggle('is-active', captionsEnabled);
+      ccToggleBtn.setAttribute('aria-pressed', captionsEnabled ? 'true' : 'false');
+      captionStage.classList.toggle('is-cc-off', !captionsEnabled);
+      if (ccToggleLabel) {
+        ccToggleLabel.textContent = captionsEnabled ? 'Captions: ON' : 'Captions: OFF';
+      }
+    });
+  }
+
+  // Chapter buttons (Seek real video & update active chapter tab)
   document.querySelectorAll('.chapter-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
       const idx = parseInt(btn.getAttribute('data-chapter-idx'), 10) || 0;
-      selectVslChapter(idx);
+      selectVslChapter(idx, { seekVideo: true });
     });
   });
 
-  // Play/Pause & Next Chapter buttons
+  // Legacy Play/Pause & Next Chapter buttons (if present)
   const playToggleBtn = document.getElementById('vsl-play-toggle-btn');
   const nextChapterBtn = document.getElementById('vsl-next-chapter-btn');
   if (playToggleBtn) {
@@ -1079,7 +1295,7 @@ function initStep2Controls() {
   if (nextChapterBtn) {
     nextChapterBtn.addEventListener('click', () => {
       const nextIdx = (state.activeChapterIdx + 1) % VSL_CHAPTERS.length;
-      selectVslChapter(nextIdx);
+      selectVslChapter(nextIdx, { seekVideo: true });
     });
   }
 
@@ -1135,17 +1351,13 @@ function initStep2Controls() {
     careCheckbox.addEventListener('change', syncBuyOutrightCareMode);
   }
 
-  // Hydrate saved lead email & phone for Stripe prefill and 24/7 AI Text Support
+  // Hydrate saved lead email for Stripe prefill
   try {
     const savedLeadRaw = localStorage.getItem('tiberius_latest_lead');
     if (savedLeadRaw) {
       const savedLead = JSON.parse(savedLeadRaw);
       if (savedLead && savedLead.email) {
         applyStripeEmailPrefill(savedLead.email);
-      }
-      const textSupportPhone = document.getElementById('text-support-phone-input');
-      if (textSupportPhone && !textSupportPhone.value && savedLead && savedLead.phone) {
-        textSupportPhone.value = savedLead.phone;
       }
     }
   } catch (_err) {
@@ -1160,50 +1372,326 @@ function initStep2Controls() {
   const textSupportThread = document.getElementById('text-support-thread');
   const textSupportConfirmMsg = document.getElementById('text-support-confirm-msg');
 
-  function getAiSupportReply(questionText) {
-    const q = (questionText || '').toLowerCase();
-    if (q.includes('7-day') || q.includes('build') || q.includes('call') || q.includes('work')) {
-      return 'Zero phone tag! Right after checkout, you get a quick 3-minute digital onboarding link (or drop your current website URL so we auto-scan it). Our team builds your custom Smart Site + 3-second AI text engine and texts you a live preview link within 7 days.';
+  const AI_CONCIERGE_TOPICS = [
+    {
+      id: 'vs-regular-websites',
+      patterns: [
+        /regular\s+web/i,
+        /normal\s+web/i,
+        /traditional\s+web/i,
+        /standard\s+web/i,
+        /other\s+web/i,
+        /old\s+web/i,
+        /brochure/i,
+        /better\s+than/i,
+        /different\s+from/i,
+        /what\s+makes\s+(this|a\s+smart\s+site|your)/i,
+        /why\s+is\s+this\s+better/i,
+        /\b(wix|squarespace|wordpress|webflow|godaddy\s+builder)\b/i,
+        /web\s+designer/i,
+        /typical\s+agency/i,
+        /why\s+smart\s+site/i,
+        /what\s+is\s+a\s+smart\s+site/i
+      ],
+      reply:
+        "Regular 'brochure' websites are passive—92% of visitors look around and leave without calling, and missed calls go straight to voicemail while you're on a job site. A Tiberius Smart Site actively turns web traffic and missed calls into booked jobs: (1) It greets visitors and starts a 2-way text conversation within 3 seconds, (2) Its ballpark/photo quote calculator collects project photos and pre-screens budgets before you ever roll a truck, (3) When you miss a phone call, it texts the caller back in 3 seconds so they don't call the next company on Google, and (4) It automatically texts happy customers 1-tap Google review links to rank you #1 locally."
+    },
+    {
+      id: 'build-time-onboarding',
+      patterns: [
+        /7-day/i,
+        /7\s+day/i,
+        /how\s+much\s+of\s+my\s+time/i,
+        /how\s+long\s+does/i,
+        /build\s+take/i,
+        /build\s+process/i,
+        /onboarding/i,
+        /auto-scan/i,
+        /autoscan/i,
+        /homework/i,
+        /after\s+checkout/i,
+        /how\s+do\s+we\s+start/i,
+        /turnaround/i
+      ],
+      reply:
+        'About 60 seconds of your time! Right after checkout, enter your business name or current website URL and our system auto-scans your logo, project photos, services, and best Google reviews—zero long forms or sales calls. Our Texas build team constructs your custom Smart Site and trains your AI agent over Days 2–5, then texts a private live preview link straight to your phone by Day 7.'
+    },
+    {
+      id: 'existing-phone-number',
+      patterns: [
+        /keep\s+my/i,
+        /existing\s+.*phone/i,
+        /existing\s+.*number/i,
+        /current\s+.*phone/i,
+        /current\s+.*number/i,
+        /my\s+business\s+phone/i,
+        /my\s+phone\s+number/i,
+        /same\s+number/i,
+        /change\s+my\s+number/i,
+        /port\s+my/i,
+        /call\s+forwarding/i
+      ],
+      reply:
+        'Yes—100%! You keep your existing business phone number. Your current number keeps ringing just like normal, and we pair a dedicated A2P-verified local texting line with missed-call detection so whenever you miss a call on a job site, our AI texts your caller back in 3 seconds.'
+    },
+    {
+      id: 'photo-quote-calculator',
+      patterns: [
+        /photo\s+quote/i,
+        /calculator/i,
+        /know\s+my\s+pricing/i,
+        /ballpark/i,
+        /estimator/i,
+        /tire-kicker/i,
+        /tire\s+kicker/i,
+        /how\s+does\s+it\s+price/i,
+        /my\s+pricing/i,
+        /my\s+prices/i,
+        /collect.*photo/i
+      ],
+      reply:
+        'We train your photo quote calculator and 3-second AI text agent on your exact services and ballpark price ranges—or we can configure it to collect 2–3 project photos and scope details without showing prices publicly. Homeowners get an instant response and you see pre-screened project photos on your phone before you ever drive out for an estimate.'
+    },
+    {
+      id: 'after-12-payments-ownership',
+      patterns: [
+        /12th/i,
+        /after\s+12/i,
+        /after\s+month\s+12/i,
+        /12\s+months/i,
+        /12-month/i,
+        /rent-to-own/i,
+        /rent\s+to\s+own/i,
+        /\$?297/,
+        /\$?2,?400/,
+        /buy\s+it\s+outright/i,
+        /buy\s+outright/i,
+        /ownership/i,
+        /own\s+my/i,
+        /own\s+the/i,
+        /buyout/i,
+        /pay\s+off/i,
+        /hostage/i
+      ],
+      reply:
+        'After your 12th monthly payment of $297, your lease payments end and you own 100% of your custom Smart Site outright—with zero buyout fees or hostage contracts! During months 1–12, all hosting, dedicated texting lines, and 24/7 AI usage are included at $0 extra. Afterward, you can keep our optional $100/mo Web & AI Care Plan or move the site to your own hosting anytime. (Or choose $2,400 Buy It Outright to own 100% from Day 1 and save $1,164.)'
+    },
+    {
+      id: 'care-plan-100',
+      patterns: [
+        /\$?100/,
+        /care\s+plan/i,
+        /hosting/i,
+        /carrier\s+registration/i,
+        /a2p/i,
+        /monthly\s+fee/i,
+        /ongoing\s+cost/i
+      ],
+      reply:
+        'The optional $100/mo Web & AI Care Plan covers high-speed cloud hosting, your dedicated local texting number, telecom carrier registration, 24/7 AI usage fees, and routine text/photo edits on your site. During your 12-month Rent-to-Own term, all of this is already included in your $297/mo at $0 extra—and once you own your site, the $100/mo Care Plan is 100% optional.'
+    },
+    {
+      id: 'guarantee-cancellation',
+      patterns: [
+        /guarantee/i,
+        /money-back/i,
+        /money\s+back/i,
+        /refund/i,
+        /30-day/i,
+        /30\s+day/i,
+        /cancel/i,
+        /contract/i,
+        /lock-in/i,
+        /locked\s+in/i,
+        /risk/i
+      ],
+      reply:
+        "You are 100% protected by our Zero-Risk 30-Day Money-Back Guarantee and zero lock-in contracts. Because we launch your custom Smart Site in 7 days, you get over 3 full weeks inside your first 30 days to test the live site and 3-second AI text agent with real customers. If you aren't thrilled, just text us within 30 days for a full 100% refund—no hard feelings. You can also buy out early or cancel with 30 days' notice anytime."
+    },
+    {
+      id: 'domain-name',
+      patterns: [
+        /domain/i,
+        /\burl\b/i,
+        /\.com\b/i,
+        /\bdns\b/i,
+        /godaddy/i,
+        /namecheap/i,
+        /already\s+have\s+a\s+(site|website)/i,
+        /replace\s+my/i
+      ],
+      reply:
+        'Yes—you keep 100% ownership of your domain name! Whether your domain is on GoDaddy, Namecheap, Squarespace, or Google, our auto-scanner pulls your best photos and info from your current site in 60 seconds, and on Day 7 we point your domain to your new Smart Site with zero downtime (or help you grab a new domain if you need one).'
+    },
+    {
+      id: 'missed-call-rescue',
+      patterns: [
+        /missed\s+call/i,
+        /missed-call/i,
+        /text\s+rescue/i,
+        /voicemail/i,
+        /miss\s+a\s+call/i,
+        /text\s+back/i,
+        /text-back/i,
+        /3-second/i,
+        /3\s+second/i
+      ],
+      reply:
+        "Whenever you're on a loud job site, in a meeting, or after hours and miss a call, our system detects it and texts the caller back within 3 seconds from your business line (e.g., 'Hey! Sorry we missed your call on the job site—how can we help, or want to text a quick photo of your project?'). It answers their questions, collects job photos, and books the estimate before they call the next company on Google."
+    },
+    {
+      id: 'reviews-seo-ranking',
+      patterns: [
+        /review/i,
+        /5-star/i,
+        /5\s+star/i,
+        /google/i,
+        /\bseo\b/i,
+        /\brank/i,
+        /\bmaps\b/i,
+        /search/i,
+        /traffic/i,
+        /more\s+leads/i,
+        /chatgpt/i
+      ],
+      reply:
+        'Every Smart Site is engineered for local Google Maps & search ranking—with sub-second load speeds, local schema markup, and dedicated service pages—plus our Automated 5-Star Google Review Engine. Right after you finish a job, 1 tap sends a friendly text to your customer with your direct Google review link so you stack 5-star reviews automatically and outrank competitors.'
+    },
+    {
+      id: 'edits-updates-support',
+      patterns: [
+        /\bedit/i,
+        /\bupdate/i,
+        /change\s+text/i,
+        /add\s+photo/i,
+        /new\s+photo/i,
+        /who\s+manages/i,
+        /make\s+changes/i,
+        /support/i
+      ],
+      reply:
+        'You never have to wrestle with a DIY website builder! Anytime you want to add new job photos, update pricing, add a service, or tweak text on your site, just text the photo or request to our 24/7 support line and our team updates your site for you—included during your 12-month Rent-to-Own term and under the $100/mo Care Plan.'
+    },
+    {
+      id: 'ai-control-human-takeover',
+      patterns: [
+        /robot/i,
+        /sound\s+like/i,
+        /take\s+over/i,
+        /pause/i,
+        /office\s+hours/i,
+        /reply\s+myself/i,
+        /inbox/i,
+        /conversation\s+room/i,
+        /human/i,
+        /ai\s+agent/i
+      ],
+      reply:
+        'Our AI is trained on your exact services, service area, and tone so it replies like a sharp, friendly office manager—never a pushy bot. You also get a simple mobile & web inbox where you can see every text thread and jump in from your phone anytime; the AI automatically pauses the instant you reply, or can be set to run only on missed calls and after hours.'
+    },
+    {
+      id: 'industries-trades',
+      patterns: [
+        /\btrade/i,
+        /industr/i,
+        /\bniche/i,
+        /contractor/i,
+        /\broof/i,
+        /remodel/i,
+        /\bhvac/i,
+        /\bplumb/i,
+        /electric/i,
+        /\btree\b/i,
+        /landscap/i,
+        /concrete/i,
+        /\bpest/i,
+        /mortgage/i,
+        /\bcpa\b/i,
+        /legal/i,
+        /\blaw\b/i,
+        /cafe/i,
+        /bakery/i,
+        /restaurant/i,
+        /\bshop\b/i,
+        /medspa/i,
+        /salon/i
+      ],
+      reply:
+        'We custom-build Smart Sites for contractors & home service trades (remodeling, roofing, HVAC, plumbing, electrical, tree service, concrete, pest control), professional services (mortgage, CPA, legal, real estate), and busy local storefronts/cafes. Every build is tailored to how your specific customers buy—whether that is photo estimates, emergency dispatch, or appointment booking.'
     }
-    if (q.includes('297') || q.includes('2,400') || q.includes('2400') || q.includes('rent') || q.includes('buy') || q.includes('difference')) {
-      return 'With $297/mo Rent-to-Own, there is $0 upfront and all hosting + AI texting are included while you pay—after 12 payments, you own 100% of the site forever. With $2,400 Buy Outright, you own 100% from Day 1 and save $1,164 vs. the 12-month path.';
+  ];
+
+  function getAiSupportReply(questionText, phoneVal = '') {
+    const q = String(questionText || '').trim();
+    const cleanDigits = String(phoneVal || '').replace(/\D/g, '');
+    const hasValidPhone = cleanDigits.length >= 10;
+
+    const matchedReplies = [];
+    for (const topic of AI_CONCIERGE_TOPICS) {
+      if (topic.patterns.some((rx) => rx.test(q))) {
+        matchedReplies.push(topic.reply);
+      }
     }
-    if (q.includes('guarantee') || q.includes('refund') || q.includes('30-day') || q.includes('risk')) {
-      return 'You are 100% covered by our Zero-Risk 30-Day Money-Back Guarantee. Start on the $297/mo Rent-to-Own plan today, test your live Smart Site and AI text agent for 30 days, and if you aren’t thrilled, just text us and we refund your $297 in full—no hard feelings.';
+
+    let baseAnswer = '';
+    if (matchedReplies.length > 0) {
+      baseAnswer = matchedReplies.slice(0, 2).join(' ');
+    } else if (/website|site|lead|customer|call|text|business|work|how|what|why|can\s+you|do\s+you/i.test(q)) {
+      baseAnswer =
+        "Unlike a regular brochure website where 92% of visitors leave without calling, your Tiberius Smart Site actively turns traffic and missed calls into booked jobs: it starts a 2-way text conversation in 3 seconds, collects project photos & pre-screens budgets with an interactive calculator, texts back missed callers when you're on a job site, and automates 5-star Google reviews—all built for you in 7 days with 100% ownership ($297/mo Rent-to-Own or $2,400 Outright) and a 30-Day Money-Back Guarantee.";
+    } else {
+      baseAnswer =
+        'Every Tiberius Smart Site is custom-built for your business in 7 days and combines a high-converting website, interactive ballpark/photo quote calculator, 3-second missed-call & web-lead AI text reply, and automated 5-star Google review requests—all backed by 100% ownership ($297/mo Rent-to-Own or $2,400 Outright) and our 30-Day Money-Back Guarantee.';
     }
-    if (q.includes('100') || q.includes('care')) {
-      return 'The optional $100/mo Web & AI Care Plan covers high-speed cloud hosting, 24/7 AI missed-call & web-chat SMS fees, 5-star review automation, and unlimited text/photo edits. (During the 12-month Rent-to-Own period, all of this is already included in your $297/mo!)';
+
+    if (hasValidPhone) {
+      return `${baseAnswer} (📲 We also dispatched this thread via SMS to ${phoneVal} so you can reply from your phone anytime!)`;
     }
-    return 'Great question! We build and launch your custom Smart Site + 24/7 AI Text Agent in 7 days with zero sales calls, backed by our 30-Day 100% Money-Back Guarantee. I just logged your question and dispatched a live text thread to your phone so you can reply anytime 24/7!';
+    return baseAnswer;
   }
 
   async function dispatchTextSupportQuestion(questionText) {
     if (!questionText) return;
     const phoneVal = (textPhoneInput && textPhoneInput.value.trim()) || '';
+    const hasValidPhone = phoneVal.replace(/\D/g, '').length >= 10;
 
     if (textSupportThread) {
+      const userWrap = document.createElement('div');
+      userWrap.className = 'support-msg support-msg-user text-support-msg text-support-msg-user';
       const userBubble = document.createElement('div');
-      userBubble.className = 'text-support-msg text-support-msg-user';
+      userBubble.className = 'support-msg-bubble';
       userBubble.textContent = questionText;
-      textSupportThread.appendChild(userBubble);
+      userWrap.appendChild(userBubble);
+      textSupportThread.appendChild(userWrap);
+      textSupportThread.scrollTop = textSupportThread.scrollHeight;
     }
 
-    const aiReply = getAiSupportReply(questionText);
+    const aiReply = getAiSupportReply(questionText, phoneVal);
 
     setTimeout(() => {
       if (textSupportThread) {
+        const aiWrap = document.createElement('div');
+        aiWrap.className = 'support-msg support-msg-ai text-support-msg text-support-msg-ai';
         const aiBubble = document.createElement('div');
-        aiBubble.className = 'text-support-msg text-support-msg-ai';
+        aiBubble.className = 'support-msg-bubble';
         aiBubble.innerHTML = `<strong>Tiberius AI Agent (Instant 24/7 Reply):</strong> ${aiReply}`;
-        textSupportThread.appendChild(aiBubble);
+        const aiMeta = document.createElement('span');
+        aiMeta.className = 'support-msg-meta';
+        aiMeta.textContent = hasValidPhone
+          ? `Tiberius AI Agent • Instant Web Reply + SMS Sent to ${phoneVal} ⚡`
+          : 'Tiberius AI Agent • Instant Web Reply ⚡ (Optional: enter mobile # below to text from your phone)';
+        aiWrap.appendChild(aiBubble);
+        aiWrap.appendChild(aiMeta);
+        textSupportThread.appendChild(aiWrap);
+        textSupportThread.scrollTop = textSupportThread.scrollHeight;
       }
       if (textSupportConfirmMsg) {
         textSupportConfirmMsg.hidden = false;
-        textSupportConfirmMsg.textContent = phoneVal
-          ? `✓ Instant AI reply posted above & live SMS thread dispatched to ${phoneVal}! (Notice how fast that answered? Your Smart Site includes this exact 24/7 AI agent for your customers.)`
-          : '✓ Instant AI reply posted above! Enter your mobile number anytime to move this conversation to your phone via SMS.';
+        textSupportConfirmMsg.textContent = hasValidPhone
+          ? `✓ Instant AI reply posted above & live SMS thread dispatched to ${phoneVal}!`
+          : '✓ Instant AI reply posted above! Enter your mobile number anytime if you want to move this conversation to your phone via SMS.';
       }
-    }, 650);
+    }, 450);
 
     const supportPayload = {
       source: 'step-2-24-7-ai-text-support',

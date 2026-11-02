@@ -103,60 +103,81 @@
 
         <!-- Personalized Lead Greeting Pill -->
         <div class="unlocked-banner-pill" id="watch-lead-greeting-pill">
-          <span class="unlocked-check">✓</span>
-          <span id="unlocked-personal-greeting">STEP 2 UNLOCKED: Full 5-Minute System Walkthrough &amp; Transparent Ownership Options</span>
+          <span class="unlocked-check" aria-hidden="true">✓</span>
+          <span id="unlocked-personal-greeting">STEP 2 UNLOCKED • LIVE DEMO SENT TO YOUR PHONE</span>
         </div>
 
         <h1 class="section-title watch-page-title">
-          Step 2: Your Full <span class="text-gold">5-Minute System Walkthrough</span>
+          Step 2: See How Your Smart Site <span class="text-gold">Turns Missed Calls &amp; Web Traffic Into Booked Jobs</span> in 3 Seconds
         </h1>
         <p class="section-subtitle watch-page-subtitle" id="watch-personalized-subhead">
-          Watch how your custom AI Smart Site, 3-second missed-call text rescue, and 5-star Google review engine work together—then choose your risk-free ownership plan below.
+          Watch the 5-minute system breakdown below while you test the live AI text demo on your phone—then choose your zero-hostage ownership plan.
         </p>
 
-        <!-- 16:9 VIDEO PLAYER CONTAINER (WITH EASY SWAP PLACEHOLDER) -->
+        <!-- 16:9 VIDEO PLAYER CONTAINER (WITH STYLED ON-PLAYER VSL CAPTIONS) -->
         <div class="watch-video-stage-wrapper">
-          <div class="watch-video-player-16x9" id="watch-video-player-container">
+          <div class="watch-video-player-16x9 watch-video-live-mode" id="watch-video-player-container">
             <!-- DROP REAL VIDEO EMBED OR <video> TAG HERE -->
-            <div class="watch-video-placeholder-state" id="vsl-interactive-screen">
-              <div class="vsl-screen-topbar">
-                <span class="vsl-status-pill" id="vsl-playing-indicator">🔊 STEP 2: YOUR FULL 5-MINUTE SYSTEM WALKTHROUGH • CHAPTER 1 OF 4</span>
-                <span class="vsl-timecode" id="vsl-timecode-display">00:42 / 05:12</span>
+            <div class="vsl-screen-topbar vsl-live-topbar">
+              <span class="vsl-status-pill" id="vsl-playing-indicator">🔊 STEP 2: FULL SYSTEM WALKTHROUGH • CHAPTER 1 OF 4</span>
+              <div class="vsl-topbar-right-controls">
+                <button
+                  type="button"
+                  class="vsl-cc-toggle-btn is-active"
+                  id="vsl-cc-toggle-btn"
+                  aria-pressed="true"
+                  title="Toggle Styled On-Player VSL Captions"
+                >
+                  <span class="vsl-cc-badge">CC</span>
+                  <span id="vsl-cc-toggle-label">Captions: ON</span>
+                </button>
+                <span class="vsl-timecode" id="vsl-timecode-display">00:00 / 06:40</span>
               </div>
+            </div>
 
-              <div class="vsl-stage-content" id="vsl-stage-content">
-                <div class="vsl-stage-visual">
-                  <img src="demos/remodel-1.webp" alt="Walkthrough Visual" id="vsl-chapter-img" class="vsl-chapter-img" />
-                  <div class="watch-placeholder-overlay-badge">
-                    <span class="live-dot"></span>
-                    <span>5-Minute System Walkthrough Placeholder (Ready for Video Embed)</span>
-                  </div>
-                </div>
-                <div class="vsl-stage-explainer">
-                  <span class="vsl-chapter-tag" id="vsl-chapter-tag">CHAPTER 1 • 0:00 • SMART SITE + INSTANT SMS</span>
-                  <h3 id="vsl-chapter-heading">1. Custom AI Smart Site + 3-Second Text Follow-Up</h3>
-                  <p id="vsl-chapter-desc">
-                    Instead of a brochure website where 92% of visitors leave without calling, your Smart Site starts a live text conversation within 3 seconds, collects job photos, and books qualified estimates automatically.
-                  </p>
-                  <ul class="vsl-chapter-bullets" id="vsl-chapter-bullets">
-                    <li>✓ Custom-built for your business to pre-screen leads and showcase your best work</li>
-                    <li>✓ Starts an instant 3-second text conversation to capture name, phone &amp; project details</li>
-                    <li>✓ Works on autopilot 24/7, or pauses automatically during office hours so your team can reply</li>
-                  </ul>
-                  <div class="vsl-player-controls">
-                    <button type="button" class="vsl-play-toggle" id="vsl-play-toggle-btn">
-                      ⏸ Pause Walkthrough
-                    </button>
-                    <button type="button" class="vsl-next-chapter-btn" id="vsl-next-chapter-btn">
-                      Next Chapter →
-                    </button>
-                  </div>
-                </div>
-              </div>
+            <div class="watch-real-video-viewport" id="watch-real-video-viewport">
+              <video
+                id="watch-walkthrough-video"
+                class="watch-real-video-el"
+                poster="images/tiberius-smart-sites-poster.jpg"
+                preload="metadata"
+                controls
+                playsinline
+              >
+                <source src="video/Tiberius-Smart-Sites.mp4" type="video/mp4" />
+                <source src="/video/Tiberius-Smart-Sites.mp4" type="video/mp4" />
+                <track
+                  id="watch-vtt-track"
+                  kind="captions"
+                  src="video/tiberius-smart-sites-captions.vtt"
+                  srclang="en"
+                  label="English"
+                />
+                Your browser does not support HTML5 video.
+              </video>
 
-              <!-- Progress scrubber bar -->
-              <div class="vsl-scrubber-track">
-                <div class="vsl-scrubber-fill" id="vsl-scrubber-fill" style="width: 25%;"></div>
+              <!-- Click-to-Play Center Overlay (Hides automatically while playing) -->
+              <button
+                type="button"
+                class="watch-video-play-overlay"
+                id="watch-video-play-overlay"
+                aria-label="Play Full System Walkthrough Video"
+              >
+                <span class="watch-play-circle">
+                  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    <path d="M8 5.14v14l11-7-11-7z" />
+                  </svg>
+                </span>
+                <span class="watch-play-caption-pill">
+                  ▶ Click to Watch Your Full Walkthrough (Voiceover + Live Captions)
+                </span>
+              </button>
+
+              <!-- Styled On-Player VSL Captions Overlay (Synced to Voiceover) -->
+              <div class="vsl-styled-caption-stage" id="vsl-styled-caption-stage" aria-live="polite">
+                <div class="vsl-styled-caption-box" id="vsl-styled-caption-box">
+                  Very cool—glad you made it over to <span class="vsl-cap-gold">Step 2!</span>
+                </div>
               </div>
             </div>
             <!-- DROP REAL VIDEO EMBED OR <video> TAG HERE -->
@@ -164,32 +185,32 @@
 
           <!-- Compact Chapter Timestamp Bar Directly Under 16:9 Player -->
           <div class="watch-chapters-bar" role="tablist" aria-label="Walkthrough Video Chapters">
-            <button type="button" class="chapter-btn is-active" data-chapter-idx="0" role="tab" aria-selected="true">
+            <button type="button" class="chapter-btn is-active" data-chapter-idx="0" data-seek-seconds="0" role="tab" aria-selected="true">
               <span class="chapter-time">0:00</span>
               <div class="chapter-info">
-                <strong>1. Smart Site + Instant SMS</strong>
-                <span>3-second web lead follow-up</span>
+                <strong>1. Instant SMS + Functional Sites</strong>
+                <span>Why brochure &amp; GHL sites leak jobs</span>
               </div>
             </button>
-            <button type="button" class="chapter-btn" data-chapter-idx="1" role="tab" aria-selected="false">
-              <span class="chapter-time">1:18</span>
+            <button type="button" class="chapter-btn" data-chapter-idx="1" data-seek-seconds="112.8" role="tab" aria-selected="false">
+              <span class="chapter-time">1:52</span>
               <div class="chapter-info">
-                <strong>2. 5-Star Review Engine</strong>
-                <span>Automated Google review growth</span>
+                <strong>2. AI Lead Capture &amp; Follow-Up</strong>
+                <span>24/7 AI receptionist + follow-up magic</span>
               </div>
             </button>
-            <button type="button" class="chapter-btn" data-chapter-idx="2" role="tab" aria-selected="false">
-              <span class="chapter-time">2:34</span>
+            <button type="button" class="chapter-btn" data-chapter-idx="2" data-seek-seconds="180.0" role="tab" aria-selected="false">
+              <span class="chapter-time">3:00</span>
               <div class="chapter-info">
-                <strong>3. Missed-Call Text Rescue</strong>
-                <span>Instant text-back on job sites</span>
+                <strong>3. Automated 5-Star Reviews</strong>
+                <span>30-second Google review generation</span>
               </div>
             </button>
-            <button type="button" class="chapter-btn" data-chapter-idx="3" role="tab" aria-selected="false">
-              <span class="chapter-time">3:45</span>
+            <button type="button" class="chapter-btn" data-chapter-idx="3" data-seek-seconds="228.7" role="tab" aria-selected="false">
+              <span class="chapter-time">3:48</span>
               <div class="chapter-info">
-                <strong>4. Rent-to-Own vs. Outright</strong>
-                <span>100% website ownership</span>
+                <strong>4. $297/mo Rent-to-Own &amp; Guarantee</strong>
+                <span>100% ownership + 30-day money-back</span>
               </div>
             </button>
           </div>
@@ -199,8 +220,41 @@
     </section>
 
     <!-- ===================================================================
+         2B. 3-STEP "WHAT HAPPENS AFTER YOU CHECKOUT" BRIDGE STRIP
+         Directly between Walkthrough Video and Pricing (#pricing)
+         =================================================================== -->
+    <section class="watch-onboarding-bridge-section" id="what-happens-next">
+      <div class="container">
+        <div class="pricing-header onboarding-bridge-header">
+          <span class="eyebrow-tag">ZERO HOMEWORK • LIVE IN 7 DAYS</span>
+          <h2>What Happens the Second You Lock In Your Build Slot</h2>
+        </div>
+
+        <div class="onboarding-bridge-grid">
+          <div class="onboarding-step-card">
+            <span class="onboarding-step-badge">STEP 01 • TODAY (60 SECONDS)</span>
+            <h3>Auto-Scan Your Existing Business</h3>
+            <p>Enter your business name or current website URL after checkout. Our system automatically pulls your logo, project photos, services, and best Google reviews—zero long forms required.</p>
+          </div>
+
+          <div class="onboarding-step-card">
+            <span class="onboarding-step-badge">STEP 02 • DAYS 2–5</span>
+            <h3>Custom Build &amp; AI Agent Training</h3>
+            <p>Our Texas build team constructs your custom Smart Site, configures your ballpark/photo quote calculator, and trains your 3-second AI text agent on your exact services and pricing.</p>
+          </div>
+
+          <div class="onboarding-step-card">
+            <span class="onboarding-step-badge">STEP 03 • DAY 7 LAUNCH</span>
+            <h3>Review by Text &amp; Flip the Switch</h3>
+            <p>We text a private live preview link straight to your phone. Request any tweaks by text, approve the build, and go live—backed for 30 full days by our 100% money-back guarantee.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
          3. LIVE PAYMENT FORMS + 30-DAY MONEY-BACK GUARANTEE
-         Directly beneath the video player on Page 2
+         Directly beneath the onboarding bridge strip on Page 2
          =================================================================== -->
     <section class="watch-pricing-section" id="pricing">
       <span id="pricing-matrix" aria-hidden="true"></span>
@@ -248,14 +302,11 @@
                 <li><span>✓</span> After month 12, your $297 payment ends; keep our optional $100/mo Web &amp; AI Care Plan or manage hosting yourself</li>
               </ul>
 
-              <!-- Prominent 30-Day 100% Money-Back Guarantee Badge & Callout Box Inside $297/mo Card Right Above Checkout Buttons -->
-              <div class="card-guarantee-callout" id="rent-card-guarantee-box">
-                <div class="guarantee-badge-pill guarantee-badge-inline">
-                  🛡️ 30-Day 100% Money-Back Guarantee
-                </div>
-                <p class="card-guarantee-copy">
-                  <strong>Zero-Risk 30-Day Test Drive:</strong> Start with the $297/mo Rent-to-Own plan today. We build and launch your custom Smart Site in 7 days. If you aren't thrilled with the build and the leads it captures in your first 30 days, we refund your $297 in full—no hard feelings. Start for $297/mo now, and buy it outright later anytime.
-                </p>
+              <div class="care-plan-toggle-box care-plan-included-box" id="rent-card-included-care-box">
+                <span>
+                  <strong>✓ Months 1–12 Hosting, AI &amp; SMS Included ($0 Extra)</strong>
+                  <small>Covers high-speed hosting, dedicated texting number, carrier registration &amp; AI usage during your 12-month term</small>
+                </span>
               </div>
 
               <div class="plan-cta-stack">
@@ -267,6 +318,9 @@
                 >
                   <span id="stripe-label-rent-to-own">Start Rent-to-Own at $297/mo →</span>
                 </a>
+                <p class="plan-cta-micro-trust">
+                  🛡️ Protected by our 30-Day 100% Money-Back Guarantee • Cancel or buy out anytime
+                </p>
                 <button type="button" class="plan-secondary-btn js-select-plan" data-plan="$297/mo 12-Month Rent-to-Own">
                   💬 Have a Question? Text Us 24/7 (Live AI Agent) ↓
                 </button>
@@ -315,6 +369,9 @@
                 >
                   <span id="stripe-label-buy-outright">Buy My Website Outright for $2,400 →</span>
                 </a>
+                <p class="plan-cta-micro-trust">
+                  🛡️ 100% Day-1 Ownership • Protected by our 30-Day Money-Back Guarantee
+                </p>
                 <button type="button" class="plan-secondary-btn js-select-plan" data-plan="$2,400 Buy It Outright">
                   💬 Have a Question? Text Us 24/7 (Live AI Agent) ↓
                 </button>
@@ -322,7 +379,7 @@
             </div>
           </div>
 
-          <!-- Standalone $100/mo Web & AI Care Plan Strip -->
+          <!-- Standalone $100/mo Web & AI Care Plan Strip (Compact Secondary Bar) -->
           <div class="care-plan-standalone-strip" id="care-plan-strip">
             <div class="care-strip-copy">
               <strong>Already own your Smart Site outright or finished your 12-month term?</strong>
@@ -336,31 +393,6 @@
             >
               Activate $100/mo Web &amp; AI Care Plan →
             </a>
-          </div>
-
-          <!-- Instant Stripe Checkout Fast-Track Bar -->
-          <div class="step2-stripe-fasttrack watch-stripe-fasttrack" id="step2-stripe-fasttrack">
-            <div class="fasttrack-copy">
-              <span class="eyebrow-tag">INSTANT STRIPE CHECKOUT • GO LIVE IN 7 DAYS</span>
-              <h3>Ready to Lock In Your Custom Smart Site Right Now?</h3>
-              <p>Secure your 7-day build slot immediately via Stripe backed by our 🛡️ 30-Day 100% Money-Back Guarantee—or tap "Text Us" below to ask our 24/7 Live AI Agent anything.</p>
-            </div>
-            <div class="fasttrack-actions">
-              <a
-                id="step2-stripe-rent-link"
-                href="https://buy.stripe.com/dRm7sMggXc5leDkbnv2sM0q"
-                class="plan-select-btn plan-select-btn-green plan-stripe-link"
-              >
-                💳 Start 12-Month Rent-to-Own ($297/mo) →
-              </a>
-              <a
-                id="step2-stripe-buy-link"
-                href="https://buy.stripe.com/4gM7sM9Szd9p2UC4Z72sM0r"
-                class="plan-select-btn plan-stripe-link"
-              >
-                ⚡ Buy Website Outright ($2,400) →
-              </a>
-            </div>
           </div>
         </div>
 
@@ -408,17 +440,17 @@
 
               <!-- Quick-Tap Question Pills -->
               <div class="text-support-quick-pills" role="group" aria-label="Quick Questions">
-                <button type="button" class="text-quick-pill" data-question="How does the 7-day build process work without phone calls?">
-                  How does the 7-day build work?
+                <button type="button" class="text-quick-pill" data-question="⏱️ How much of my time does the 7-day build take?">
+                  ⏱️ How much of my time does the 7-day build take?
                 </button>
-                <button type="button" class="text-quick-pill" data-question="Can I start with $297/mo Rent-to-Own and buy it outright later?">
-                  Start at $297/mo &amp; buy later?
+                <button type="button" class="text-quick-pill" data-question="📞 Can I keep my existing business phone number?">
+                  📞 Can I keep my existing business phone number?
                 </button>
-                <button type="button" class="text-quick-pill" data-question="How does the 30-Day 100% Money-Back Guarantee work?">
-                  How does the 30-day guarantee work?
+                <button type="button" class="text-quick-pill" data-question="📸 How does the photo quote calculator know my pricing?">
+                  📸 How does the photo quote calculator know my pricing?
                 </button>
-                <button type="button" class="text-quick-pill" data-question="Can this 24/7 AI agent answer customer texts on my website too?">
-                  Will my site have this 24/7 AI agent?
+                <button type="button" class="text-quick-pill" data-question="🔑 What happens after my 12th payment of $297?">
+                  🔑 What happens after my 12th payment of $297?
                 </button>
               </div>
 
@@ -484,6 +516,33 @@
               <h3>What happens if I need to cancel during the 12-month Rent-to-Own plan?</h3>
               <p>There are no long-term lock-in penalties. Plus, your first 30 days are protected by our <strong>30-Day 100% Money-Back Guarantee</strong>. You can pay off your remaining balance at any time to own your website immediately, or cancel with 30 days' notice if your business plans change.</p>
             </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             6. FINAL INSTANT STRIPE CHECKOUT BANNER (DIRECTLY BELOW FAQ, ABOVE FOOTER)
+             =================================================================== -->
+        <div class="step2-stripe-fasttrack watch-stripe-fasttrack watch-bottom-final-cta" id="step2-stripe-fasttrack">
+          <div class="fasttrack-copy">
+            <span class="eyebrow-tag">INSTANT STRIPE CHECKOUT • GO LIVE IN 7 DAYS</span>
+            <h3>Ready to Lock In Your Custom Smart Site Right Now?</h3>
+            <p>Secure your 7-day build slot immediately via Stripe backed by our 🛡️ 30-Day 100% Money-Back Guarantee—or tap "Text Us" above to ask our 24/7 Live AI Agent anything.</p>
+          </div>
+          <div class="fasttrack-actions">
+            <a
+              id="step2-stripe-rent-link"
+              href="https://buy.stripe.com/dRm7sMggXc5leDkbnv2sM0q"
+              class="plan-select-btn plan-select-btn-green plan-stripe-link"
+            >
+              💳 Start 12-Month Rent-to-Own ($297/mo) →
+            </a>
+            <a
+              id="step2-stripe-buy-link"
+              href="https://buy.stripe.com/4gM7sM9Szd9p2UC4Z72sM0r"
+              class="plan-select-btn plan-stripe-link"
+            >
+              ⚡ Buy Website Outright ($2,400) →
+            </a>
           </div>
         </div>
 
