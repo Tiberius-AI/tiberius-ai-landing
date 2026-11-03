@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1920, initial-scale=1.0" />
+  <title>The Obsidian Ring 3D Backdrop (1920x1080 Widescreen)</title>
+  <style>
+    :root {
+      --stage-w: 1920px;
+      --stage-h: 1080px;
+      --card-w: 535px;
+      --card-h: 352px;
+
+      /* Theme 1: Dark Obsidian & Gold Rim (Default) */
+      --bg-outer: #020305;
+      --bg-sky-top: #04060c;
+      --bg-sky-horizon: #0b101e;
+      --bg-floor-top: #070b14;
+      --bg-floor-bottom: #020306;
+      --spotlight-1: rgba(245, 158, 11, 0.18);
+      --spotlight-2: rgba(56, 189, 248, 0.13);
+      --horizon-line: rgba(251, 191, 36, 0.30);
+      --horizon-glow: rgba(245, 158, 11, 0.20);
+      --card-border-hero: rgba(251, 191, 36, 0.90);
+      --card-border-rest: rgba(255, 255, 255, 0.20);
+      --card-chrome-bg: #0f172a;
+      --card-shadow-hero:
+        0 38px 90px -14px rgba(0, 0, 0, 0.96),
+        0 0 68px -10px rgba(245, 158, 11, 0.34),
+        0 0 1px 1px rgba(251, 191, 36, 0.48);
+      --card-shadow-rest:
+        0 28px 65px -12px rgba(0, 0, 0, 0.92),
+        0 0 24px -8px rgba(15, 23, 42, 0.7);
+      --reflection-opacity: 0.56;
+      --reflection-blur: 1.6px;
+    }
+
+    body[data-theme="2"] {
+      /* Theme 2: Midnight Cobalt & Cyan Studio */
+      --bg-outer: #010308;
+      --bg-sky-top: #030613;
+      --bg-sky-horizon: #09132b;
+      --bg-floor-top: #060c1d;
+      --bg-floor-bottom: #02040a;
+      --spotlight-1: rgba(56, 189, 248, 0.22);
+      --spotlight-2: rgba(139, 92, 246, 0.15);
+      --horizon-line: rgba(56, 189, 248, 0.34);
+      --horizon-glow: rgba(56, 189, 248, 0.22);
+      --card-border-hero: rgba(125, 211, 252, 0.90);
+      --card-border-rest: rgba(148, 163, 184, 0.24);
+      --card-chrome-bg: #0b1226;
+      --card-shadow-hero:
+        0 38px 90px -14px rgba(0, 0, 0, 0.96),
+        0 0 70px -10px rgba(56, 189, 248, 0.36),
+        0 0 1px 1px rgba(125, 211, 252, 0.48);
+    }
+
+    body[data-theme="3"] {
+      /* Theme 3: Warm Architectural Gallery */
+      --bg-outer: #cfc9be;
+      --bg-sky-top: #e8e2d7;
+      --bg-sky-horizon: #f3efe6;
+      --bg-floor-top: #ded7ca;
+      --bg-floor-bottom: #c7bfb0;
+      --spotlight-1: rgba(217, 119, 6, 0.16);
+      --spotlight-2: rgba(120, 113, 108, 0.12);
+      --horizon-line: rgba(180, 83, 9, 0.30);
+      --horizon-glow: rgba(217, 119, 6, 0.15);
+      --card-border-hero: rgba(180, 83, 9, 0.82);
+      --card-border-rest: rgba(28, 25, 23, 0.18);
+      --card-chrome-bg: #1c1917;
+      --card-shadow-hero:
+        0 34px 75px -14px rgba(28, 25, 23, 0.38),
+        0 12px 30px -8px rgba(180, 83, 9, 0.24);
+      --card-shadow-rest:
+        0 22px 48px -12px rgba(28, 25, 23, 0.26);
+    }
+
+    body[data-theme="4"] {
+      /* Theme 4: Pure OLED Black Void */
+      --bg-outer: #000000;
+      --bg-sky-top: #010102;
+      --bg-sky-horizon: #060609;
+      --bg-floor-top: #040407;
+      --bg-floor-bottom: #000000;
+      --spotlight-1: rgba(255, 255, 255, 0.09);
+      --spotlight-2: rgba(245, 158, 11, 0.08);
+      --horizon-line: rgba(255, 255, 255, 0.20);
+      --horizon-glow: rgba(255, 255, 255, 0.10);
+      --card-border-hero: rgba(255, 255, 255, 0.88);
+      --card-border-rest: rgba(255, 255, 255, 0.16);
+      --card-chrome-bg: #0b0b0f;
+      --card-shadow-hero:
+        0 40px 100px -12px rgba(0, 0, 0, 0.99),
+        0 0 60px -10px rgba(255, 255, 255, 0.22);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: var(--bg-outer);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: grab;
+      transition: background 0.6s ease;
+    }
+
+    body:active {
+      cursor: grabbing;
+    }
+
+    /* =====================================================================
+       MASTER STAGE CONTAINER (Default 16:9 1920x1080 Widescreen)
+       ===================================================================== */
+    #stage-frame {
+      position: relative;
+      width: var(--stage-w);
+      height: var(--stage-h);
+      background: var(--bg-sky-top);
+      overflow: hidden;
+      transform-origin: center center;
+      box-shadow: 0 0 120px rgba(0, 0, 0, 0.92);
+    }
+
+    /* Upper Studio Wall & Overhead Spotlight Cone */
+    .studio-upper-wall {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 632px;
+      background:
+        radial-gradient(ellipse 84% 78% at 50% 88%, var(--spotlight-1) 0%, transparent 76%),
+        radial-gradient(ellipse 58% 64% at 16% 68%, var(--spotlight-2) 0%, transparent 72%),
+        radial-gradient(ellipse 58% 64% at 84% 68%, var(--spotlight-2) 0%, transparent 72%),
+        linear-gradient(180deg, var(--bg-sky-top) 0%, var(--bg-sky-horizon) 100%);
+      z-index: 1;
+      transition: background 0.6s ease;
+    }
+
+    /* Glossy Obsidian Mirror Studio Floor */
+    .studio-obsidian-floor {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 632px;
+      bottom: 0;
+      background:
+        radial-gradient(ellipse 88% 72% at 50% 8%, var(--spotlight-1) 0%, transparent 76%),
+        radial-gradient(ellipse 72% 48% at 50% 0%, var(--horizon-glow) 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-floor-top) 0%, var(--bg-floor-bottom) 100%);
+      z-index: 2;
+      transition: background 0.6s ease;
+    }
+
+    /* Horizon Seam Between Studio Wall & Obsidian Floor */
+    .studio-horizon-seam {
+      position: absolute;
+      left: 2%;
+      right: 2%;
+      top: 631px;
+      height: 1.5px;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        var(--horizon-line) 12%,
+        var(--horizon-line) 88%,
+        transparent 100%
+      );
+      box-shadow: 0 0 32px 2px var(--horizon-glow);
+      z-index: 3;
+      pointer-events: none;
+    }
+
+    /* High-DPI Turntable Floor Rings & Ambient Light Canvas */
+    #turntable-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    /* =====================================================================
+       3D CYLINDRICAL CAROUSEL STAGE
+       ===================================================================== */
+    .carousel-3d-viewport {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+    }
+
+    .carousel-3d-stage {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* 3D Slot Container (Holds Main Card + Mirror Floor Reflection Beneath It) */
+    .carousel-slot-3d {
+      position: absolute;
+      left: 50%;
+      top: 446px;
+      width: var(--card-w);
+      height: var(--card-h);
+      margin-left: calc(var(--card-w) * -0.5);
+      margin-top: calc(var(--card-h) * -0.5);
+      will-change: transform, filter;
+    }
+
+    /* Primary Floating Website Viewport Card */
+    .site-card-main {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 16px;
+      background: var(--card-chrome-bg);
+      border: 1.5px solid var(--card-border-rest);
+      box-shadow: var(--card-shadow-rest);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .carousel-slot-3d.is-hero .site-card-main {
+      border-color: var(--card-border-hero);
+      box-shadow: var(--card-shadow-hero);
+    }
+
+    /* Subtle Hero Halo Backlight Behind Main Card */
+    .card-backlight-aura {
+      position: absolute;
+      inset: -26px;
+      border-radius: 32px;
+      background: radial-gradient(ellipse at center, rgba(251, 191, 36, 0.30) 0%, transparent 72%);
+      opacity: 0;
+      z-index: -1;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .carousel-slot-3d.is-hero .card-backlight-aura {
+      opacity: 1;
+    }
+
+    /* =====================================================================
+       SYNCHRONIZED MIRROR FLOOR REFLECTION CARD
+       ===================================================================== */
+    .site-card-reflection {
+      position: absolute;
+      left: 0;
+      top: calc(100% + 14px);
+      width: 100%;
+      height: 100%;
+      border-radius: 16px;
+      background: var(--card-chrome-bg);
+      border: 1.5px solid var(--card-border-rest);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      /* Flip vertically around center-center so the bottom edge of the card mirrors seamlessly at the top of the reflection */
+      transform: scaleY(-1);
+      transform-origin: center center;
+      opacity: var(--reflection-opacity);
+      filter: blur(var(--reflection-blur)) brightness(0.82);
+      /* In flipped local coords, local bottom (100%) is at the top near the card, and local top (0%) is deep in the floor */
+      mask-image: linear-gradient(
+        to bottom,
+        transparent 18%,
+        rgba(0, 0, 0, 0.08) 42%,
+        rgba(0, 0, 0, 0.48) 74%,
+        rgba(0, 0, 0, 0.96) 100%
+      );
+      -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 18%,
+        rgba(0, 0, 0, 0.08) 42%,
+        rgba(0, 0, 0, 0.48) 74%,
+        rgba(0, 0, 0, 0.96) 100%
+      );
+      pointer-events: none;
+      transition: opacity 0.35s ease, border-color 0.35s ease;
+    }
+
+    .carousel-slot-3d.is-hero .site-card-reflection {
+      border-color: var(--card-border-hero);
+      opacity: calc(var(--reflection-opacity) * 1.25);
+    }
+
+    /* Glowing Floor Contact Pool Between Card & Reflection */
+    .floor-contact-glow {
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      top: calc(100% + 2px);
+      height: 20px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(251, 191, 36, 0.38) 0%, rgba(56, 189, 248, 0.16) 52%, transparent 78%);
+      filter: blur(9px);
+      opacity: 0.35;
+      pointer-events: none;
+      transition: opacity 0.35s ease;
+    }
+
+    .carousel-slot-3d.is-hero .floor-contact-glow {
+      opacity: 0.95;
+    }
+
+    /* =====================================================================
+       MINIMALIST ZERO-TEXT BROWSER CHROME & SCREEN VIEWPORT
+       ===================================================================== */
+    .card-browser-bar {
+      height: 26px;
+      min-height: 26px;
+      padding: 0 13px;
+      background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 3;
+    }
+
+    .window-dots {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .window-dots span {
+      width: 7.5px;
+      height: 7.5px;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .window-dots span:nth-child(1) { background: #f87171; }
+    .window-dots span:nth-child(2) { background: #fbbf24; }
+    .window-dots span:nth-child(3) { background: #34d399; }
+
+    /* Graphical-only URL Pill (Zero Text) */
+    .window-address-pill {
+      width: 44%;
+      max-width: 185px;
+      height: 11px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+      gap: 5px;
+      overflow: hidden;
+    }
+
+    .pill-dot {
+      width: 4.5px;
+      height: 4.5px;
+      border-radius: 50%;
+      background: #34d399;
+      box-shadow: 0 0 6px #34d399;
+      flex-shrink: 0;
+    }
+
+    .pill-bar {
+      height: 3px;
+      width: 66%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.06));
+    }
+
+    .window-status-badge {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .status-pulse {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #fbbf24;
+      box-shadow: 0 0 8px rgba(251, 191, 36, 0.95);
+    }
+
+    /* Website Viewport Area */
+    .card-screen-viewport {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      overflow: hidden;
+      background: #0f172a;
+    }
+
+    .card-screen-scroller {
+      width: 100%;
+      will-change: transform;
+      transform: translate3d(0, 0, 0);
+    }
+
+    .card-screen-scroller img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    /* Dynamic Glass Specular Sheen Across Screen */
+    .card-glass-sheen {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        116deg,
+        transparent 0%,
+        transparent 38%,
+        rgba(255, 255, 255, 0.09) 47%,
+        rgba(255, 255, 255, 0.20) 50%,
+        rgba(255, 255, 255, 0.07) 53%,
+        transparent 62%,
+        transparent 100%
+      );
+      background-size: 240% 240%;
+      mix-blend-mode: screen;
+      pointer-events: none;
+      z-index: 4;
+      opacity: 0.78;
+    }
+
+    /* Soft Cinema Vignette */
+    .studio-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 88% 82% at 50% 48%, transparent 62%, rgba(0, 0, 0, 0.54) 100%);
+      z-index: 30;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body data-theme="1">
+
+  <!-- Master Stage (Default 16:9 1920x1080 Widescreen to fill Desktop Video Frame) -->
+  <div id="stage-frame">
+    <!-- Studio Wall & Mirror Floor -->
+    <div class="studio-upper-wall"></div>
+    <div class="studio-obsidian-floor"></div>
+    <div class="studio-horizon-seam"></div>
+
+    <!-- High-DPI Obsidian Turntable Floor Rings & Light Particles Canvas -->
+    <canvas id="turntable-canvas" width="3840" height="2160"></canvas>
+
+    <!-- 3D Cylindrical Carousel Stage -->
+    <div class="carousel-3d-viewport" id="carousel-viewport">
+      <div class="carousel-3d-stage" id="carousel-stage">
+        <!-- Populated dynamically by JS -->
+      </div>
+    </div>
+
+    <div class="studio-vignette"></div>
+  </div>
+
+  <script>
+    /**
+     * ========================================================================
+     * THE OBSIDIAN RING (16:9 WIDESCREEN 1920x1080 • MIRROR FLOOR REFLECTION)
+     * DYNAMIC N-CARD TEMPLATE • ZERO TEXT ON SCREEN
+     * ========================================================================
+     * Invisible Director Hotkeys (for recording / live control):
+     * - Space       : Pause / Resume continuous rotation (settles onto front hero site)
+     * - Left/Right  : Spin smoothly to previous / next demo site
+     * - Up/Down     : Speed up / Slow down rotation speed
+     * - C / M       : Cycle Cylindrical Curve Style (Showroom Wing, Deep Cylinder, Concave IMAX)
+     * - E / T       : Cycle Camera Elevation (Studio Horizon, Elevated Crown, Low Heroic)
+     * - F           : Cycle Mirror Floor Reflection Intensity (Standard Obsidian, Wet Mirror, Subtle)
+     * - A           : Toggle Stage Aspect Ratio (16:9 1920x1080 <-> 4:3 1440x1080)
+     * - B           : Toggle optical Depth-of-Field lens blur on background cards
+     * - S           : Toggle smooth internal website vertical auto-scrolling
+     * - R           : Reverse carousel rotation direction
+     * - 1 / 2 / 3 / 4 : Switch Studio Lighting Theme
+     */
+
+    // ========================================================================
+    // 1. CONFIGURE DEMO WEBSITE TEMPLATES HERE (Supports 4 to 12+ templates)
+    // ========================================================================
+    const DEMO_BUILDS = [
+      {
+        id: 'remodel-1',
+        src: 'demos/remodel-1.webp',
+        scrollMaxPct: 0.72,
+        scrollSpeedOffset: 1.0,
+        accent: '#fbbf24'
+      },
+      {
+        id: 'pro-services',
+        src: 'demos/pro-services.webp',
+        scrollMaxPct: 0.72,
+        scrollSpeedOffset: 1.12,
+        accent: '#34d399'
+      },
+      {
+        id: 'local-cafe',
+        src: 'demos/local-cafe.webp',
+        scrollMaxPct: 0.70,
+        scrollSpeedOffset: 0.94,
+        accent: '#f59e0b'
+      },
+      {
+        id: 'pest-control',
+        src: 'demos/pest-control.webp',
+        scrollMaxPct: 0.74,
+        scrollSpeedOffset: 1.06,
+        accent: '#f87171'
+      },
+      {
+        id: 'remodel-2',
+        src: 'demos/remodel-2.webp',
+        scrollMaxPct: 0.72,
+        scrollSpeedOffset: 0.98,
+        accent: '#fb923c'
+      },
+      {
+        id: 'tree-service',
+        src: 'demos/tree-service.webp',
+        scrollMaxPct: 0.74,
+        scrollSpeedOffset: 1.10,
+        accent: '#a3e635'
+      }
+    ];
+
+    const urlParams = new URLSearchParams(window.location.search);
+    // Default is now 16:9 (1920x1080) to fill the desktop walkthrough player frame edge-to-edge
+    const initialAspect = urlParams.get('aspect') === '4x3' ? '4:3' : '16:9';
+    if (urlParams.get('theme')) {
+      document.body.setAttribute('data-theme', urlParams.get('theme'));
+    }
+
+    const stageFrame = document.getElementById('stage-frame');
+    const carouselStage = document.getElementById('carousel-stage');
+    const turntableCanvas = document.getElementById('turntable-canvas');
+    const ctx = turntableCanvas.getContext('2d');
+
+    let stageWidth = initialAspect === '4:3' ? 1440 : 1920;
+    let stageHeight = 1080;
+
+    /**
+     * Automatically compute optimal card size & cylinder radius for ANY number of sites (4 to 12+)
+     * Widened on 16:9 (1920x1080) so the carousel spans across the full widescreen frame!
+     */
+    function computeNCardGeometry(count, aspectW) {
+      const isWide = aspectW > 1500;
+      if (count <= 5) {
+        return {
+          cardW: isWide ? 545 : 450,
+          cardH: isWide ? 360 : 314,
+          rx: isWide ? 700 : 480,
+          rz: isWide ? 385 : 330
+        };
+      } else if (count === 6) {
+        return {
+          cardW: isWide ? 525 : 430,
+          cardH: isWide ? 346 : 300,
+          rx: isWide ? 715 : 495,
+          rz: isWide ? 395 : 340
+        };
+      } else if (count <= 8) {
+        return {
+          cardW: isWide ? 465 : 380,
+          cardH: isWide ? 310 : 268,
+          rx: isWide ? 745 : 535,
+          rz: isWide ? 425 : 375
+        };
+      } else if (count <= 10) {
+        return {
+          cardW: isWide ? 415 : 340,
+          cardH: isWide ? 278 : 240,
+          rx: isWide ? 770 : 565,
+          rz: isWide ? 450 : 405
+        };
+      } else {
+        return {
+          cardW: isWide ? 375 : 305,
+          cardH: isWide ? 252 : 216,
+          rx: isWide ? 795 : 590,
+          rz: isWide ? 475 : 430
+        };
+      }
+    }
+
+    let nGeom = computeNCardGeometry(DEMO_BUILDS.length, stageWidth);
+
+    function applyStageDimensions() {
+      nGeom = computeNCardGeometry(DEMO_BUILDS.length, stageWidth);
+      document.documentElement.style.setProperty('--stage-w', `${stageWidth}px`);
+      document.documentElement.style.setProperty('--stage-h', `${stageHeight}px`);
+      document.documentElement.style.setProperty('--card-w', `${nGeom.cardW}px`);
+      document.documentElement.style.setProperty('--card-h', `${nGeom.cardH}px`);
+      turntableCanvas.width = stageWidth * 2;
+      turntableCanvas.height = stageHeight * 2;
+      fitStageToWindow();
+    }
+
+    function fitStageToWindow() {
+      const ww = window.innerWidth;
+      const wh = window.innerHeight;
+      const scale = Math.min(ww / stageWidth, wh / stageHeight);
+      stageFrame.style.transform = `scale(${scale})`;
+    }
+    window.addEventListener('resize', fitStageToWindow);
+
+    // Helper to build the zero-text browser inner markup (shared by Main Card & Mirror Reflection)
+    function createBrowserInnerMarkup(item) {
+      return `
+        <div class="card-browser-bar">
+          <div class="window-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="window-address-pill">
+            <span class="pill-dot" style="background:${item.accent}; box-shadow: 0 0 6px ${item.accent}"></span>
+            <span class="pill-bar"></span>
+          </div>
+          <div class="window-status-badge">
+            <span class="status-pulse" style="background:${item.accent}"></span>
+          </div>
+        </div>
+        <div class="card-screen-viewport">
+          <div class="card-screen-scroller">
+            <img src="${item.src}" alt="" draggable="false" />
+          </div>
+          <div class="card-glass-sheen"></div>
+        </div>
+      `;
+    }
+
+    // Build 3D Slots (Main Card + Synchronized Mirror Floor Reflection)
+    const slotNodes = DEMO_BUILDS.map((item, index) => {
+      const slot = document.createElement('div');
+      slot.className = 'carousel-slot-3d';
+      slot.dataset.index = index;
+
+      slot.innerHTML = `
+        <div class="card-backlight-aura"></div>
+        <div class="site-card-main">
+          ${createBrowserInnerMarkup(item)}
+        </div>
+        <div class="floor-contact-glow"></div>
+        <div class="site-card-reflection" aria-hidden="true">
+          ${createBrowserInnerMarkup(item)}
+        </div>
+      `;
+
+      carouselStage.appendChild(slot);
+
+      const scrollers = slot.querySelectorAll('.card-screen-scroller');
+      const sheens = slot.querySelectorAll('.card-glass-sheen');
+      const mainImg = slot.querySelector('.site-card-main img');
+      const reflEl = slot.querySelector('.site-card-reflection');
+
+      return {
+        el: slot,
+        reflEl,
+        mainScroller: scrollers[0],
+        reflScroller: scrollers[1],
+        mainSheen: sheens[0],
+        reflSheen: sheens[1],
+        img: mainImg,
+        config: item,
+        scrollPhase: index * 1.05
+      };
+    });
+
+    applyStageDimensions();
+
+    // Camera Elevation Presets (Offsets relative to dynamic N-card geometry)
+    const ELEVATION_PRESETS = [
+      { rxMult: 1.00, rzMult: 1.00, frontDropY: 40, backLiftY: -200, cardPitchX: 0 },  // 0: Classic Showroom Cylinder
+      { rxMult: 1.02, rzMult: 1.03, frontDropY: 50, backLiftY: -240, cardPitchX: -3 }, // 1: Elevated Amphitheater Turntable
+      { rxMult: 1.03, rzMult: 0.97, frontDropY: 24, backLiftY: -125, cardPitchX: 2 }   // 2: Low Horizon Stage Angle
+    ];
+
+    // Floor Reflection Intensity Presets
+    const REFLECTION_PRESETS = [
+      { opacity: '0.56', blur: '1.6px' }, // Standard Glossy Obsidian
+      { opacity: '0.76', blur: '0.7px' }, // High-Gloss Wet Mirror
+      { opacity: '0.28', blur: '3.5px' }  // Soft Matte Brushed Stone
+    ];
+
+    let state = {
+      orbitAngle: 0.0,
+      targetAngle: null,
+      baseSpeed: parseFloat(urlParams.get('speed')) || 0.21,
+      direction: 1,
+      paused: false,
+      curveMode: 0,
+      elevationIndex: 0,
+      reflectionIndex: 0,
+      dofEnabled: true,
+      autoScrollSites: true,
+      curRx: nGeom.rx,
+      curRz: nGeom.rz,
+      curFrontDropY: ELEVATION_PRESETS[0].frontDropY,
+      curBackLiftY: ELEVATION_PRESETS[0].backLiftY,
+      curCardPitchX: ELEVATION_PRESETS[0].cardPitchX,
+      isDragging: false,
+      dragStartX: 0,
+      dragStartAngle: 0
+    };
+
+    // Ambient floor light motes
+    const FLOOR_MOTES = Array.from({ length: 95 }, (_, i) => ({
+      angle: (i / 95) * Math.PI * 2 + Math.random() * 0.3,
+      radiusScale: 0.38 + Math.random() * 0.82,
+      speedMult: 0.4 + Math.random() * 0.65,
+      size: 1.1 + Math.random() * 2.4,
+      alpha: 0.22 + Math.random() * 0.55,
+      isGold: i % 3 !== 0
+    }));
+
+    // Mouse / Touch Drag to Spin Cylinder
+    window.addEventListener('pointerdown', (e) => {
+      state.isDragging = true;
+      state.dragStartX = e.clientX;
+      state.dragStartAngle = state.orbitAngle;
+      state.targetAngle = null;
+    });
+
+    window.addEventListener('pointermove', (e) => {
+      if (!state.isDragging) return;
+      const dx = e.clientX - state.dragStartX;
+      state.orbitAngle = state.dragStartAngle + dx * 0.0045;
+    });
+
+    window.addEventListener('pointerup', () => {
+      state.isDragging = false;
+    });
+
+    window.addEventListener('wheel', (e) => {
+      state.targetAngle = null;
+      state.orbitAngle += e.deltaY * 0.0012;
+    }, { passive: true });
+
+    function stepToCard(deltaSteps) {
+      const count = slotNodes.length;
+      const stepRad = (Math.PI * 2) / count;
+      const baseAngle = state.targetAngle !== null ? state.targetAngle : state.orbitAngle;
+      const currentSlot = Math.round(baseAngle / stepRad);
+      state.targetAngle = (currentSlot + deltaSteps) * stepRad;
+    }
+
+    // Invisible Director Keyboard Controls
+    window.addEventListener('keydown', (e) => {
+      switch (e.code) {
+        case 'Space':
+          e.preventDefault();
+          state.paused = !state.paused;
+          if (state.paused) {
+            stepToCard(0);
+          } else {
+            state.targetAngle = null;
+          }
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          stepToCard(-1);
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          stepToCard(1);
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          state.baseSpeed = Math.min(1.2, state.baseSpeed + 0.06);
+          break;
+        case 'ArrowDown':
+          e.preventDefault();
+          state.baseSpeed = Math.max(0.05, state.baseSpeed - 0.06);
+          break;
+        case 'KeyC':
+        case 'KeyM':
+          state.curveMode = (state.curveMode + 1) % 3;
+          break;
+        case 'KeyE':
+        case 'KeyT':
+          state.elevationIndex = (state.elevationIndex + 1) % ELEVATION_PRESETS.length;
+          break;
+        case 'KeyF':
+          state.reflectionIndex = (state.reflectionIndex + 1) % REFLECTION_PRESETS.length;
+          const refl = REFLECTION_PRESETS[state.reflectionIndex];
+          document.documentElement.style.setProperty('--reflection-opacity', refl.opacity);
+          document.documentElement.style.setProperty('--reflection-blur', refl.blur);
+          break;
+        case 'KeyA':
+          stageWidth = stageWidth === 1920 ? 1440 : 1920;
+          applyStageDimensions();
+          break;
+        case 'KeyB':
+          state.dofEnabled = !state.dofEnabled;
+          break;
+        case 'KeyS':
+          state.autoScrollSites = !state.autoScrollSites;
+          break;
+        case 'KeyR':
+          state.direction *= -1;
+          break;
+        case 'Digit1':
+          document.body.setAttribute('data-theme', '1');
+          break;
+        case 'Digit2':
+          document.body.setAttribute('data-theme', '2');
+          break;
+        case 'Digit3':
+          document.body.setAttribute('data-theme', '3');
+          break;
+        case 'Digit4':
+          document.body.setAttribute('data-theme', '4');
+          break;
+      }
+    });
+
+    /**
+     * Draw Illuminated Turntable Rings on the Glossy Obsidian Floor
+     */
+    function drawObsidianTurntableFloor(now, dt) {
+      ctx.save();
+      ctx.scale(2, 2);
+      ctx.clearRect(0, 0, stageWidth, stageHeight);
+
+      const theme = document.body.getAttribute('data-theme') || '1';
+      const primaryRgb =
+        theme === '2' ? '56, 189, 248' :
+        theme === '3' ? '180, 83, 9' :
+        theme === '4' ? '255, 255, 255' :
+        '251, 191, 36';
+      const secondaryRgb =
+        theme === '2' ? '167, 139, 250' :
+        theme === '3' ? '120, 113, 108' :
+        '56, 189, 248';
+
+      const floorCenterX = stageWidth * 0.5;
+      const floorCenterY = 682;
+      const ringSpread = stageWidth > 1500 ? 1.32 : 1.0;
+
+      // 1. Soft Floor Pool Glow Under the Carousel Center
+      const floorGrad = ctx.createRadialGradient(
+        floorCenterX, floorCenterY, 24,
+        floorCenterX, floorCenterY, 620 * ringSpread
+      );
+      floorGrad.addColorStop(0, `rgba(${primaryRgb}, 0.19)`);
+      floorGrad.addColorStop(0.45, `rgba(${secondaryRgb}, 0.09)`);
+      floorGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.save();
+      ctx.translate(floorCenterX, floorCenterY);
+      ctx.scale(1, 0.23);
+      ctx.fillStyle = floorGrad;
+      ctx.beginPath();
+      ctx.arc(0, 0, 620 * ringSpread, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // 2. Concentric Perspective Elliptical Turntable Rings on the Floor
+      const floorRings = [
+        { rx: 335 * ringSpread, ry: 72,  width: 1.0, alpha: 0.18, rgb: secondaryRgb, dashed: false },
+        { rx: 470 * ringSpread, ry: 102, width: 1.4, alpha: 0.28, rgb: primaryRgb,   dashed: true },
+        { rx: 565 * ringSpread, ry: 124, width: 2.3, alpha: 0.46, rgb: primaryRgb,   dashed: false },
+        { rx: 650 * ringSpread, ry: 142, width: 1.3, alpha: 0.23, rgb: secondaryRgb, dashed: false },
+        { rx: 725 * ringSpread, ry: 158, width: 1.0, alpha: 0.15, rgb: primaryRgb,   dashed: true }
+      ];
+
+      floorRings.forEach((r) => {
+        ctx.save();
+        if (r.dashed) {
+          ctx.setLineDash([8, 12]);
+        }
+        ctx.beginPath();
+        ctx.ellipse(floorCenterX, floorCenterY, r.rx, r.ry, 0, 0, Math.PI * 2);
+        ctx.strokeStyle = `rgba(${r.rgb}, ${r.alpha})`;
+        ctx.lineWidth = r.width;
+        ctx.shadowColor = `rgba(${r.rgb}, 0.5)`;
+        ctx.shadowBlur = r.width > 1.8 ? 14 : 0;
+        ctx.stroke();
+        ctx.restore();
+      });
+
+      // 3. Orbiting Floor Light Motes
+      FLOOR_MOTES.forEach((m) => {
+        if (!state.paused) {
+          m.angle += state.baseSpeed * state.direction * m.speedMult * dt * 0.8;
+        }
+        const mx = floorCenterX + Math.sin(m.angle) * 565 * ringSpread * m.radiusScale;
+        const my = floorCenterY + Math.cos(m.angle) * 124 * m.radiusScale;
+        const depthFade = 0.3 + ((Math.cos(m.angle) + 1) * 0.5) * 0.7;
+        const rgb = m.isGold ? primaryRgb : secondaryRgb;
+
+        ctx.fillStyle = `rgba(${rgb}, ${(m.alpha * depthFade).toFixed(3)})`;
+        ctx.beginPath();
+        ctx.arc(mx, my, m.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      ctx.restore();
+    }
+
+    let lastTime = performance.now();
+
+    function animate(now) {
+      const dt = Math.min(0.05, (now - lastTime) / 1000);
+      lastTime = now;
+
+      // 1. Update Cylindrical Rotation Angle
+      if (!state.isDragging) {
+        if (state.targetAngle !== null) {
+          const diff = state.targetAngle - state.orbitAngle;
+          state.orbitAngle += diff * Math.min(1, dt * 6.5);
+          if (!state.paused && Math.abs(diff) < 0.004) {
+            state.targetAngle = null;
+          }
+        } else if (!state.paused) {
+          state.orbitAngle += state.baseSpeed * state.direction * dt;
+        }
+      }
+
+      // 2. Smoothly Interpolate Camera Elevation Preset
+      const preset = ELEVATION_PRESETS[state.elevationIndex];
+      const targetRx = nGeom.rx * preset.rxMult;
+      const targetRz = nGeom.rz * preset.rzMult;
+      const lerp = Math.min(1, dt * 5);
+      state.curRx += (targetRx - state.curRx) * lerp;
+      state.curRz += (targetRz - state.curRz) * lerp;
+      state.curFrontDropY += (preset.frontDropY - state.curFrontDropY) * lerp;
+      state.curBackLiftY += (preset.backLiftY - state.curBackLiftY) * lerp;
+      state.curCardPitchX += (preset.cardPitchX - state.curCardPitchX) * lerp;
+
+      // 3. Render Turntable Floor Rings
+      drawObsidianTurntableFloor(now, dt);
+
+      // 4. Position & Orient Each 3D Slot (Main Card + Mirror Floor Reflection)
+      const count = slotNodes.length;
+      const stepRad = (Math.PI * 2) / count;
+      const perspective = 1750;
+      const viewportHeight = nGeom.cardH - 26;
+
+      slotNodes.forEach((node, idx) => {
+        const theta = state.orbitAngle + idx * stepRad;
+        const sinT = Math.sin(theta);
+        const cosT = Math.cos(theta); // +1 at front hero center, -1 at back center
+
+        // Normalized depth: 0.0 (farthest back) -> 1.0 (closest front hero)
+        const depthNorm = (cosT + 1) * 0.5;
+
+        // Cylindrical coordinates projected with true 3D perspective
+        const rawX = sinT * state.curRx;
+        const rawZ = cosT * state.curRz;
+        const perspScale = perspective / (perspective - rawZ * 0.52);
+
+        const screenX = rawX * perspScale;
+        const screenY = depthNorm * state.curFrontDropY + (1 - depthNorm) * state.curBackLiftY;
+
+        // Cylindrical Yaw Rotation Modes
+        let rotY = 0;
+        if (state.curveMode === 0) {
+          rotY = sinT * 32;
+        } else if (state.curveMode === 1) {
+          rotY = sinT * 50;
+        } else {
+          rotY = -sinT * 26;
+        }
+
+        const totalScale = 0.65 + Math.pow(depthNorm, 1.38) * 0.52;
+
+        node.el.style.transform = `
+          translate3d(${screenX.toFixed(1)}px, ${screenY.toFixed(1)}px, 0px)
+          perspective(1500px)
+          rotateY(${rotY.toFixed(2)}deg)
+          rotateX(${state.curCardPitchX.toFixed(2)}deg)
+          scale(${totalScale.toFixed(3)})
+        `;
+
+        node.el.style.zIndex = Math.round(500 + rawZ);
+
+        const reflDepthWeight = Math.max(0.12, Math.pow(depthNorm, 1.5));
+        node.reflEl.style.opacity = `calc(var(--reflection-opacity) * ${reflDepthWeight.toFixed(2)})`;
+
+        const isHero = depthNorm > 0.85;
+        node.el.classList.toggle('is-hero', isHero);
+
+        if (state.dofEnabled) {
+          const blurPx = depthNorm > 0.68 ? 0 : Math.pow(1 - depthNorm, 1.5) * 2.5;
+          const brightness = 0.52 + Math.pow(depthNorm, 1.1) * 0.52;
+          const saturate = 0.82 + depthNorm * 0.22;
+          node.el.style.filter = `blur(${blurPx.toFixed(2)}px) brightness(${brightness.toFixed(2)}) saturate(${saturate.toFixed(2)})`;
+        } else {
+          const brightness = 0.68 + depthNorm * 0.34;
+          node.el.style.filter = `brightness(${brightness.toFixed(2)})`;
+        }
+
+        const sheenPos = 50 + sinT * 65;
+        node.mainSheen.style.backgroundPosition = `${sheenPos.toFixed(1)}% 50%`;
+        node.reflSheen.style.backgroundPosition = `${sheenPos.toFixed(1)}% 50%`;
+
+        // 5. Synchronized Internal Website Auto-Scrolling (Main Screen + Mirror Reflection)
+        if (state.autoScrollSites) {
+          const speedBoost = 0.45 + depthNorm * 0.85;
+          node.scrollPhase += dt * 0.40 * node.config.scrollSpeedOffset * speedBoost;
+        }
+
+        const scrollWave = (1 - Math.cos(node.scrollPhase)) * 0.5;
+        const imgHeight = node.img.offsetHeight || 1450;
+        const maxScrollPx = Math.max(0, (imgHeight - viewportHeight) * node.config.scrollMaxPct);
+        const scrollY = -scrollWave * maxScrollPx;
+        const transformStr = `translate3d(0, ${scrollY.toFixed(1)}px, 0)`;
+
+        node.mainScroller.style.transform = transformStr;
+        node.reflScroller.style.transform = transformStr;
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>

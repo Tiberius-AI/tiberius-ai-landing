@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1440, initial-scale=1.0" />
+  <title>Saturn Halo 3D Backdrop (1440x1080)</title>
+  <style>
+    :root {
+      --stage-w: 1440px;
+      --stage-h: 1080px;
+
+      /* Theme 1: Obsidian & Gold Studio (Default) */
+      --bg-outer: #020306;
+      --bg-base: #060913;
+      --bg-radial-1: rgba(245, 158, 11, 0.17);
+      --bg-radial-2: rgba(56, 189, 248, 0.13);
+      --bg-radial-3: rgba(99, 102, 241, 0.09);
+      --card-border-front: rgba(251, 191, 36, 0.88);
+      --card-border-rest: rgba(255, 255, 255, 0.20);
+      --card-chrome-bg: #0f172a;
+      --card-shadow-hero:
+        0 42px 95px -16px rgba(0, 0, 0, 0.95),
+        0 0 70px -8px rgba(245, 158, 11, 0.32),
+        0 0 1px 1px rgba(251, 191, 36, 0.45);
+      --card-shadow-rest:
+        0 28px 65px -14px rgba(0, 0, 0, 0.88),
+        0 0 28px -8px rgba(56, 189, 248, 0.14);
+      --grid-line: rgba(255, 255, 255, 0.028);
+    }
+
+    body[data-theme="2"] {
+      /* Theme 2: Deep Cosmic Sapphire & Cyan */
+      --bg-outer: #02040a;
+      --bg-base: #040817;
+      --bg-radial-1: rgba(56, 189, 248, 0.22);
+      --bg-radial-2: rgba(139, 92, 246, 0.16);
+      --bg-radial-3: rgba(14, 165, 233, 0.12);
+      --card-border-front: rgba(125, 211, 252, 0.88);
+      --card-border-rest: rgba(148, 163, 184, 0.24);
+      --card-chrome-bg: #0b1227;
+      --card-shadow-hero:
+        0 42px 95px -16px rgba(0, 0, 0, 0.95),
+        0 0 75px -8px rgba(56, 189, 248, 0.36),
+        0 0 1px 1px rgba(125, 211, 252, 0.45);
+      --grid-line: rgba(148, 163, 184, 0.032);
+    }
+
+    body[data-theme="3"] {
+      /* Theme 3: Warm Editorial Daylight Gallery */
+      --bg-outer: #d4cfc4;
+      --bg-base: #efeae1;
+      --bg-radial-1: rgba(217, 119, 6, 0.16);
+      --bg-radial-2: rgba(120, 113, 108, 0.12);
+      --bg-radial-3: rgba(180, 83, 9, 0.09);
+      --card-border-front: rgba(180, 83, 9, 0.78);
+      --card-border-rest: rgba(28, 25, 23, 0.18);
+      --card-chrome-bg: #1c1917;
+      --card-shadow-hero:
+        0 38px 80px -16px rgba(28, 25, 23, 0.40),
+        0 14px 32px -8px rgba(180, 83, 9, 0.24);
+      --card-shadow-rest:
+        0 24px 50px -12px rgba(28, 25, 23, 0.26);
+      --grid-line: rgba(28, 25, 23, 0.042);
+    }
+
+    body[data-theme="4"] {
+      /* Theme 4: Pure Pitch Studio Void */
+      --bg-outer: #000000;
+      --bg-base: #030305;
+      --bg-radial-1: rgba(245, 158, 11, 0.10);
+      --bg-radial-2: rgba(255, 255, 255, 0.05);
+      --bg-radial-3: rgba(245, 158, 11, 0.05);
+      --card-border-front: rgba(255, 255, 255, 0.82);
+      --card-border-rest: rgba(255, 255, 255, 0.16);
+      --card-chrome-bg: #0c0c10;
+      --card-shadow-hero:
+        0 44px 105px -14px rgba(0, 0, 0, 0.98),
+        0 0 60px -10px rgba(255, 255, 255, 0.22);
+      --grid-line: rgba(255, 255, 255, 0.018);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: var(--bg-outer);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: grab;
+      transition: background 0.6s ease;
+    }
+
+    body:active {
+      cursor: grabbing;
+    }
+
+    /* =====================================================================
+       4:3 (1440x1080) MASTER STAGE CONTAINER
+       ===================================================================== */
+    #stage-frame {
+      position: relative;
+      width: var(--stage-w);
+      height: var(--stage-h);
+      background: var(--bg-base);
+      overflow: hidden;
+      transform-origin: center center;
+      box-shadow: 0 0 120px rgba(0, 0, 0, 0.9);
+      transition: background 0.6s ease;
+    }
+
+    /* Ambient Studio Lighting */
+    .studio-backdrop {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 66% 54% at 50% 44%, var(--bg-radial-1) 0%, transparent 70%),
+        radial-gradient(ellipse 54% 44% at 24% 62%, var(--bg-radial-2) 0%, transparent 66%),
+        radial-gradient(ellipse 54% 44% at 76% 30%, var(--bg-radial-3) 0%, transparent 68%),
+        var(--bg-base);
+      z-index: 1;
+      transition: background 0.6s ease;
+    }
+
+    /* Perspective Studio Floor Grid */
+    .studio-grid-floor {
+      position: absolute;
+      width: 220%;
+      height: 140%;
+      left: -60%;
+      bottom: -46%;
+      background-image:
+        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size: 64px 64px;
+      transform: perspective(950px) rotateX(75deg) rotateZ(-14deg);
+      mask-image: radial-gradient(ellipse 54% 48% at 50% 45%, rgba(0,0,0,0.9) 0%, transparent 72%);
+      -webkit-mask-image: radial-gradient(ellipse 54% 48% at 50% 45%, rgba(0,0,0,0.9) 0%, transparent 72%);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* High-DPI Saturn Halo Ring Canvas (Sits cleanly behind solid 3D cards) */
+    #halo-canvas {
+      position: absolute;
+      inset: 0;
+      width: 1440px;
+      height: 1080px;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    /* =====================================================================
+       3D CAROUSEL STAGE & WEBSITE CARDS
+       ===================================================================== */
+    .carousel-3d-viewport {
+      position: absolute;
+      inset: 0;
+      perspective: 1850px;
+      perspective-origin: 50% 44%;
+      z-index: 10;
+    }
+
+    .carousel-3d-stage {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+    }
+
+    /* Individual 3D Website Viewport Card (100% Opaque so rings never bleed through) */
+    .site-card-3d {
+      position: absolute;
+      left: 50%;
+      top: 44.5%;
+      width: 445px;
+      height: 312px;
+      margin-left: -222.5px;
+      margin-top: -156px;
+      border-radius: 16px;
+      background: var(--card-chrome-bg);
+      border: 1.5px solid var(--card-border-rest);
+      box-shadow: var(--card-shadow-rest);
+      transform-style: preserve-3d;
+      will-change: transform, filter;
+      overflow: visible;
+      opacity: 1;
+      transition: border-color 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .site-card-3d.is-hero {
+      border-color: var(--card-border-front);
+      box-shadow: var(--card-shadow-hero);
+    }
+
+    /* Subtle 3D Glass Bezel & Rim Thickness */
+    .card-frame-shell {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border-radius: 14.5px;
+      overflow: hidden;
+      background: #0b0f19;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Minimalist Zero-Text Browser Header Bar */
+    .card-browser-bar {
+      height: 25px;
+      min-height: 25px;
+      padding: 0 12px;
+      background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 3;
+    }
+
+    .window-dots {
+      display: flex;
+      align-items: center;
+      gap: 5.5px;
+    }
+
+    .window-dots span {
+      width: 7.5px;
+      height: 7.5px;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .window-dots span:nth-child(1) { background: #f87171; }
+    .window-dots span:nth-child(2) { background: #fbbf24; }
+    .window-dots span:nth-child(3) { background: #34d399; }
+
+    /* Graphical-only URL Pill (No Text) */
+    .window-address-pill {
+      width: 160px;
+      height: 11px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+      gap: 5px;
+      overflow: hidden;
+    }
+
+    .pill-dot {
+      width: 4.5px;
+      height: 4.5px;
+      border-radius: 50%;
+      background: #34d399;
+      box-shadow: 0 0 6px #34d399;
+      flex-shrink: 0;
+    }
+
+    .pill-bar {
+      height: 3px;
+      width: 65%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.06));
+    }
+
+    .window-status-badge {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .status-pulse {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #fbbf24;
+      box-shadow: 0 0 8px rgba(251, 191, 36, 0.95);
+    }
+
+    /* Website Viewport Area (Auto-Scrolling Full-Page Webp) */
+    .card-screen-viewport {
+      position: relative;
+      flex: 1;
+      width: 100%;
+      overflow: hidden;
+      background: #0f172a;
+    }
+
+    .card-screen-scroller {
+      width: 100%;
+      will-change: transform;
+      transform: translate3d(0, 0, 0);
+    }
+
+    .card-screen-scroller img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    /* Dynamic Glass Specular Sheen Across Screen */
+    .card-glass-sheen {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        118deg,
+        transparent 0%,
+        transparent 38%,
+        rgba(255, 255, 255, 0.09) 47%,
+        rgba(255, 255, 255, 0.20) 50%,
+        rgba(255, 255, 255, 0.07) 53%,
+        transparent 62%,
+        transparent 100%
+      );
+      background-size: 240% 240%;
+      mix-blend-mode: screen;
+      pointer-events: none;
+      z-index: 4;
+      opacity: 0.75;
+    }
+
+    /* Orbital Aura Behind Each Card */
+    .card-halo-glow-under {
+      position: absolute;
+      inset: -20px;
+      border-radius: 28px;
+      background: radial-gradient(ellipse at center, rgba(251, 191, 36, 0.30) 0%, transparent 72%);
+      opacity: 0;
+      z-index: -1;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .site-card-3d.is-hero .card-halo-glow-under {
+      opacity: 1;
+    }
+
+    /* Studio Floor Reflection Underneath the Front Hero Card */
+    .hero-floor-reflection {
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      bottom: -68px;
+      height: 60px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at center, rgba(251, 191, 36, 0.28) 0%, rgba(56, 189, 248, 0.14) 48%, transparent 76%);
+      filter: blur(16px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    .site-card-3d.is-hero .hero-floor-reflection {
+      opacity: 0.95;
+    }
+
+    /* Soft Vignette */
+    .studio-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 84% 80% at 50% 50%, transparent 58%, rgba(0, 0, 0, 0.54) 100%);
+      z-index: 30;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body data-theme="1">
+
+  <!-- 4:3 (1440x1080) Stage Frame -->
+  <div id="stage-frame">
+    <div class="studio-backdrop"></div>
+    <div class="studio-grid-floor"></div>
+
+    <!-- High-DPI 3D Saturn Halo Ring & Planetary Core Canvas -->
+    <canvas id="halo-canvas" width="2880" height="2160"></canvas>
+
+    <!-- 3D Orbiting Website Cards Stage -->
+    <div class="carousel-3d-viewport">
+      <div class="carousel-3d-stage" id="carousel-stage">
+        <!-- Populated dynamically by JS -->
+      </div>
+    </div>
+
+    <div class="studio-vignette"></div>
+  </div>
+
+  <script>
+    /**
+     * ========================================================================
+     * SATURN HALO 3D MERRY-GO-ROUND ENGINE (4:3 • 1440x1080 • ZERO TEXT)
+     * ========================================================================
+     * Invisible Director Hotkeys (for recording / live control):
+     * - Space       : Pause / Resume continuous orbit (settles on front hero site)
+     * - Left/Right  : Rotate smoothly to previous / next demo site
+     * - Up/Down     : Speed up / Slow down orbit speed
+     * - T           : Cycle Saturn Halo tilt angle (-14° Left-Low, +14° Right-Low, -20° Steep, 0° Level)
+     * - M           : Cycle 3D Card Orientation Mode (Camera-Biased Halo, Radial Cylinder, Isometric)
+     * - B           : Toggle optical Depth-of-Field lens blur on background cards
+     * - S           : Toggle smooth internal website vertical auto-scrolling
+     * - R           : Reverse orbit direction
+     * - 1 / 2 / 3 / 4 : Switch Studio Lighting Theme
+     */
+
+    const STAGE_CENTER_X = 720;
+    const STAGE_CENTER_Y = 480;
+
+    // 6 Gap-Free Full-Page Tiberius Smart Site Builds (60° symmetrical orbital spacing)
+    const DEMO_BUILDS = [
+      {
+        id: 'remodel-1',
+        src: 'demos/remodel-1.webp',
+        scrollMaxPct: 0.72,
+        scrollSpeedOffset: 1.0,
+        accent: '#fbbf24'
+      },
+      {
+        id: 'pro-services',
+        src: 'demos/pro-services.webp',
+        scrollMaxPct: 0.72,
+        scrollSpeedOffset: 1.12,
+        accent: '#34d399'
+      },
+      {
+        id: 'local-cafe',
+        src: 'demos/local-cafe.webp',
+        scrollMaxPct: 0.70,
+        scrollSpeedOffset: 0.94,
+        accent: '#f59e0b'
+      },
+      {
+        id: 'pest-control',
+        src: 'demos/pest-control.webp',
+        scrollMaxPct: 0.74,
+        scrollSpeedOffset: 1.06,
+        accent: '#f87171'
+      },
+      {
+        id: 'remodel-2',
+        src: 'demos/remodel-2.webp',
+        scrollMaxPct: 0.72,
+        scrollSpeedOffset: 0.98,
+        accent: '#fb923c'
+      },
+      {
+        id: 'tree-service',
+        src: 'demos/tree-service.webp',
+        scrollMaxPct: 0.74,
+        scrollSpeedOffset: 1.10,
+        accent: '#a3e635'
+      }
+    ];
+
+    const stageFrame = document.getElementById('stage-frame');
+    const carouselStage = document.getElementById('carousel-stage');
+    const haloCanvas = document.getElementById('halo-canvas');
+    const ctx = haloCanvas.getContext('2d');
+
+    // Responsive 4:3 (1440x1080) exact scaling to fit any window cleanly
+    function fitStageToWindow() {
+      const ww = window.innerWidth;
+      const wh = window.innerHeight;
+      const scale = Math.min(ww / 1440, wh / 1080);
+      stageFrame.style.transform = `scale(${scale})`;
+    }
+    window.addEventListener('resize', fitStageToWindow);
+    fitStageToWindow();
+
+    // Build 3D Cards in DOM
+    const cardNodes = DEMO_BUILDS.map((item, index) => {
+      const card = document.createElement('div');
+      card.className = 'site-card-3d';
+      card.dataset.index = index;
+
+      card.innerHTML = `
+        <div class="card-halo-glow-under"></div>
+        <div class="card-frame-shell">
+          <div class="card-browser-bar">
+            <div class="window-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="window-address-pill">
+              <span class="pill-dot" style="background:${item.accent}; box-shadow: 0 0 6px ${item.accent}"></span>
+              <span class="pill-bar"></span>
+            </div>
+            <div class="window-status-badge">
+              <span class="status-pulse" style="background:${item.accent}"></span>
+            </div>
+          </div>
+          <div class="card-screen-viewport">
+            <div class="card-screen-scroller">
+              <img src="${item.src}" alt="" draggable="false" />
+            </div>
+            <div class="card-glass-sheen"></div>
+          </div>
+        </div>
+        <div class="hero-floor-reflection"></div>
+      `;
+
+      carouselStage.appendChild(card);
+      return {
+        el: card,
+        scroller: card.querySelector('.card-screen-scroller'),
+        sheen: card.querySelector('.card-glass-sheen'),
+        img: card.querySelector('img'),
+        config: item,
+        scrollPhase: index * 0.95
+      };
+    });
+
+    // Orbital Geometry Presets
+    const TILT_PRESETS = [
+      { pitchYAmp: 215, rollDeg: -14, ringRx: 495, ringRz: 350 }, // Classic Saturn Diagonal Halo
+      { pitchYAmp: 215, rollDeg: 14,  ringRx: 495, ringRz: 350 }, // Counter-Diagonal Halo
+      { pitchYAmp: 245, rollDeg: -20, ringRx: 505, ringRz: 360 }, // Steep High-Crown Halo
+      { pitchYAmp: 190, rollDeg: 0,   ringRx: 510, ringRz: 340 }  // Symmetrical Horizon Halo
+    ];
+
+    let state = {
+      orbitAngle: 0.0, // Starts with flagship Aether Remodel in hero foreground
+      targetAngle: null,
+      baseSpeed: 0.22, // Radians per second
+      direction: 1,
+      paused: false,
+      tiltIndex: 0,
+      modeIndex: 0,
+      dofEnabled: true,
+      autoScrollSites: true,
+      curPitchY: TILT_PRESETS[0].pitchYAmp,
+      curRoll: TILT_PRESETS[0].rollDeg,
+      curRx: TILT_PRESETS[0].ringRx,
+      curRz: TILT_PRESETS[0].ringRz,
+      isDragging: false,
+      dragStartX: 0,
+      dragStartAngle: 0
+    };
+
+    // Generate stardust particles orbiting along the Saturn ring
+    const RING_DUST = Array.from({ length: 120 }, (_, i) => ({
+      angle: (i / 120) * Math.PI * 2 + Math.random() * 0.2,
+      radiusScale: 0.82 + Math.random() * 0.38,
+      speedMult: 0.65 + Math.random() * 0.7,
+      size: 1.1 + Math.random() * 2.5,
+      alpha: 0.25 + Math.random() * 0.65,
+      isGold: i % 3 !== 0
+    }));
+
+    // Mouse / Touch Drag to Scrub Orbit
+    window.addEventListener('pointerdown', (e) => {
+      state.isDragging = true;
+      state.dragStartX = e.clientX;
+      state.dragStartAngle = state.orbitAngle;
+      state.targetAngle = null;
+    });
+
+    window.addEventListener('pointermove', (e) => {
+      if (!state.isDragging) return;
+      const dx = e.clientX - state.dragStartX;
+      state.orbitAngle = state.dragStartAngle + dx * 0.0045;
+    });
+
+    window.addEventListener('pointerup', () => {
+      state.isDragging = false;
+    });
+
+    window.addEventListener('wheel', (e) => {
+      state.targetAngle = null;
+      state.orbitAngle += e.deltaY * 0.0012;
+    }, { passive: true });
+
+    function stepToCard(deltaSteps) {
+      const count = cardNodes.length;
+      const stepRad = (Math.PI * 2) / count;
+      const baseAngle = state.targetAngle !== null ? state.targetAngle : state.orbitAngle;
+      const currentSlot = Math.round(baseAngle / stepRad);
+      state.targetAngle = (currentSlot + deltaSteps) * stepRad;
+    }
+
+    window.addEventListener('keydown', (e) => {
+      switch (e.code) {
+        case 'Space':
+          e.preventDefault();
+          state.paused = !state.paused;
+          if (state.paused) {
+            stepToCard(0);
+          } else {
+            state.targetAngle = null;
+          }
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          stepToCard(-1);
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          stepToCard(1);
+          break;
+        case 'ArrowUp':
+          e.preventDefault();
+          state.baseSpeed = Math.min(1.2, state.baseSpeed + 0.06);
+          break;
+        case 'ArrowDown':
+          e.preventDefault();
+          state.baseSpeed = Math.max(0.05, state.baseSpeed - 0.06);
+          break;
+        case 'KeyT':
+          state.tiltIndex = (state.tiltIndex + 1) % TILT_PRESETS.length;
+          break;
+        case 'KeyM':
+          state.modeIndex = (state.modeIndex + 1) % 3;
+          break;
+        case 'KeyB':
+          state.dofEnabled = !state.dofEnabled;
+          break;
+        case 'KeyS':
+          state.autoScrollSites = !state.autoScrollSites;
+          break;
+        case 'KeyR':
+          state.direction *= -1;
+          break;
+        case 'Digit1':
+          document.body.setAttribute('data-theme', '1');
+          break;
+        case 'Digit2':
+          document.body.setAttribute('data-theme', '2');
+          break;
+        case 'Digit3':
+          document.body.setAttribute('data-theme', '3');
+          break;
+        case 'Digit4':
+          document.body.setAttribute('data-theme', '4');
+          break;
+      }
+    });
+
+    /**
+     * Compute 3D orbital point (x, y, z) for any angle theta along the Saturn ring
+     * theta = 0 is front-most hero card (+Z, lower foreground)
+     * theta = PI is farthest back card (-Z, upper crown)
+     */
+    function getSaturnPoint3D(theta, radiusScale = 1.0) {
+      const sinT = Math.sin(theta);
+      const cosT = Math.cos(theta);
+      const rollRad = (state.curRoll * Math.PI) / 180;
+
+      const flatX = sinT * state.curRx * radiusScale;
+      const pitchedY = cosT * state.curPitchY * radiusScale;
+      const z = cosT * state.curRz * radiusScale;
+
+      const x = flatX * Math.cos(rollRad) - pitchedY * Math.sin(rollRad);
+      const y = flatX * Math.sin(rollRad) + pitchedY * Math.cos(rollRad);
+
+      return { x, y, z, sinT, cosT };
+    }
+
+    /**
+     * Project 3D stage point (x, y, z) onto 2D 1440x1080 canvas coordinates
+     * matching CSS perspective: 1850px
+     */
+    function projectTo2D(pt3d) {
+      const perspective = 1850;
+      const scale = perspective / (perspective - pt3d.z);
+      return {
+        x: STAGE_CENTER_X + pt3d.x * scale,
+        y: STAGE_CENTER_Y + pt3d.y * scale,
+        scale
+      };
+    }
+
+    /**
+     * Render Multi-Band Luminous Saturn Halo Rings & Central Core on Retina Canvas
+     */
+    function drawSaturnHaloCanvas(now, dt) {
+      ctx.save();
+      ctx.scale(2, 2); // 2880x2160 retina scaling -> 1440x1080 logical coords
+      ctx.clearRect(0, 0, 1440, 1080);
+
+      const theme = document.body.getAttribute('data-theme') || '1';
+      const primaryRgb =
+        theme === '2' ? '56, 189, 248' :
+        theme === '3' ? '180, 83, 9' :
+        theme === '4' ? '255, 255, 255' :
+        '251, 191, 36';
+      const secondaryRgb =
+        theme === '2' ? '167, 139, 250' :
+        theme === '3' ? '120, 113, 108' :
+        '56, 189, 248';
+
+      // 1. Central Planetary Core Sphere Glow inside the Saturn Ring
+      const pulse = 1 + Math.sin(now * 0.0018) * 0.04;
+      const coreGrad = ctx.createRadialGradient(
+        STAGE_CENTER_X, STAGE_CENTER_Y, 8,
+        STAGE_CENTER_X, STAGE_CENTER_Y, 310 * pulse
+      );
+      coreGrad.addColorStop(0, `rgba(${primaryRgb}, 0.28)`);
+      coreGrad.addColorStop(0.28, `rgba(${primaryRgb}, 0.12)`);
+      coreGrad.addColorStop(0.58, `rgba(${secondaryRgb}, 0.08)`);
+      coreGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+      ctx.fillStyle = coreGrad;
+      ctx.beginPath();
+      ctx.arc(STAGE_CENTER_X, STAGE_CENTER_Y, 310 * pulse, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Subtle inner core geometric halo ring
+      ctx.save();
+      ctx.translate(STAGE_CENTER_X, STAGE_CENTER_Y);
+      ctx.rotate((state.curRoll * Math.PI) / 180);
+      ctx.strokeStyle = `rgba(${primaryRgb}, 0.18)`;
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 135 * pulse, 58 * pulse, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+
+      // 2. Draw Concentric 3D Projected Saturn Ring Bands
+      const ringBands = [
+        { rScale: 0.76, width: 1.2, alpha: 0.24, rgb: secondaryRgb, dashed: false },
+        { rScale: 0.88, width: 1.5, alpha: 0.34, rgb: primaryRgb,   dashed: true },
+        { rScale: 1.00, width: 2.8, alpha: 0.62, rgb: primaryRgb,   dashed: false },
+        { rScale: 1.03, width: 24,  alpha: 0.09, rgb: primaryRgb,   dashed: false },
+        { rScale: 1.12, width: 1.6, alpha: 0.36, rgb: secondaryRgb, dashed: false },
+        { rScale: 1.22, width: 1.1, alpha: 0.22, rgb: primaryRgb,   dashed: true }
+      ];
+
+      const segments = 128;
+      ringBands.forEach((band) => {
+        ctx.save();
+        if (band.dashed) {
+          ctx.setLineDash([7, 11]);
+        }
+        ctx.beginPath();
+        for (let i = 0; i <= segments; i++) {
+          const t = (i / segments) * Math.PI * 2;
+          const pt3 = getSaturnPoint3D(t, band.rScale);
+          const pt2 = projectTo2D(pt3);
+          if (i === 0) ctx.moveTo(pt2.x, pt2.y);
+          else ctx.lineTo(pt2.x, pt2.y);
+        }
+        ctx.strokeStyle = `rgba(${band.rgb}, ${band.alpha})`;
+        ctx.lineWidth = band.width;
+        ctx.shadowColor = `rgba(${band.rgb}, 0.6)`;
+        ctx.shadowBlur = band.width > 2 ? 18 : 0;
+        ctx.stroke();
+        ctx.restore();
+      });
+
+      // 3. Draw Orbiting Stardust & Luminous Nodes Along the Saturn Ring
+      RING_DUST.forEach((p) => {
+        if (!state.paused) {
+          p.angle += state.baseSpeed * state.direction * p.speedMult * dt * 0.85;
+        }
+        const pt3 = getSaturnPoint3D(p.angle, p.radiusScale);
+        const pt2 = projectTo2D(pt3);
+        const depthFade = 0.35 + ((pt3.cosT + 1) * 0.5) * 0.65;
+        const rgb = p.isGold ? primaryRgb : secondaryRgb;
+
+        ctx.fillStyle = `rgba(${rgb}, ${(p.alpha * depthFade).toFixed(3)})`;
+        ctx.beginPath();
+        ctx.arc(pt2.x, pt2.y, p.size * pt2.scale, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      ctx.restore();
+    }
+
+    let lastTime = performance.now();
+
+    function animate(now) {
+      const dt = Math.min(0.05, (now - lastTime) / 1000);
+      lastTime = now;
+
+      // 1. Update Orbital Angle
+      if (!state.isDragging) {
+        if (state.targetAngle !== null) {
+          const diff = state.targetAngle - state.orbitAngle;
+          state.orbitAngle += diff * Math.min(1, dt * 6.5);
+          if (!state.paused && Math.abs(diff) < 0.004) {
+            state.targetAngle = null;
+          }
+        } else if (!state.paused) {
+          state.orbitAngle += state.baseSpeed * state.direction * dt;
+        }
+      }
+
+      // 2. Smoothly Interpolate Saturn Ring Tilt Preset
+      const preset = TILT_PRESETS[state.tiltIndex];
+      const lerpFactor = Math.min(1, dt * 5);
+      state.curPitchY += (preset.pitchYAmp - state.curPitchY) * lerpFactor;
+      state.curRoll += (preset.rollDeg - state.curRoll) * lerpFactor;
+      state.curRx += (preset.ringRx - state.curRx) * lerpFactor;
+      state.curRz += (preset.ringRz - state.curRz) * lerpFactor;
+
+      // 3. Draw Synchronized 3D Saturn Halo Rings on Canvas
+      drawSaturnHaloCanvas(now, dt);
+
+      // 4. Position & Orient Each Website Card Along the Tilted Saturn Orbit
+      const count = cardNodes.length;
+      const stepRad = (Math.PI * 2) / count;
+
+      cardNodes.forEach((node, idx) => {
+        const theta = state.orbitAngle + idx * stepRad;
+        const { x, y, z, sinT, cosT } = getSaturnPoint3D(theta, 1.0);
+
+        // Normalized depth factor: 0.0 (farthest back crown) -> 1.0 (closest front hero)
+        const depthNorm = (cosT + 1) * 0.5;
+
+        // 3D Card Orientation Modes
+        let cardRotY = 0;
+        let cardRotX = 0;
+        let cardRotZ = 0;
+
+        if (state.modeIndex === 0) {
+          // Mode 0: Camera-Biased Saturn Halo (Every screen stays clearly visible & dimensional)
+          cardRotY = sinT * 25;
+          cardRotX = -cosT * 5;
+          cardRotZ = state.curRoll * 0.30 * cosT;
+        } else if (state.modeIndex === 1) {
+          // Mode 1: Stronger Radial Turntable Angle
+          cardRotY = sinT * 46;
+          cardRotX = -cosT * 7;
+          cardRotZ = state.curRoll * 0.45;
+        } else {
+          // Mode 2: Isometric Showroom Planes
+          cardRotY = -16 + sinT * 14;
+          cardRotX = 7 - cosT * 5;
+          cardRotZ = state.curRoll * 0.35;
+        }
+
+        // Smooth scale curve: back crown cards (0.64x) -> front hero spotlight card (1.16x)
+        const scale = 0.64 + Math.pow(depthNorm, 1.45) * 0.52;
+
+        // Note: Keep translateZ positive by adding +400px base offset so all 3D cards stay
+        // in front of the z=0 background plane while preserving relative 3D perspective & depth!
+        const visualZ = z * 0.72;
+
+        node.el.style.transform = `
+          translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, ${visualZ.toFixed(1)}px)
+          rotateZ(${cardRotZ.toFixed(2)}deg)
+          rotateY(${cardRotY.toFixed(2)}deg)
+          rotateX(${cardRotX.toFixed(2)}deg)
+          scale(${scale.toFixed(3)})
+        `;
+
+        // Z-Index sorting so foreground cards cleanly overlap background cards
+        node.el.style.zIndex = Math.round(500 + z);
+
+        // Highlight front-most Hero card
+        const isHero = depthNorm > 0.84;
+        node.el.classList.toggle('is-hero', isHero);
+
+        // Optical Depth-of-Field (Keep cards 100% solid opaque so rings never bleed through!)
+        if (state.dofEnabled) {
+          const blurPx = depthNorm > 0.70 ? 0 : Math.pow(1 - depthNorm, 1.55) * 2.4;
+          const brightness = 0.54 + Math.pow(depthNorm, 1.1) * 0.50;
+          const saturate = 0.82 + depthNorm * 0.22;
+          node.el.style.filter = `blur(${blurPx.toFixed(2)}px) brightness(${brightness.toFixed(2)}) saturate(${saturate.toFixed(2)})`;
+        } else {
+          const brightness = 0.70 + depthNorm * 0.32;
+          node.el.style.filter = `brightness(${brightness.toFixed(2)})`;
+        }
+
+        // Dynamic Glass Specular Sheen Sweep as card crosses the front light
+        const sheenPos = 50 + sinT * 65;
+        node.sheen.style.backgroundPosition = `${sheenPos.toFixed(1)}% 50%`;
+
+        // 5. Smooth Internal Website Auto-Scrolling Inside Each Viewport
+        if (state.autoScrollSites) {
+          const speedBoost = 0.45 + depthNorm * 0.85;
+          node.scrollPhase += dt * 0.40 * node.config.scrollSpeedOffset * speedBoost;
+        }
+
+        const scrollWave = (1 - Math.cos(node.scrollPhase)) * 0.5;
+        const imgHeight = node.img.offsetHeight || 1350;
+        const viewportHeight = 287;
+        const maxScrollPx = Math.max(0, (imgHeight - viewportHeight) * node.config.scrollMaxPct);
+        const scrollY = -scrollWave * maxScrollPx;
+        node.scroller.style.transform = `translate3d(0, ${scrollY.toFixed(1)}px, 0)`;
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>
