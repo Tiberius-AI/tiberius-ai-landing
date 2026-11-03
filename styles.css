@@ -411,41 +411,36 @@ footer .brand-logo {
   max-width: 940px;
 }
 
-/* 1. Eyebrow HUD Callout (Sharp Left/Right Gold Power-Blades) */
+/* 1. Clean Borderless Hero Eyebrow (Font Colors Only) */
 .hero-eyebrow-wrap {
   display: flex;
   justify-content: center;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .hero-eyebrow-pill {
-  position: relative;
   display: inline-flex;
   align-items: center;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 12px;
-  background: linear-gradient(90deg, rgba(245, 158, 11, 0.18) 0%, rgba(11, 16, 28, 0.92) 50%, rgba(245, 158, 11, 0.18) 100%);
-  border: 1px solid rgba(245, 158, 11, 0.36);
-  border-left: 3.5px solid var(--gold-bright);
-  border-right: 3.5px solid var(--gold-bright);
-  border-radius: 3px;
-  padding: 7px 20px;
-  font-size: 12px;
+  gap: 10px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  font-size: 12.5px;
   font-weight: 800;
-  letter-spacing: 0.05em;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.55), 0 0 22px rgba(245, 158, 11, 0.14);
+  letter-spacing: 0.04em;
+  box-shadow: none;
 }
 
 .geo-badge-text {
   color: var(--gold-bright);
   text-transform: uppercase;
-  text-shadow: 0 0 14px rgba(245, 158, 11, 0.35);
 }
 
 .eyebrow-divider {
-  color: rgba(251, 191, 36, 0.55);
-  font-weight: 900;
+  color: rgba(255, 255, 255, 0.35);
 }
 
 .eyebrow-terms {
@@ -1332,70 +1327,45 @@ footer .brand-logo {
   margin: 0 auto 32px;
 }
 
-/* Part 1: Architectural Horizon Beam for Section Eyebrows */
+/* Clean Borderless Section Eyebrows Over Main Headlines (Font Colors Only) */
 .eyebrow-tag {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
   color: var(--gold-bright);
   background: transparent;
   border: none;
-  padding: 0 0 6px;
+  padding: 0;
   border-radius: 0;
   font-size: 12px;
-  font-weight: 900;
-  letter-spacing: 0.14em;
+  font-weight: 800;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  margin-bottom: 14px;
-  position: relative;
-  text-shadow: 0 0 18px rgba(245, 158, 11, 0.38);
-}
-
-.eyebrow-tag::before,
-.eyebrow-tag::after {
-  content: "";
-  display: inline-block;
-  width: clamp(28px, 5.5vw, 72px);
-  height: 1.5px;
-  background: linear-gradient(90deg, transparent 0%, rgba(245, 158, 11, 0.45) 45%, var(--gold-bright) 100%);
-  box-shadow: 0 0 10px rgba(251, 191, 36, 0.55);
-  flex-shrink: 0;
-}
-
-.eyebrow-tag::after {
-  background: linear-gradient(90deg, var(--gold-bright) 0%, rgba(245, 158, 11, 0.45) 55%, transparent 100%);
+  margin-bottom: 10px;
+  box-shadow: none;
 }
 
 .eyebrow-kicker {
   color: var(--gold-bright);
-  font-weight: 900;
+  font-weight: 800;
 }
 
 .eyebrow-sep {
-  color: var(--gold-primary);
-  font-size: 10px;
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 9px;
   line-height: 1;
-  filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.85));
 }
 
 .eyebrow-sub {
-  color: #F8FAFC;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-shadow: none;
+  color: var(--text-white);
+  font-weight: 700;
+  letter-spacing: 0.08em;
 }
 
 .fasttrack-copy .eyebrow-tag {
   justify-content: flex-start;
-}
-
-.fasttrack-copy .eyebrow-tag::before {
-  width: 3.5px;
-  height: 14px;
-  background: var(--gold-bright);
-  box-shadow: 0 0 10px rgba(251, 191, 36, 0.65);
 }
 
 .section-title {
@@ -1789,35 +1759,29 @@ footer .brand-logo {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  max-width: 720px;
-  margin: 0 auto 20px;
-  background: linear-gradient(90deg, rgba(22, 163, 74, 0.24) 0%, rgba(11, 17, 30, 0.94) 50%, rgba(22, 163, 74, 0.24) 100%);
-  border: 1px solid rgba(34, 197, 94, 0.42);
-  border-left: 4px solid #22C55E;
-  border-right: 4px solid #22C55E;
-  color: #86EFAC;
-  padding: 9px 22px;
-  border-radius: 3px;
+  gap: 8px;
+  max-width: 760px;
+  margin: 0 auto 12px;
+  background: transparent;
+  border: none;
+  color: #4ADE80;
+  padding: 0;
+  border-radius: 0;
   font-size: 12.5px;
   font-weight: 800;
   letter-spacing: 0.06em;
   text-align: center;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55), 0 0 24px rgba(34, 197, 94, 0.16);
+  box-shadow: none;
 }
 
 .unlocked-check {
-  width: 22px;
-  height: 22px;
-  border-radius: 3px;
-  background: #22C55E;
-  color: #07090E;
+  color: #4ADE80;
+  background: transparent;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-weight: 900;
   flex-shrink: 0;
-  box-shadow: 0 0 12px rgba(34, 197, 94, 0.5);
 }
 
 .unlocked-vsl-grid {
@@ -3961,12 +3925,7 @@ footer .brand-logo {
   .hero-eyebrow-pill {
     flex-direction: column;
     gap: 4px;
-    border-radius: 3px;
-    padding: 8px 14px;
-  }
-  .eyebrow-tag::before,
-  .eyebrow-tag::after {
-    width: 18px;
+    padding: 0;
   }
 }
 
@@ -3976,7 +3935,7 @@ footer .brand-logo {
   }
   .hero-eyebrow-pill {
     font-size: 11px;
-    padding: 7px 14px;
+    padding: 0;
   }
   .video-gate-frame {
     aspect-ratio: 4 / 3;
