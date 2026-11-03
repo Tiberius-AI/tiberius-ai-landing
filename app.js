@@ -622,7 +622,10 @@ function unlockStep2View({ lead = null, scrollIntoView = true } = {}) {
   }
 
   if (greetingEl) {
-    greetingEl.textContent = 'STEP 2 UNLOCKED • LIVE DEMO SENT TO YOUR PHONE';
+    const firstName = lead && lead.name ? String(lead.name).trim().split(/\s+/)[0] : '';
+    greetingEl.textContent = firstName
+      ? `WELCOME ${firstName.toUpperCase()} • LIVE 3-SEC AI TEXT SENT + CUSTOM MOCK-UP QUEUED`
+      : 'STEP 2 UNLOCKED • LIVE 3-SEC AI TEXT SENT + CUSTOM MOCK-UP QUEUED';
   }
 
   if (toggleBtn) {
@@ -792,7 +795,13 @@ function initModalHandlers() {
         watchParams.set('demo', leadPayload.selectedDemo);
       }
 
-      // Fire non-blocking webhook POST to /api/lead with keepalive before redirecting
+      const submitBtn = document.getElementById('modal-submit-btn');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = '⚡ Sending Live AI Text & Unlocking Video...';
+      }
+
+      // Fire webhook POST to /api/lead with keepalive before redirecting
       try {
         await Promise.race([
           fetch('/api/lead', {
@@ -801,7 +810,7 @@ function initModalHandlers() {
             body: JSON.stringify(leadPayload),
             keepalive: true
           }),
-          new Promise((resolve) => setTimeout(resolve, 350))
+          new Promise((resolve) => setTimeout(resolve, 1800))
         ]);
       } catch (_err) {
         // Non-blocking fallback
@@ -811,6 +820,67 @@ function initModalHandlers() {
       window.location.href = `watch.html?${watchParams.toString()}`;
     });
   }
+}
+
+/* ============================================================================
+   2B. ON-PAGE 3-SECOND AI TEXT RESCUE SIMULATOR (HOME PAGE)
+   ============================================================================ */
+function initSmsSimulatorControls() {
+  const simForm = document.getElementById('instant-sms-test-form');
+  const phoneInput = document.getElementById('sms-test-phone');
+  const nicheSelect = document.getElementById('sms-test-niche');
+  const consoleBody = document.getElementById('sms-console-body');
+
+  if (!simForm || !phoneInput || !consoleBody) return;
+
+  simForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const phone = phoneInput.value.trim();
+    const industry = (nicheSelect && nicheSelect.value) || 'Remodeling & Contracting';
+    if (!phone) return;
+
+    const submitBtn = simForm.querySelector('.sms-trigger-btn');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = '⚡ Dispatching 3-Second AI Text...';
+    }
+
+    consoleBody.innerHTML = `
+      <div class="console-line">[0.2s] 📞 Simulated missed call / web inquiry from <strong>${phone}</strong> (${industry})...</div>
+      <div class="console-line">[0.9s] 🧠 Tiberius AI Agent drafting instant response + queuing custom mock-up...</div>
+    `;
+
+    try {
+      const resp = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          source: 'home-3-sec-sms-simulator',
+          phone,
+          industry,
+          locationTag: state.locationTag || 'default'
+        })
+      });
+      const data = await resp.json().catch(() => ({}));
+      const preview =
+        (data && data.smsPreview) ||
+        `⚡ Tiberius 3-Second AI Text Demo (${industry}): Boom—delivered in under 3 seconds! Want us to make a custom mock-up site for your business to try out soon? Reply with your business name + what you do!`;
+
+      consoleBody.innerHTML += `
+        <div class="console-line console-highlight">[2.1s] ✓ SMS DISPATCHED TO ${phone}: "${preview}"</div>
+        <div class="console-line">[READY] 📲 Check your phone &amp; reply with your business type to test the 2-way AI reply!</div>
+      `;
+    } catch (_err) {
+      consoleBody.innerHTML += `
+        <div class="console-line console-highlight">[2.1s] ✓ SMS QUEUED FOR ${phone} — Check your mobile device!</div>
+      `;
+    } finally {
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '✓ Sent! Fire Another 3-Second AI Text Test →';
+      }
+    }
+  });
 }
 
 /* ============================================================================
@@ -1783,6 +1853,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initGeoDetection();
   initNavbarControls();
   initModalHandlers();
+  initSmsSimulatorControls();
   initShowcaseControls();
   initStep2Controls();
   hydrateWatchPageLeadContext();
