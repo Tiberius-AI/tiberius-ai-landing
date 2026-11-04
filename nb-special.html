@@ -70,6 +70,23 @@
       <div class="hero-ambient-glow" aria-hidden="true"></div>
       <div class="container watch-hero-container">
 
+        <!-- Post-Checkout Stripe Success Banner (Shown automatically when ?checkout=success is in URL) -->
+        <div class="checkout-success-banner" id="checkout-success-banner" hidden>
+          <div class="checkout-success-badge">✓ STRIPE PAYMENT CONFIRMED • 7-DAY NB SMART SITE LAUNCH INITIATED</div>
+          <h3 id="checkout-success-title">Welcome to Tiberius Smart Sites™! Your New Braunfels Build Slot Is Locked In.</h3>
+          <p id="checkout-success-desc">
+            We’ve received your Stripe confirmation and our build team is preparing your custom AI Smart Site, 3-second missed-call text rescue, and 5-star Google review engine. Auto-scan your existing website now or text our 24/7 live AI onboarding agent below with any questions.
+          </p>
+          <div class="checkout-success-actions">
+            <a href="/recon/onboarding?smart_site=1" class="plan-select-btn plan-select-btn-green plan-stripe-link">
+              🧠 Auto-Scan Existing Website &amp; Shop Dossier →
+            </a>
+            <a href="#text-us-support" class="plan-secondary-btn plan-stripe-link">
+              💬 Text Us Any Question (24/7 Live AI Support) ↓
+            </a>
+          </div>
+        </div>
+
         <div class="nb-local-banner" style="margin: 0 auto 18px; max-width: 860px;">
           <img src="/nb-logo.png" alt="New Braunfels Business Welcome" class="nb-opa-thumb" />
           <div class="nb-banner-copy">
@@ -87,7 +104,7 @@
           Sorry You Missed the First 10 Free Slots — Lock In Our <span class="text-gold">Private New Braunfels Neighbor Rate</span> (<span class="price-underline">$197/mo</span> vs. $297/mo)
         </h1>
         <p class="section-subtitle watch-page-subtitle">
-          Our 10 free "guinea pig" builds filled up fast, and our build team is capped on free slots this month. Because you’re a legitimate local business serving New Braunfels and already raised your hand, we don’t want you paying the standard <strong>$297/mo</strong> or <strong>$2,400</strong> price on our main site. Claim 1 of 5 Runner-Up Build Slots below—still 100% protected by our <strong>30-Day 100% Money-Back Guarantee</strong>.
+          Our 10 free "guinea pig" builds filled up fast, and our build team is capped on free slots this month. Because you’re a legitimate local business serving New Braunfels and already raised your hand, we don’t want you paying the standard <strong>$297/mo</strong> or <strong>$2,400</strong> price on our main site. Claim 1 of 5 Runner-Up Build Slots via Stripe below—still 100% protected by our <strong>30-Day 100% Money-Back Guarantee</strong>.
         </p>
       </div>
     </section>
@@ -111,10 +128,10 @@
 
           <div class="pricing-cards-grid">
             <!-- Card 1: 12-Month Rent-to-Own ($197/mo vs $297/mo) -->
-            <div class="pricing-card is-popular is-user-selected" id="ru-card-rent">
+            <div class="pricing-card is-popular is-user-selected" id="pricing-card-rent">
               <div class="popular-ribbon">★ NB NEIGHBOR RATE (SAVE $1,200)</div>
-              <div class="user-selected-option-badge" id="ru-badge-rent">
-                ✓ Selected Runner-Up Offer
+              <div class="user-selected-option-badge" id="selected-badge-rent">
+                ✓ Most Popular NB Option
               </div>
 
               <div class="plan-top">
@@ -145,22 +162,26 @@
               </div>
 
               <div class="plan-cta-stack">
-                <button
-                  type="button"
-                  class="plan-select-btn plan-select-btn-green js-select-runnerup-plan"
-                  data-runnerup-plan="$197/mo 12-Month Rent-to-Own (NB Runner-Up Special — Save $1,200)"
+                <a
+                  id="stripe-cta-rent-to-own"
+                  href="https://buy.stripe.com/aFabJ23ub1qH8eW4Z72sM0u"
+                  data-stripe-base="https://buy.stripe.com/aFabJ23ub1qH8eW4Z72sM0u"
+                  class="plan-select-btn plan-select-btn-green plan-stripe-link"
                 >
-                  Lock In $197/mo NB Runner-Up Rate →
-                </button>
+                  <span id="stripe-label-rent-to-own">Start NB Rent-to-Own at $197/mo →</span>
+                </a>
                 <p class="plan-cta-micro-trust">
                   🛡️ Protected by our 30-Day 100% Money-Back Guarantee • Cancel or buy out anytime
                 </p>
+                <button type="button" class="plan-secondary-btn js-select-plan" data-plan="$197/mo 12-Month Rent-to-Own">
+                  💬 Have a Question? Text Us 24/7 (Live AI Agent) ↓
+                </button>
               </div>
             </div>
 
             <!-- Card 2: Buy It Outright ($1,600 vs $2,400) -->
-            <div class="pricing-card" id="ru-card-buy">
-              <div class="user-selected-option-badge" id="ru-badge-buy" hidden>
+            <div class="pricing-card" id="pricing-card-buy">
+              <div class="user-selected-option-badge" id="selected-badge-buy" hidden>
                 ✓ Selected Runner-Up Offer
               </div>
 
@@ -169,11 +190,11 @@
                 <h3>Buy It Outright (NB Special)</h3>
                 <div class="plan-price">
                   <span class="price-strike-old">$2,400</span>
-                  <span class="price-amount">$1,600</span>
-                  <span class="price-period">one-time</span>
+                  <span class="price-amount" id="buy-outright-price-amount">$1,600</span>
+                  <span class="price-period" id="buy-outright-price-period">one-time</span>
                   <span class="runnerup-savings-pill">SAVE $800</span>
                 </div>
-                <p class="plan-tagline"><strong>You own it from Day 1 • $800 off public $2,400 buyout</strong></p>
+                <p class="plan-tagline" id="buy-outright-tagline"><strong>You own it from Day 1 • $800 off public $2,400 buyout</strong></p>
               </div>
 
               <ul class="plan-features">
@@ -184,81 +205,49 @@
                 <li><span>✓</span> Add our optional $100/mo Web &amp; AI Care Plan anytime, or connect your own hosting/telecom accounts</li>
               </ul>
 
-              <div class="plan-cta-stack" style="margin-top: auto;">
-                <button
-                  type="button"
-                  class="plan-select-btn js-select-runnerup-plan"
-                  data-runnerup-plan="$1,600 One-Time Buyout (NB Runner-Up Special — Save $800)"
+              <label class="care-plan-toggle-box" for="buy-outright-care-checkbox">
+                <input type="checkbox" id="buy-outright-care-checkbox" />
+                <span>
+                  <strong>Include Optional $100/mo Web &amp; AI Care Plan</strong>
+                  <small>Covers high-speed hosting, dedicated texting number, carrier registration &amp; AI usage</small>
+                </span>
+              </label>
+
+              <div class="plan-cta-stack">
+                <a
+                  id="stripe-cta-buy-outright"
+                  href="https://buy.stripe.com/8x27sMggX4CT0Mu9fn2sM0v"
+                  data-stripe-standalone="https://buy.stripe.com/8x27sMggX4CT0Mu9fn2sM0v"
+                  data-stripe-with-care="https://buy.stripe.com/5kQ9AU4yf5GX0Mu77f2sM0w"
+                  data-buyout-amount="$1,600"
+                  class="plan-select-btn plan-stripe-link"
                 >
-                  Lock In $1,600 NB Runner-Up Buyout →
-                </button>
+                  <span id="stripe-label-buy-outright">Buy My Website Outright for $1,600 →</span>
+                </a>
                 <p class="plan-cta-micro-trust">
                   🛡️ 100% Day-1 Ownership • Protected by our 30-Day 100% Money-Back Guarantee
                 </p>
+                <button type="button" class="plan-secondary-btn js-select-plan" data-plan="$1,600 Buy It Outright">
+                  💬 Have a Question? Text Us 24/7 (Live AI Agent) ↓
+                </button>
               </div>
             </div>
           </div>
 
-          <!-- ===============================================================
-               RUNNER-UP SLOT RESERVATION FORM (AUTO-PREFILLED FROM SURVEY)
-               =============================================================== -->
-          <div class="ru-claim-section" id="runner-up-claim-section">
-            <div class="gp-survey-card">
-              <div class="gp-survey-top-header" style="margin-bottom: 20px;">
-                <span class="eyebrow-tag"><span class="eyebrow-kicker">5 NB RUNNER-UP SLOTS</span> <span class="eyebrow-sep" aria-hidden="true">◆</span> <span class="eyebrow-sub">30-DAY MONEY-BACK GUARANTEE</span></span>
-                <h2>Reserve Your <span class="text-gold">New Braunfels Runner-Up Slot</span></h2>
-                <p>
-                  Selected Offer: <strong id="ru-selected-plan-label" class="text-gold">$197/mo 12-Month Rent-to-Own (NB Runner-Up Special — Save $1,200)</strong>. Confirm your details below and we will text your private NB Runner-Up checkout link &amp; kick off your 7-day build!
-                </p>
-              </div>
-
-              <!-- Success Panel -->
-              <div class="gp-survey-success-panel" id="ru-claim-success-panel" hidden>
-                <span class="gp-survey-success-badge">✓ NB RUNNER-UP DISCOUNT LOCKED IN</span>
-                <h3>Awesome! Your New Braunfels Runner-Up Discount Is Reserved.</h3>
-                <p>
-                  We locked in <strong id="ru-success-plan">$197/mo 12-Month Rent-to-Own</strong> for your business and just sent a text to <strong id="ru-success-phone">your mobile phone</strong> with your private checkout &amp; 7-day build kickoff link!
-                </p>
-              </div>
-
-              <form id="runner-up-claim-form">
-                <input
-                  type="hidden"
-                  id="ru-selected-plan-input"
-                  name="selectedPlan"
-                  value="$197/mo 12-Month Rent-to-Own (NB Runner-Up Special — Save $1,200)"
-                />
-                <div class="gp-form-grid" style="margin-bottom: 18px;">
-                  <div class="gp-field">
-                    <label for="ru-name">Your Full Name *</label>
-                    <input type="text" id="ru-name" placeholder="e.g. Mark Hoffmann" required />
-                  </div>
-                  <div class="gp-field">
-                    <label for="ru-business">Business Name *</label>
-                    <input type="text" id="ru-business" placeholder="e.g. Comal Custom Remodeling" required />
-                  </div>
-                  <div class="gp-field">
-                    <label for="ru-phone">Mobile Phone Number * <span class="gp-hint">(Where we'll text your private discount link)</span></label>
-                    <input type="tel" id="ru-phone" placeholder="e.g. (830) 555-0199" required />
-                  </div>
-                  <div class="gp-field">
-                    <label for="ru-email">Email Address *</label>
-                    <input type="email" id="ru-email" placeholder="e.g. mark@comalremodel.com" required />
-                  </div>
-                  <div class="gp-field gp-field-full">
-                    <label for="ru-website">Current Website / Google Business Link or Top Services <span class="gp-hint">(If you already filled out the survey, you can leave this blank)</span></label>
-                    <input type="text" id="ru-website" placeholder="e.g. Already submitted survey / https://mybusiness.com" />
-                  </div>
-                </div>
-
-                <button type="submit" class="gp-submit-btn" id="ru-submit-btn">
-                  🔒 Lock In My NB Runner-Up Discount &amp; Text My Private Link →
-                </button>
-                <p class="gp-submit-micro">
-                  🛡️ Backed by our 30-Day 100% Money-Back Guarantee • Zero Hostage Contracts
-                </p>
-              </form>
+          <!-- Standalone $100/mo Web & AI Care Plan Strip -->
+          <div class="care-plan-standalone-strip" id="care-plan-strip">
+            <div class="care-strip-copy">
+              <strong>Already own your Smart Site outright or finished your 12-month term?</strong>
+              <span>Keep high-speed managed hosting, dedicated texting lines, 3-second AI usage, and routine edits active month-to-month.</span>
             </div>
+            <a
+              id="stripe-cta-care-plan"
+              href="https://buy.stripe.com/aFabJ2aWD3yP52K3V32sM0t"
+              data-stripe-base="https://buy.stripe.com/aFabJ2aWD3yP52K3V32sM0t"
+              class="care-strip-btn plan-stripe-link"
+            >
+              Activate $100/mo Web &amp; AI Care Plan →
+            </a>
           </div>
 
         </div>
@@ -435,8 +424,36 @@
 
             <div class="faq-card">
               <h3>Do I need to fill out the build survey again?</h3>
-              <p>No! If you already submitted the 2-minute survey on our `/nb-test` page, we already have your build notes in our system. Just confirm your name and phone number in the Runner-Up box above so we can text over your private link.</p>
+              <p>No! If you already submitted the 2-minute survey on our `/nb-test` page, we already have your build notes in our system. Just complete your Stripe checkout on this page (or use our 60-second Auto-Scan after checkout) and our team gets straight to work on your 7-day build.</p>
             </div>
+          </div>
+        </div>
+
+        <!-- ===================================================================
+             7. FINAL INSTANT STRIPE CHECKOUT BANNER (NB RUNNER-UP RATES)
+             =================================================================== -->
+        <div class="step2-stripe-fasttrack watch-stripe-fasttrack watch-bottom-final-cta" id="step2-stripe-fasttrack">
+          <div class="fasttrack-copy">
+            <span class="eyebrow-tag"><span class="eyebrow-kicker">INSTANT STRIPE CHECKOUT</span> <span class="eyebrow-sep" aria-hidden="true">◆</span> <span class="eyebrow-sub">GO LIVE IN 7 DAYS</span></span>
+            <h3>Ready to Lock In Your New Braunfels Neighbor Discount Right Now?</h3>
+            <p>Secure your 7-day build slot immediately via Stripe backed by our 🛡️ 30-Day 100% Money-Back Guarantee—or tap "Text Us" above to ask our 24/7 Live AI Agent anything.</p>
+          </div>
+          <div class="fasttrack-actions">
+            <a
+              id="step2-stripe-rent-link"
+              href="https://buy.stripe.com/aFabJ23ub1qH8eW4Z72sM0u"
+              data-stripe-base="https://buy.stripe.com/aFabJ23ub1qH8eW4Z72sM0u"
+              class="plan-select-btn plan-select-btn-green plan-stripe-link"
+            >
+              💳 Start 12-Month Rent-to-Own ($197/mo) →
+            </a>
+            <a
+              id="step2-stripe-buy-link"
+              href="https://buy.stripe.com/8x27sMggX4CT0Mu9fn2sM0v"
+              class="plan-select-btn plan-stripe-link"
+            >
+              ⚡ Buy Website Outright ($1,600) →
+            </a>
           </div>
         </div>
 

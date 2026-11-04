@@ -293,7 +293,10 @@ const STRIPE_SMART_SITE_LINKS = {
   rentToOwn297: 'https://buy.stripe.com/dRm7sMggXc5leDkbnv2sM0q',
   buyOutright2400: 'https://buy.stripe.com/4gM7sM9Szd9p2UC4Z72sM0r',
   buyOutrightWithCare: 'https://buy.stripe.com/14A00kaWD1qH66Obnv2sM0s',
-  carePlan100: 'https://buy.stripe.com/aFabJ2aWD3yP52K3V32sM0t'
+  carePlan100: 'https://buy.stripe.com/aFabJ2aWD3yP52K3V32sM0t',
+  nbRentToOwn197: 'https://buy.stripe.com/aFabJ23ub1qH8eW4Z72sM0u',
+  nbBuyOutright1600: 'https://buy.stripe.com/8x27sMggX4CT0Mu9fn2sM0v',
+  nbBuyOutrightWithCare: 'https://buy.stripe.com/5kQ9AU4yf5GX0Mu77f2sM0w'
 };
 
 window.STRIPE_SMART_SITE_LINKS = STRIPE_SMART_SITE_LINKS;
@@ -323,12 +326,22 @@ function applyStripeEmailPrefill(rawEmailInput) {
   const careCheckbox = document.getElementById('buy-outright-care-checkbox');
   const includeCare = Boolean(careCheckbox && careCheckbox.checked);
 
-  const buyBaseUrl = includeCare
-    ? STRIPE_SMART_SITE_LINKS.buyOutrightWithCare
-    : STRIPE_SMART_SITE_LINKS.buyOutright2400;
+  const rentBaseUrl =
+    (rentCta && rentCta.getAttribute('data-stripe-base')) ||
+    STRIPE_SMART_SITE_LINKS.rentToOwn297;
+
+  const standaloneBuyUrl =
+    (buyCta && buyCta.getAttribute('data-stripe-standalone')) ||
+    STRIPE_SMART_SITE_LINKS.buyOutright2400;
+
+  const withCareBuyUrl =
+    (buyCta && buyCta.getAttribute('data-stripe-with-care')) ||
+    STRIPE_SMART_SITE_LINKS.buyOutrightWithCare;
+
+  const buyBaseUrl = includeCare ? withCareBuyUrl : standaloneBuyUrl;
 
   if (rentCta) {
-    rentCta.href = buildStripeHref(STRIPE_SMART_SITE_LINKS.rentToOwn297, state.leadEmail);
+    rentCta.href = buildStripeHref(rentBaseUrl, state.leadEmail);
   }
   if (buyCta) {
     buyCta.href = buildStripeHref(buyBaseUrl, state.leadEmail);
@@ -337,7 +350,9 @@ function applyStripeEmailPrefill(rawEmailInput) {
     careCta.href = buildStripeHref(STRIPE_SMART_SITE_LINKS.carePlan100, state.leadEmail);
   }
   if (step2RentCta) {
-    step2RentCta.href = buildStripeHref(STRIPE_SMART_SITE_LINKS.rentToOwn297, state.leadEmail);
+    const step2RentBase =
+      step2RentCta.getAttribute('data-stripe-base') || rentBaseUrl;
+    step2RentCta.href = buildStripeHref(step2RentBase, state.leadEmail);
   }
   if (step2BuyCta) {
     step2BuyCta.href = buildStripeHref(buyBaseUrl, state.leadEmail);
@@ -1424,10 +1439,16 @@ function initStep2Controls() {
 
   function syncBuyOutrightCareMode() {
     const includeCare = Boolean(careCheckbox && careCheckbox.checked);
+    const buyCta = document.getElementById('stripe-cta-buy-outright');
+    const isNbSpecial = Boolean(
+      buyCta && (buyCta.getAttribute('data-buyout-amount') === '$1,600' || window.location.pathname.includes('nb-special'))
+    );
+    const priceStr = isNbSpecial ? '$1,600' : '$2,400';
+
     if (buyLabelEl) {
       buyLabelEl.textContent = includeCare
-        ? 'Buy Outright ($2,400) + $100/mo Care Plan →'
-        : 'Buy My Website Outright for $2,400 →';
+        ? `Buy Outright (${priceStr}) + $100/mo Care Plan →`
+        : `Buy My Website Outright for ${priceStr} →`;
     }
     if (buyPeriodEl) {
       buyPeriodEl.textContent = includeCare ? 'one-time + $100/mo care' : 'one-time';
@@ -1439,8 +1460,8 @@ function initStep2Controls() {
     }
     if (step2BuyCta) {
       step2BuyCta.textContent = includeCare
-        ? '⚡ Buy Outright + $100/mo Care Plan →'
-        : '⚡ Buy Website Outright ($2,400) →';
+        ? `⚡ Buy Outright (${priceStr}) + $100/mo Care Plan →`
+        : `⚡ Buy Website Outright (${priceStr}) →`;
     }
     applyStripeEmailPrefill(state.leadEmail || '');
   }
@@ -1855,7 +1876,10 @@ function initStripeCheckoutReturn() {
     rent_to_own_297: '12-Month Rent-to-Own ($297/mo)',
     buy_outright_2400: 'Buy It Outright ($2,400 — 100% Day-1 Ownership)',
     buy_outright_with_care: 'Buy It Outright ($2,400) + $100/mo Web & AI Care Plan',
-    care_plan_100: '$100/mo Web & AI Care Plan'
+    care_plan_100: '$100/mo Web & AI Care Plan',
+    nb_rent_to_own_197: '12-Month Rent-to-Own ($197/mo New Braunfels Neighbor Rate)',
+    nb_buy_outright_1600: 'Buy It Outright ($1,600 New Braunfels Neighbor Rate — 100% Day-1 Ownership)',
+    nb_buy_outright_with_care: 'Buy It Outright ($1,600 NB Rate) + $100/mo Web & AI Care Plan'
   };
 
   const planLabel = PLAN_LABELS[planCode] || PLAN_LABELS.rent_to_own_297;
