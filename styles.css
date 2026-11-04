@@ -4050,3 +4050,360 @@ footer .brand-logo {
     align-items: flex-start;
   }
 }
+
+/* ============================================================================
+   NEW BRAUNFELS 30-DAY GUINEA PIG SURVEY (/nb-test) & RUNNER-UP SPECIAL (/nb-special)
+   ============================================================================ */
+.nb-gp-hero-cta-bar {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.nb-gp-slot-counter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(245, 158, 11, 0.14);
+  border: 1.5px solid rgba(245, 158, 11, 0.55);
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--gold-bright);
+  letter-spacing: 0.03em;
+  margin-bottom: 12px;
+}
+
+.nb-slots-full-callout {
+  max-width: 920px;
+  margin: 0 auto 28px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.22) 0%, rgba(15, 23, 42, 0.96) 100%);
+  border: 2px solid var(--gold-bright);
+  border-radius: 18px;
+  padding: 24px 28px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65);
+}
+
+.nb-slots-full-callout h3 {
+  font-size: clamp(20px, 2.5vw, 26px);
+  font-weight: 900;
+  color: var(--gold-bright);
+  margin-bottom: 8px;
+}
+
+.nb-slots-full-callout p {
+  font-size: 15px;
+  color: var(--text-light);
+  margin-bottom: 16px;
+}
+
+.gp-survey-section {
+  padding: 56px 0 64px;
+  scroll-margin-top: 88px;
+}
+
+.gp-survey-card {
+  max-width: 920px;
+  margin: 0 auto;
+  background: linear-gradient(180deg, #131C31 0%, #0B101D 100%);
+  border: 2px solid rgba(245, 158, 11, 0.55);
+  border-radius: 22px;
+  padding: 38px 34px;
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.7), 0 0 40px rgba(245, 158, 11, 0.14);
+}
+
+.gp-survey-top-header {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 28px;
+}
+
+.gp-survey-top-header h2 {
+  font-size: clamp(25px, 3.2vw, 36px);
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+
+.gp-survey-top-header p {
+  color: var(--text-light);
+  font-size: 15.5px;
+  line-height: 1.55;
+}
+
+.gp-selected-demo-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(34, 197, 94, 0.16);
+  border: 1px solid rgba(34, 197, 94, 0.5);
+  color: #86EFAC;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 7px 16px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+
+.gp-survey-block {
+  background: rgba(7, 9, 14, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 24px 22px;
+  margin-bottom: 22px;
+}
+
+.gp-block-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.gp-block-step {
+  background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
+  color: #07090E;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.gp-block-header h3 {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-white);
+  margin: 0;
+}
+
+.gp-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.gp-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.gp-field-full {
+  grid-column: 1 / -1;
+}
+
+.gp-field label {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #F1F5F9;
+}
+
+.gp-field label span.gp-hint {
+  font-weight: 500;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.gp-field input,
+.gp-field select,
+.gp-field textarea {
+  width: 100%;
+  background: #07090E;
+  color: var(--text-white);
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 14.5px;
+  font-family: inherit;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.gp-field textarea {
+  min-height: 86px;
+  resize: vertical;
+}
+
+.gp-field input:focus,
+.gp-field select:focus,
+.gp-field textarea:focus {
+  outline: none;
+  border-color: var(--gold-bright);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+}
+
+.gp-handshake-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(22, 163, 74, 0.12);
+  border: 1.5px solid rgba(34, 197, 94, 0.45);
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 22px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.gp-handshake-box input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  accent-color: #22C55E;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.gp-handshake-box span {
+  font-size: 14px;
+  color: #E2E8F0;
+  line-height: 1.5;
+}
+
+.gp-handshake-box strong {
+  color: #4ADE80;
+}
+
+.gp-submit-btn {
+  width: 100%;
+  background: linear-gradient(180deg, #22C55E 0%, #16A34A 100%);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 14px;
+  padding: 18px 24px;
+  font-size: 18px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 14px 34px rgba(22, 163, 74, 0.42);
+  transition: transform 0.18s ease, background 0.18s ease;
+}
+
+.gp-submit-btn:hover {
+  background: linear-gradient(180deg, #16A34A 0%, #15803D 100%);
+  transform: translateY(-2px);
+}
+
+.gp-submit-micro {
+  margin-top: 12px;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+.gp-survey-success-panel {
+  background: rgba(15, 23, 42, 0.95);
+  border: 2px solid #22C55E;
+  border-radius: 18px;
+  padding: 28px 24px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+}
+
+.gp-survey-success-badge {
+  display: inline-block;
+  background: rgba(34, 197, 94, 0.18);
+  border: 1px solid rgba(34, 197, 94, 0.5);
+  color: #4ADE80;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  padding: 6px 14px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+.gp-survey-success-panel h3 {
+  font-size: clamp(22px, 2.8vw, 28px);
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+
+.gp-survey-success-panel p {
+  font-size: 15px;
+  color: var(--text-light);
+  max-width: 680px;
+  margin: 0 auto 18px;
+  line-height: 1.55;
+}
+
+.gp-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  text-align: left;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.gp-summary-item {
+  background: #07090E;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+.gp-summary-item small {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--gold-bright);
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.gp-summary-item strong {
+  font-size: 14px;
+  color: var(--text-white);
+}
+
+/* Runner-Up Special Page Styles (/nb-special) */
+.price-strike-old {
+  font-size: 22px;
+  font-weight: 800;
+  color: #94A3B8;
+  text-decoration: line-through;
+  text-decoration-color: #EF4444;
+  text-decoration-thickness: 2.5px;
+  margin-right: 6px;
+}
+
+.runnerup-savings-pill {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(34, 197, 94, 0.18);
+  border: 1px solid rgba(34, 197, 94, 0.5);
+  color: #4ADE80;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin-left: 6px;
+}
+
+.ru-claim-section {
+  max-width: 820px;
+  margin: 36px auto 0;
+  scroll-margin-top: 90px;
+}
+
+@media (max-width: 767px) {
+  .gp-survey-card {
+    padding: 24px 16px;
+  }
+  .gp-survey-block {
+    padding: 18px 14px;
+  }
+  .gp-form-grid,
+  .gp-summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

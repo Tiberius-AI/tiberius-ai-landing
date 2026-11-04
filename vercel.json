@@ -10,6 +10,14 @@
       "destination": "/?loc=nb"
     },
     {
+      "source": "/nb-test",
+      "destination": "/nb-test.html"
+    },
+    {
+      "source": "/nb-special",
+      "destination": "/nb-special.html"
+    },
+    {
       "source": "/tx",
       "destination": "/?loc=tx"
     },

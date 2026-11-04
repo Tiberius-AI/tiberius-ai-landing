@@ -33,6 +33,14 @@ function buildWelcomeSmsBody(lead) {
   const firstName = String(lead.name || 'there').trim().split(/\s+/)[0] || 'there';
   const bizLabel = lead.businessName ? lead.businessName : 'your business';
 
+  if (lead.source === 'nb-guinea-pig-survey') {
+    return `⚡ Howdy ${firstName}! We received your New Braunfels 30-Day "Guinea Pig" Smart Site application & build survey for ${bizLabel}. We're manually reviewing the 10 local NB slots right now and will text you here as soon as your 7-day build is approved! Reply anytime with questions.`;
+  }
+
+  if (lead.source === 'nb-runner-up-special') {
+    return `⚡ Howdy ${firstName}! Your New Braunfels Runner-Up Discount slot (${lead.ownershipPreference || '$197/mo Rent-to-Own'}) for ${bizLabel} is reserved! Reply READY here (or with any questions) and we'll text over your private checkout link to kick off your 7-day build.`;
+  }
+
   if (lead.question) {
     return `⚡ Tiberius 24/7 AI Concierge: Thanks for asking "${lead.question.slice(
       0,
@@ -78,10 +86,19 @@ module.exports = async function handler(req, res) {
     id: `lead_${Date.now()}`,
     industry: payload.industry || 'Home Services & Contracting (Remodel, Roof, Trades)',
     name: payload.name || '',
+    role: payload.role || '',
     businessName,
     phone: payload.phone || '',
     email: payload.email || '',
     cleanEmail,
+    websiteOrGbp: payload.websiteOrGbp || '',
+    serviceArea: payload.serviceArea || '',
+    yearsInBusiness: payload.yearsInBusiness || '',
+    topServices: payload.topServices || '',
+    typicalPricing: payload.typicalPricing || '',
+    missedCallHandling: payload.missedCallHandling || '',
+    primaryGoal: payload.primaryGoal || '',
+    confirmedNbLegit: Boolean(payload.confirmedNbLegit),
     question: payload.question || '',
     ownershipPreference: payload.ownershipPreference || '$297/mo 12-Month Rent-to-Own',
     locationTag: payload.locationTag || 'default',
@@ -108,11 +125,36 @@ module.exports = async function handler(req, res) {
     // Record the Smart Site lead & mock-up request in the Conversation Room so replies thread cleanly
     try {
       const { ingestInboundWebhookReply } = require('../db/store');
-      const leadSummary = `[SMART SITE MOCK-UP QUEUED] ${
+      let leadSummary = `[SMART SITE MOCK-UP QUEUED] ${
         enrichedLead.name || 'New Lead'
       } (${enrichedLead.businessName || enrichedLead.industry}) • Phone: ${
         enrichedLead.phone
       } • Email: ${enrichedLead.email || 'N/A'} • Plan: ${enrichedLead.ownershipPreference}`;
+
+      if (enrichedLead.source === 'nb-guinea-pig-survey') {
+        leadSummary = `[NB 30-DAY GUINEA PIG APPLICATION] ${enrichedLead.name || 'Owner'} (${
+          enrichedLead.role || 'Owner'
+        }) @ ${enrichedLead.businessName || 'NB Business'} • Industry: ${
+          enrichedLead.industry
+        } • Phone: ${enrichedLead.phone} • Email: ${
+          enrichedLead.cleanEmail || enrichedLead.email || 'N/A'
+        } • Web/GBP: ${enrichedLead.websiteOrGbp || 'None'} • Area: ${
+          enrichedLead.serviceArea || 'New Braunfels'
+        } (${enrichedLead.yearsInBusiness || 'N/A'}) • Top Services: ${
+          enrichedLead.topServices || 'N/A'
+        } • Pricing: ${enrichedLead.typicalPricing || 'N/A'} • Missed Calls: ${
+          enrichedLead.missedCallHandling || 'N/A'
+        } • #1 Goal: ${enrichedLead.primaryGoal || 'N/A'}`;
+      } else if (enrichedLead.source === 'nb-runner-up-special') {
+        leadSummary = `[NB RUNNER-UP DISCOUNT CLAIMED] ${enrichedLead.name || 'Owner'} @ ${
+          enrichedLead.businessName || enrichedLead.industry
+        } • Selected Discount Plan: ${enrichedLead.ownershipPreference} • Phone: ${
+          enrichedLead.phone
+        } • Email: ${enrichedLead.cleanEmail || enrichedLead.email || 'N/A'} • Web/Notes: ${
+          enrichedLead.websiteOrGbp || 'N/A'
+        }`;
+      }
+
       ingestInboundWebhookReply({
         provider: 'TWILIO',
         fromPhone: enrichedLead.phone,

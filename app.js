@@ -535,7 +535,35 @@ function openLeadModal({ demoId = null, presetOwnership = null } = {}) {
   const demoPill = document.getElementById('modal-selected-demo-pill');
   const demoNameEl = document.getElementById('modal-selected-demo-name');
 
-  if (!modal) return;
+  if (!modal) {
+    // Zero-popup pages (e.g. nb-test.html / nb-special.html): scroll to embedded survey or claim form
+    if (demoId) {
+      const foundDemo = DEMO_SITES.find((d) => d.id === demoId);
+      state.selectedDemo = foundDemo ? foundDemo.id : demoId;
+      const gpDemoPill = document.getElementById('gp-selected-demo-pill');
+      const gpDemoName = document.getElementById('gp-selected-demo-name');
+      const gpIndustrySelect = document.getElementById('gp-industry');
+      if (foundDemo && gpDemoPill && gpDemoName) {
+        gpDemoName.textContent = foundDemo.categoryLabel;
+        gpDemoPill.hidden = false;
+      }
+      if (foundDemo && foundDemo.industryPreset && gpIndustrySelect) {
+        gpIndustrySelect.value = foundDemo.industryPreset;
+      }
+    }
+    const surveySection =
+      document.getElementById('guinea-pig-survey') ||
+      document.getElementById('runner-up-claim-section') ||
+      document.getElementById('pricing');
+    if (surveySection) {
+      surveySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const firstInput = surveySection.querySelector('input:not([type="hidden"]):not([type="checkbox"])');
+      if (firstInput) {
+        setTimeout(() => firstInput.focus(), 450);
+      }
+    }
+    return;
+  }
 
   if (demoId) {
     const foundDemo = DEMO_SITES.find((d) => d.id === demoId);
@@ -1847,6 +1875,210 @@ function initStripeCheckoutReturn() {
 }
 
 /* ============================================================================
+   5. NEW BRAUNFELS 30-DAY GUINEA PIG SURVEY (/nb-test) & RUNNER-UP SPECIAL (/nb-special)
+   ============================================================================ */
+function initGuineaPigAndRunnerUpControls() {
+  // Optional URL toggle (?status=full or ?waitlist=1) on /nb-test to show "10 Slots Full -> Claim Runner-Up Discount" banner
+  const params = new URLSearchParams(window.location.search);
+  const fullNotice = document.getElementById('nb-slots-full-callout');
+  if (fullNotice && (params.get('status') === 'full' || params.get('waitlist') === '1')) {
+    fullNotice.hidden = false;
+  }
+
+  // 1. Guinea Pig Manual-Approval Build Survey Form (/nb-test)
+  const gpForm = document.getElementById('guinea-pig-survey-form');
+  const gpSuccessPanel = document.getElementById('gp-survey-success-panel');
+  if (gpForm) {
+    gpForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = document.getElementById('gp-survey-submit-btn');
+
+      const name = (document.getElementById('gp-name')?.value || '').trim();
+      const role = (document.getElementById('gp-role')?.value || 'Owner / Partner').trim();
+      const businessName = (document.getElementById('gp-business')?.value || '').trim();
+      const phone = (document.getElementById('gp-phone')?.value || '').trim();
+      const email = (document.getElementById('gp-email')?.value || '').trim();
+      const websiteOrGbp = (document.getElementById('gp-website')?.value || '').trim();
+      const serviceArea = (document.getElementById('gp-service-area')?.value || 'New Braunfels, TX').trim();
+      const yearsInBusiness = (document.getElementById('gp-years')?.value || '').trim();
+      const industry = (document.getElementById('gp-industry')?.value || 'Home Services & Contracting (Remodel, Roof, Trades)').trim();
+      const topServices = (document.getElementById('gp-services')?.value || '').trim();
+      const typicalPricing = (document.getElementById('gp-pricing')?.value || '').trim();
+      const missedCallHandling = (document.getElementById('gp-missed-calls')?.value || '').trim();
+      const primaryGoal = (document.getElementById('gp-goal')?.value || '').trim();
+      const confirmedNbLegit = Boolean(document.getElementById('gp-confirm-nb')?.checked);
+
+      const payload = {
+        source: 'nb-guinea-pig-survey',
+        name,
+        role,
+        businessName,
+        phone,
+        email,
+        websiteOrGbp,
+        serviceArea,
+        yearsInBusiness,
+        industry,
+        topServices,
+        typicalPricing,
+        missedCallHandling,
+        primaryGoal,
+        confirmedNbLegit,
+        ownershipPreference: '30-Day Free NB Guinea Pig Build ($0 / No Card)',
+        locationTag: 'nb',
+        selectedDemo: state.selectedDemo || null,
+        timestamp: new Date().toISOString()
+      };
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = '⚡ Submitting Your NB Build Survey & Dispatched SMS...';
+      }
+
+      window.__TIBERIUS_LEADS__.push(payload);
+      try {
+        localStorage.setItem('tiberius_latest_lead', JSON.stringify(payload));
+      } catch (_err) {
+        // Ignore storage errors
+      }
+
+      try {
+        await fetch('/api/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          keepalive: true
+        });
+      } catch (_err) {
+        // Non-blocking fallback
+      }
+
+      gpForm.hidden = true;
+      if (gpSuccessPanel) {
+        const summaryBiz = document.getElementById('gp-success-biz-name');
+        const summaryPhone = document.getElementById('gp-success-phone');
+        const summaryArea = document.getElementById('gp-success-area');
+        const summaryServices = document.getElementById('gp-success-services');
+        if (summaryBiz) summaryBiz.textContent = businessName || name;
+        if (summaryPhone) summaryPhone.textContent = phone;
+        if (summaryArea) summaryArea.textContent = `${serviceArea} (${yearsInBusiness || 'Local NB Business'})`;
+        if (summaryServices) summaryServices.textContent = topServices || industry;
+
+        gpSuccessPanel.hidden = false;
+        gpSuccessPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  }
+
+  // 2. Runner-Up Discount Claim Form & Plan Selector (/nb-special)
+  const runnerUpPlanBtns = document.querySelectorAll('.js-select-runnerup-plan');
+  const runnerUpPlanInput = document.getElementById('ru-selected-plan-input');
+  const runnerUpPlanBadge = document.getElementById('ru-selected-plan-label');
+  const runnerUpClaimSection = document.getElementById('runner-up-claim-section');
+  const runnerUpForm = document.getElementById('runner-up-claim-form');
+  const runnerUpSuccess = document.getElementById('ru-claim-success-panel');
+
+  runnerUpPlanBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const planLabel = btn.getAttribute('data-runnerup-plan') || '$197/mo 12-Month Rent-to-Own (NB Runner-Up Special)';
+      state.selectedOwnership = planLabel;
+      if (runnerUpPlanInput) runnerUpPlanInput.value = planLabel;
+      if (runnerUpPlanBadge) runnerUpPlanBadge.textContent = planLabel;
+
+      const isBuyout = planLabel.includes('1,600') || planLabel.toLowerCase().includes('outright');
+      const rentCard = document.getElementById('ru-card-rent');
+      const buyCard = document.getElementById('ru-card-buy');
+      const rentBadge = document.getElementById('ru-badge-rent');
+      const buyBadge = document.getElementById('ru-badge-buy');
+      if (rentCard) rentCard.classList.toggle('is-user-selected', !isBuyout);
+      if (buyCard) buyCard.classList.toggle('is-user-selected', isBuyout);
+      if (rentBadge) rentBadge.hidden = isBuyout;
+      if (buyBadge) buyBadge.hidden = !isBuyout;
+
+      if (runnerUpClaimSection) {
+        runnerUpClaimSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const nameEl = document.getElementById('ru-name');
+        if (nameEl) setTimeout(() => nameEl.focus(), 400);
+      }
+    });
+  });
+
+  // Pre-populate runner-up form if they already filled out the /nb-test survey earlier
+  if (runnerUpForm) {
+    try {
+      const savedRaw = localStorage.getItem('tiberius_latest_lead');
+      if (savedRaw) {
+        const saved = JSON.parse(savedRaw);
+        const ruName = document.getElementById('ru-name');
+        const ruBiz = document.getElementById('ru-business');
+        const ruPhone = document.getElementById('ru-phone');
+        const ruEmail = document.getElementById('ru-email');
+        const ruWeb = document.getElementById('ru-website');
+        if (ruName && saved.name && !ruName.value) ruName.value = saved.name;
+        if (ruBiz && saved.businessName && !ruBiz.value) ruBiz.value = saved.businessName;
+        if (ruPhone && saved.phone && !ruPhone.value) ruPhone.value = saved.phone;
+        if (ruEmail && (saved.cleanEmail || saved.email) && !ruEmail.value) ruEmail.value = saved.cleanEmail || saved.email;
+        if (ruWeb && saved.websiteOrGbp && !ruWeb.value) ruWeb.value = saved.websiteOrGbp;
+      }
+    } catch (_err) {
+      // Ignore storage errors
+    }
+
+    runnerUpForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = document.getElementById('ru-submit-btn');
+      const name = (document.getElementById('ru-name')?.value || '').trim();
+      const businessName = (document.getElementById('ru-business')?.value || '').trim();
+      const phone = (document.getElementById('ru-phone')?.value || '').trim();
+      const email = (document.getElementById('ru-email')?.value || '').trim();
+      const websiteOrGbp = (document.getElementById('ru-website')?.value || '').trim();
+      const selectedPlan =
+        (runnerUpPlanInput && runnerUpPlanInput.value) ||
+        '$197/mo 12-Month Rent-to-Own (NB Runner-Up Special)';
+
+      const payload = {
+        source: 'nb-runner-up-special',
+        name,
+        businessName,
+        phone,
+        email,
+        websiteOrGbp,
+        ownershipPreference: selectedPlan,
+        locationTag: 'nb',
+        timestamp: new Date().toISOString()
+      };
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = '⚡ Locking In Your NB Runner-Up Discount Slot...';
+      }
+
+      window.__TIBERIUS_LEADS__.push(payload);
+      try {
+        await fetch('/api/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          keepalive: true
+        });
+      } catch (_err) {
+        // Non-blocking fallback
+      }
+
+      runnerUpForm.hidden = true;
+      if (runnerUpSuccess) {
+        const planSummaryEl = document.getElementById('ru-success-plan');
+        const phoneSummaryEl = document.getElementById('ru-success-phone');
+        if (planSummaryEl) planSummaryEl.textContent = selectedPlan;
+        if (phoneSummaryEl) phoneSummaryEl.textContent = phone;
+        runnerUpSuccess.hidden = false;
+        runnerUpSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  }
+}
+
+/* ============================================================================
    BOOT
    ============================================================================ */
 document.addEventListener('DOMContentLoaded', () => {
@@ -1858,4 +2090,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initStep2Controls();
   hydrateWatchPageLeadContext();
   initStripeCheckoutReturn();
+  initGuineaPigAndRunnerUpControls();
 });
