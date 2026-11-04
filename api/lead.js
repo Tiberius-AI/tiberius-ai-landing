@@ -41,6 +41,10 @@ function buildWelcomeSmsBody(lead) {
     return `⚡ Howdy ${firstName}! Your New Braunfels Runner-Up Discount slot (${lead.ownershipPreference || '$197/mo Rent-to-Own'}) for ${bizLabel} is reserved! Reply READY here (or with any questions) and we'll text over your private checkout link to kick off your 7-day build.`;
   }
 
+  if (lead.source === 'stripe-checkout-completed') {
+    return `🎉 Welcome to Tiberius Smart Sites, ${firstName}! Your Stripe checkout (${lead.planLabel || lead.ownershipPreference}) is confirmed and your 7-day custom build slot for ${bizLabel} is locked in. Complete your 60-second Auto-Scan at https://www.tiberius.ai/recon/onboarding?smart_site=1 or reply here anytime with questions!`;
+  }
+
   if (lead.question) {
     return `⚡ Tiberius 24/7 AI Concierge: Thanks for asking "${lead.question.slice(
       0,
@@ -100,35 +104,68 @@ module.exports = async function handler(req, res) {
     primaryGoal: payload.primaryGoal || '',
     confirmedNbLegit: Boolean(payload.confirmedNbLegit),
     question: payload.question || '',
-    ownershipPreference: payload.ownershipPreference || '$297/mo 12-Month Rent-to-Own',
+    ownershipPreference:
+      payload.planLabel || payload.ownershipPreference || '$297/mo 12-Month Rent-to-Own',
+    planLabel: payload.planLabel || payload.ownershipPreference || '',
+    amountPaid: payload.amountPaid || '',
     locationTag: payload.locationTag || 'default',
     selectedDemo: payload.selectedDemo || null,
     source: payload.source || '2-step-50-progress-modal',
+    eventCategory: payload.eventCategory || '',
     timestamp: new Date().toISOString()
   };
 
   const smsBody = buildWelcomeSmsBody(enrichedLead);
 
   let smsReceipt = null;
+  let adminNotificationReceipt = null;
   const cleanPhoneDigits = String(enrichedLead.phone || '').replace(/\D/g, '');
-  if (cleanPhoneDigits.length >= 10) {
-    try {
-      const { sendMasterTwilioSmsToContractor } = require('../workers/comms-dispatcher');
-      smsReceipt = await sendMasterTwilioSmsToContractor({
-        toPhone: enrichedLead.phone,
-        bodyText: smsBody
-      });
-    } catch (_err) {
-      smsReceipt = null;
-    }
+  const shouldSmsProspect =
+    cleanPhoneDigits.length >= 10 && enrichedLead.source !== 'stripe-checkout-initiated';
 
-    // Record the Smart Site lead & mock-up request in the Conversation Room so replies thread cleanly
+  try {
+    const {
+      sendMasterTwilioSmsToContractor,
+      dispatchAdminLeadAndSaleNotification
+    } = require('../workers/comms-dispatcher');
+
+    const resolvedCategory =
+      enrichedLead.eventCategory ||
+      (enrichedLead.source === 'stripe-checkout-completed'
+        ? 'SALE'
+        : enrichedLead.source === 'stripe-checkout-initiated'
+        ? 'CHECKOUT_INITIATED'
+        : enrichedLead.source === 'nb-guinea-pig-survey'
+        ? 'TRIAL'
+        : 'LEAD');
+
+    const [prospectSmsRes, adminAlertRes] = await Promise.allSettled([
+      shouldSmsProspect
+        ? sendMasterTwilioSmsToContractor({
+            toPhone: enrichedLead.phone,
+            bodyText: smsBody
+          })
+        : Promise.resolve(null),
+      dispatchAdminLeadAndSaleNotification({
+        lead: enrichedLead,
+        eventCategory: resolvedCategory
+      })
+    ]);
+
+    smsReceipt = prospectSmsRes.status === 'fulfilled' ? prospectSmsRes.value : null;
+    adminNotificationReceipt = adminAlertRes.status === 'fulfilled' ? adminAlertRes.value : null;
+  } catch (_err) {
+    smsReceipt = null;
+  }
+
+  if (cleanPhoneDigits.length >= 10 || enrichedLead.cleanEmail || enrichedLead.name) {
+    // Record the Smart Site lead, trial, or sale in the Conversation Room so replies thread cleanly
     try {
       const { ingestInboundWebhookReply } = require('../db/store');
       let leadSummary = `[SMART SITE MOCK-UP QUEUED] ${
         enrichedLead.name || 'New Lead'
       } (${enrichedLead.businessName || enrichedLead.industry}) • Phone: ${
-        enrichedLead.phone
+        enrichedLead.phone || 'N/A'
       } • Email: ${enrichedLead.email || 'N/A'} • Plan: ${enrichedLead.ownershipPreference}`;
 
       if (enrichedLead.source === 'nb-guinea-pig-survey') {
@@ -153,11 +190,24 @@ module.exports = async function handler(req, res) {
         } • Email: ${enrichedLead.cleanEmail || enrichedLead.email || 'N/A'} • Web/Notes: ${
           enrichedLead.websiteOrGbp || 'N/A'
         }`;
+      } else if (enrichedLead.source === 'stripe-checkout-completed') {
+        leadSummary = `[💸 STRIPE SALE CONFIRMED] ${enrichedLead.name || 'Customer'} (${
+          enrichedLead.businessName || enrichedLead.industry
+        }) • Plan: ${enrichedLead.ownershipPreference} • Phone: ${
+          enrichedLead.phone || 'N/A'
+        } • Email: ${enrichedLead.cleanEmail || enrichedLead.email || 'N/A'}`;
+      } else if (enrichedLead.source === 'stripe-checkout-initiated') {
+        leadSummary = `[💳 STRIPE CHECKOUT CLICKED] ${enrichedLead.name || 'Prospect'} (${
+          enrichedLead.businessName || enrichedLead.industry
+        }) • Plan: ${enrichedLead.ownershipPreference} • Phone: ${
+          enrichedLead.phone || 'N/A'
+        } • Email: ${enrichedLead.cleanEmail || enrichedLead.email || 'N/A'}`;
       }
 
       ingestInboundWebhookReply({
         provider: 'TWILIO',
-        fromPhone: enrichedLead.phone,
+        fromPhone: enrichedLead.phone || undefined,
+        fromEmail: enrichedLead.cleanEmail || undefined,
         fromName: enrichedLead.businessName
           ? `${enrichedLead.name || 'Lead'} (${enrichedLead.businessName})`
           : enrichedLead.name || 'Smart Site Lead',
@@ -187,8 +237,9 @@ module.exports = async function handler(req, res) {
   return res.status(200).json({
     ok: true,
     webhookForwarded,
-    smsDispatched: Boolean(cleanPhoneDigits.length >= 10),
+    smsDispatched: shouldSmsProspect,
     smsReceipt,
+    adminNotificationReceipt,
     lead: enrichedLead,
     smsPreview: smsBody
   });

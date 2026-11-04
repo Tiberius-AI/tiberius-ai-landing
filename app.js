@@ -1864,6 +1864,44 @@ function initStep2Controls() {
 }
 
 function initStripeCheckoutReturn() {
+  // 1. Track clicks on live Stripe Checkout links so Admin gets an instant Checkout-Initiated SMS + Email
+  document.querySelectorAll('a[href*="buy.stripe.com"]').forEach((linkEl) => {
+    linkEl.addEventListener('click', () => {
+      let savedLead = {};
+      try {
+        const raw = localStorage.getItem('tiberius_latest_lead');
+        if (raw) savedLead = JSON.parse(raw) || {};
+      } catch (_err) {
+        savedLead = {};
+      }
+
+      const href = linkEl.getAttribute('href') || '';
+      const btnText = (linkEl.textContent || '').replace(/\s+/g, ' ').trim();
+      const checkoutInitPayload = {
+        ...savedLead,
+        source: 'stripe-checkout-initiated',
+        eventCategory: 'CHECKOUT_INITIATED',
+        ownershipPreference: btnText || state.selectedOwnership || savedLead.ownershipPreference || 'Stripe Checkout',
+        planLabel: btnText || state.selectedOwnership || savedLead.ownershipPreference || 'Stripe Checkout',
+        websiteOrGbp: savedLead.websiteOrGbp || href,
+        locationTag: state.locationTag || savedLead.locationTag || 'default',
+        timestamp: new Date().toISOString()
+      };
+
+      try {
+        fetch('/api/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(checkoutInitPayload),
+          keepalive: true
+        }).catch(() => {});
+      } catch (_err) {
+        // Non-blocking
+      }
+    });
+  });
+
+  // 2. Handle Stripe Checkout Return (?checkout=success&plan=...) and fire Sale Confirmed SMS + Email to Admin
   const params = new URLSearchParams(window.location.search);
   if (params.get('checkout') !== 'success') return;
 
@@ -1896,6 +1934,52 @@ function initStripeCheckoutReturn() {
   }
 
   unlockStep2View({ scrollIntoView: true });
+
+  // Fire Admin Sale Notification once per checkout return session
+  const dedupeKey = `tiberius_sale_notified_${planCode}`;
+  let alreadyNotified = false;
+  try {
+    alreadyNotified = sessionStorage.getItem(dedupeKey) === '1';
+  } catch (_err) {
+    alreadyNotified = false;
+  }
+
+  if (!alreadyNotified) {
+    try {
+      sessionStorage.setItem(dedupeKey, '1');
+    } catch (_err) {
+      // Ignore
+    }
+
+    let savedLead = {};
+    try {
+      const raw = localStorage.getItem('tiberius_latest_lead');
+      if (raw) savedLead = JSON.parse(raw) || {};
+    } catch (_err) {
+      savedLead = {};
+    }
+
+    const salePayload = {
+      ...savedLead,
+      name: params.get('name') || savedLead.name || '',
+      phone: params.get('phone') || savedLead.phone || '',
+      email: params.get('email') || savedLead.email || '',
+      businessName: params.get('business') || savedLead.businessName || '',
+      source: 'stripe-checkout-completed',
+      eventCategory: 'SALE',
+      ownershipPreference: planLabel,
+      planLabel,
+      locationTag: state.locationTag || savedLead.locationTag || 'default',
+      timestamp: new Date().toISOString()
+    };
+
+    fetch('/api/lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(salePayload),
+      keepalive: true
+    }).catch(() => {});
+  }
 }
 
 /* ============================================================================

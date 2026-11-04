@@ -563,6 +563,42 @@
     toggleBundleBtn.addEventListener('click', () => setPricingMode('bundle'));
   }
 
+  // Notify Admin via /api/lead whenever a visitor clicks a Stripe 7-Day Free Trial / Checkout link on /recon
+  document.querySelectorAll('a[href*="buy.stripe.com"]').forEach((linkEl) => {
+    linkEl.addEventListener('click', () => {
+      const zipVal = (document.getElementById('vault-zip-input')?.value || '').trim();
+      const phoneVal = (document.getElementById('vault-phone-input')?.value || '').trim();
+      const emailVal = (document.getElementById('vault-email-input')?.value || '').trim();
+      const companyVal = (document.getElementById('vault-company-input')?.value || '').trim();
+      const tradeVal = document.getElementById('vault-trade-select-mobile')?.value || 'Commercial Contractor';
+      const btnText = (linkEl.textContent || '').replace(/\s+/g, ' ').trim();
+      const href = linkEl.getAttribute('href') || '';
+
+      try {
+        fetch('/api/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            source: 'stripe-checkout-initiated',
+            eventCategory: 'CHECKOUT_INITIATED',
+            businessName: companyVal,
+            phone: phoneVal,
+            email: emailVal,
+            industry: tradeVal,
+            serviceArea: zipVal || 'Recon Page',
+            ownershipPreference: `Recon 7-Day Free Trial Checkout (${btnText || href})`,
+            planLabel: `Recon 7-Day Free Trial Checkout (${btnText || href})`,
+            websiteOrGbp: href,
+            timestamp: new Date().toISOString()
+          }),
+          keepalive: true
+        }).catch(() => {});
+      } catch (_err) {
+        // Non-blocking
+      }
+    });
+  });
+
   /* ==========================================================================
      5. CHAPTER 5: OUTCOME-FIRST FAQ ACCORDION
      ========================================================================== */

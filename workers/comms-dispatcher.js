@@ -448,8 +448,15 @@ async function dispatchScoutMorningAlertSms({
 
   const bodyText = `☕ Good morning ${ownerFirst} — your Tiberius Digital Scout pulled ${unlockedCount} new ${trade} permits in ${zip} overnight ($240K–$410K). Tap here to review & 1-tap send: ${briefingUrl}`;
 
+  const rawTargetPhone = overridePhone || contractor.mobilePhone || '';
+  const isFictionalTarget = /^\+?1?\d{3}555\d{4}$/.test(String(rawTargetPhone).replace(/\D/g, ''));
+  const resolvedTargetPhone =
+    !rawTargetPhone || isFictionalTarget
+      ? process.env.ADMIN_ALERT_PHONE || process.env.MASTER_ADMIN_PHONE || '(830) 481-0653'
+      : rawTargetPhone;
+
   const receipt = await sendMasterTwilioSmsToContractor({
-    toPhone: overridePhone || contractor.mobilePhone || '(830) 555-0194',
+    toPhone: resolvedTargetPhone,
     bodyText,
     providerConfig
   });
@@ -495,8 +502,15 @@ async function dispatchContractorHotReplyAlertSms({
     snippet.length >= 95 ? '...' : ''
   }" — Tap to reply in Conversation Room: ${inboxUrl}`;
 
+  const rawTargetPhone = overridePhone || contractor.mobilePhone || '';
+  const isFictionalTarget = /^\+?1?\d{3}555\d{4}$/.test(String(rawTargetPhone).replace(/\D/g, ''));
+  const resolvedTargetPhone =
+    !rawTargetPhone || isFictionalTarget
+      ? process.env.ADMIN_ALERT_PHONE || process.env.MASTER_ADMIN_PHONE || '(830) 481-0653'
+      : rawTargetPhone;
+
   const receipt = await sendMasterTwilioSmsToContractor({
-    toPhone: overridePhone || contractor.mobilePhone || '(830) 555-0194',
+    toPhone: resolvedTargetPhone,
     bodyText,
     providerConfig
   });
@@ -807,6 +821,294 @@ async function dispatchPreTripAdminSms({
   };
 }
 
+/**
+ * Formats the Admin SMS + Email notification payload for any Smart Site or Recon
+ * Lead, Free Trial Application, Checkout Click, or Confirmed Sale.
+ */
+function formatAdminLeadAndSaleNotification({
+  lead = {},
+  eventCategory = 'LEAD',
+  baseUrl = 'https://www.tiberius.ai'
+} = {}) {
+  const cleanBase = String(baseUrl || 'https://www.tiberius.ai').replace(/\/$/, '');
+  const inboxUrl = `${cleanBase}/recon/inbox`;
+  const source = String(lead.source || '2-step-50-progress-modal').trim();
+  const cat = String(eventCategory || 'LEAD').toUpperCase();
+
+  const name = String(lead.name || lead.ownerName || '').trim();
+  const role = String(lead.role || '').trim();
+  const businessName = String(lead.businessName || lead.companyName || '').trim();
+  const phone = String(lead.phone || lead.mobilePhone || '').trim();
+  const email = String(lead.cleanEmail || lead.email || lead.workEmail || lead.bestEmail || '').trim();
+  const rawEmailInput = String(lead.email || '').trim();
+  const industry = String(lead.industry || lead.primaryTrade || '').trim();
+  const defaultPlanForSource =
+    source === 'nb-guinea-pig-survey'
+      ? '30-Day Free NB Guinea Pig Build ($0 / No Card)'
+      : source === 'nb-runner-up-special'
+      ? '$197/mo 12-Month Rent-to-Own (NB Runner-Up Special)'
+      : '$297/mo 12-Month Rent-to-Own';
+  const plan = String(
+    lead.planLabel || lead.ownershipPreference || lead.tierLevel || defaultPlanForSource
+  ).trim();
+  const websiteOrGbp = String(lead.websiteOrGbp || lead.websiteUrl || '').trim();
+  const serviceArea = String(lead.serviceArea || lead.territoryZip || lead.locationTag || '').trim();
+  const yearsInBusiness = String(lead.yearsInBusiness || '').trim();
+  const topServices = String(lead.topServices || '').trim();
+  const typicalPricing = String(lead.typicalPricing || '').trim();
+  const missedCallHandling = String(lead.missedCallHandling || '').trim();
+  const primaryGoal = String(lead.primaryGoal || '').trim();
+  const question = String(lead.question || '').trim();
+  const selectedDemo = String(lead.selectedDemo || '').trim();
+  const amountPaid = String(lead.amountPaid || '').trim();
+  const timestamp = lead.timestamp || new Date().toISOString();
+
+  // Classify event badge & email header styling
+  let badge = '🚨 NEW PAGE 1 SMART SITE LEAD';
+  let subjectPrefix = '[🚨 NEW SMART SITE LEAD]';
+  let headerBg = '#FEF3C7';
+  let headerColor = '#B45309';
+
+  if (
+    cat === 'SALE' ||
+    source === 'stripe-checkout-completed' ||
+    source === 'stripe-webhook' ||
+    source === 'recon-paid-onboarding'
+  ) {
+    badge = '💸 NEW SALE / PAID ONBOARDING';
+    subjectPrefix = '[💸 NEW SALE CONFIRMED]';
+    headerBg = '#DCFCE7';
+    headerColor = '#15803D';
+  } else if (cat === 'CHECKOUT_INITIATED' || source === 'stripe-checkout-initiated') {
+    badge = '💳 STRIPE CHECKOUT CLICKED';
+    subjectPrefix = '[💳 CHECKOUT CLICKED]';
+    headerBg = '#DBEAFE';
+    headerColor = '#1D4ED8';
+  } else if (source === 'nb-guinea-pig-survey') {
+    badge = '🔥 30-DAY NB GUINEA PIG TRIAL';
+    subjectPrefix = '[🔥 30-DAY NB TRIAL APPLICATION]';
+    headerBg = '#FEF3C7';
+    headerColor = '#B45309';
+  } else if (source === 'nb-runner-up-special') {
+    badge = '💰 NB $197/MO RUNNER-UP CLAIM';
+    subjectPrefix = '[💰 NB RUNNER-UP CLAIM]';
+    headerBg = '#DCFCE7';
+    headerColor = '#15803D';
+  } else if (cat === 'TRIAL' || source === 'recon-trial-activation') {
+    badge = '🧪 NEW 7-DAY RECON TRIAL';
+    subjectPrefix = '[🧪 NEW 7-DAY RECON TRIAL]';
+    headerBg = '#E0E7FF';
+    headerColor = '#3730A3';
+  } else if (source === 'home-3-sec-sms-simulator') {
+    badge = '📲 PAGE 1 3-SEC SMS DEMO LEAD';
+    subjectPrefix = '[📲 3-SEC SMS DEMO LEAD]';
+  } else if (source === 'step-2-24-7-ai-text-support') {
+    badge = '💬 24/7 AI SUPPORT QUESTION';
+    subjectPrefix = '[💬 24/7 AI SUPPORT LEAD]';
+  }
+
+  const whoLabel = [name, businessName].filter(Boolean).join(' @ ') || phone || email || 'New Prospect';
+  const subject = `${subjectPrefix} ${whoLabel} — ${plan || industry || 'Tiberius Smart Sites'}`;
+
+  // Concise high-signal SMS body for admin cell
+  const smsParts = [`${badge}: ${whoLabel}`];
+  if (phone) smsParts.push(`📞 ${phone}`);
+  if (email) smsParts.push(`✉️ ${email}`);
+  if (plan) smsParts.push(`Plan: ${plan}`);
+  if (amountPaid) smsParts.push(`Paid: ${amountPaid}`);
+  if (industry && !whoLabel.includes(industry)) smsParts.push(`Trade: ${industry}`);
+  if (websiteOrGbp) smsParts.push(`Web: ${websiteOrGbp.slice(0, 45)}`);
+  if (topServices) smsParts.push(`Services: ${topServices.slice(0, 60)}`);
+  if (question) smsParts.push(`Q: "${question.slice(0, 70)}"`);
+  smsParts.push(`Inbox: ${inboxUrl}`);
+  const smsBody = smsParts.join(' • ');
+
+  const rows = [
+    ['Event Type', `${badge} (${source})`],
+    ['Contact Name', role ? `${name || 'N/A'} (${role})` : name],
+    ['Business Name', businessName],
+    ['Mobile Phone', phone],
+    ['Email Address', rawEmailInput && rawEmailInput !== email ? `${email} (Entered: ${rawEmailInput})` : email],
+    ['Selected Plan / Offer', plan],
+    ['Amount / Billing', amountPaid],
+    ['Industry / Trade', industry],
+    ['Website / GBP Link', websiteOrGbp],
+    ['Location / Zip / Area', serviceArea],
+    ['Years in Business', yearsInBusiness],
+    ['Top 3 Profitable Services', topServices],
+    ['Typical Job Size / Pricing', typicalPricing],
+    ['Missed-Call Handling', missedCallHandling],
+    ['#1 Goal', primaryGoal],
+    ['Support Question Asked', question],
+    ['Selected Demo Build', selectedDemo],
+    ['Submitted At', timestamp]
+  ].filter(([, val]) => Boolean(val && String(val).trim()));
+
+  const textLines = [
+    `TIBERIUS SMART SITES™ — INSTANT LEAD / TRIAL / SALE NOTIFICATION`,
+    `================================================================`,
+    ...rows.map(([label, val]) => `${label}: ${val}`),
+    `================================================================`,
+    `Open 3-Pane Conversation Room: ${inboxUrl}`
+  ];
+  const text = textLines.join('\n');
+
+  const escapeHtml = (str) =>
+    String(str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+
+  const e164Phone = phone ? normalizePhoneE164(phone) : '';
+  const tableRowsHtml = rows
+    .map(
+      ([label, val]) => `
+      <tr>
+        <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;font-weight:700;color:#334155;width:36%;vertical-align:top;">${escapeHtml(
+          label
+        )}</td>
+        <td style="padding:10px 12px;border-bottom:1px solid #E2E8F0;color:#0F172A;font-weight:500;">${escapeHtml(
+          val
+        )}</td>
+      </tr>`
+    )
+    .join('');
+
+  const quickActionsHtml = [
+    e164Phone
+      ? `<a href="tel:${escapeHtml(e164Phone)}" style="display:inline-block;margin-right:10px;margin-bottom:8px;padding:10px 16px;background:#16A34A;color:#FFFFFF;text-decoration:none;border-radius:8px;font-weight:700;font-size:13px;">📞 Call ${escapeHtml(
+          phone
+        )}</a>`
+      : '',
+    e164Phone
+      ? `<a href="sms:${escapeHtml(e164Phone)}" style="display:inline-block;margin-right:10px;margin-bottom:8px;padding:10px 16px;background:#2563EB;color:#FFFFFF;text-decoration:none;border-radius:8px;font-weight:700;font-size:13px;">💬 Text From Phone</a>`
+      : '',
+    email
+      ? `<a href="mailto:${escapeHtml(email)}" style="display:inline-block;margin-right:10px;margin-bottom:8px;padding:10px 16px;background:#0F172A;color:#FFFFFF;text-decoration:none;border-radius:8px;font-weight:700;font-size:13px;">✉️ Email ${escapeHtml(
+          email
+        )}</a>`
+      : '',
+    `<a href="${escapeHtml(inboxUrl)}" style="display:inline-block;margin-bottom:8px;padding:10px 16px;background:#D97706;color:#FFFFFF;text-decoration:none;border-radius:8px;font-weight:700;font-size:13px;">📥 Open Conversation Room</a>`
+  ]
+    .filter(Boolean)
+    .join('');
+
+  const html = `
+  <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:680px;margin:0 auto;padding:24px;background:#FFFFFF;border:1px solid #E2E8F0;border-radius:12px;color:#0F172A;">
+    <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #0F172A;padding-bottom:12px;margin-bottom:16px;">
+      <div>
+        <div style="font-family:monospace;font-size:11px;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:0.08em;">Tiberius Smart Sites™ • Real-Time Alert</div>
+        <h2 style="margin:4px 0 0;font-size:20px;color:#0F172A;">${escapeHtml(whoLabel)}</h2>
+      </div>
+      <span style="background:${headerBg};color:${headerColor};padding:6px 12px;border-radius:6px;font-family:monospace;font-size:12px;font-weight:800;">
+        ${escapeHtml(badge)}
+      </span>
+    </div>
+    <div style="margin-bottom:16px;">
+      ${quickActionsHtml}
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:16px;border:1px solid #E2E8F0;border-radius:8px;overflow:hidden;">
+      <tbody>${tableRowsHtml}</tbody>
+    </table>
+    <div style="margin-top:16px;padding-top:12px;border-top:1px solid #E2E8F0;font-size:12px;color:#64748B;">
+      Hit <strong>Reply</strong> in your email client to reply directly to the lead, or manage the 2-way SMS thread in the <a href="${escapeHtml(
+        inboxUrl
+      )}" style="color:#D97706;font-weight:700;">Tiberius Conversation Room</a>.
+    </div>
+  </div>`;
+
+  return {
+    badge,
+    subject,
+    smsBody,
+    text,
+    html,
+    leadEmail: email,
+    leadPhone: phone
+  };
+}
+
+/**
+ * Dispatches BOTH an instant Admin SMS (to `process.env.ADMIN_ALERT_PHONE || '(830) 481-0653'`)
+ * AND an Admin Email (to `process.env.ADMIN_ALERT_EMAIL || 'feedbackdaisy@gmail.com'`)
+ * whenever a Page 1 Lead, 30-Day Free Trial, 7-Day Recon Trial, or Stripe Sale occurs.
+ */
+async function dispatchAdminLeadAndSaleNotification({
+  lead = {},
+  eventCategory = 'LEAD',
+  toPhone,
+  toEmail,
+  baseUrl = 'https://www.tiberius.ai',
+  providerConfig = {},
+  simulateOnly = false
+} = {}) {
+  const adminPhone =
+    toPhone ||
+    process.env.ADMIN_ALERT_PHONE ||
+    process.env.MASTER_ADMIN_PHONE ||
+    '(830) 481-0653';
+  const adminEmail =
+    toEmail ||
+    process.env.ADMIN_ALERT_EMAIL ||
+    'feedbackdaisy@gmail.com';
+
+  const formatted = formatAdminLeadAndSaleNotification({
+    lead,
+    eventCategory,
+    baseUrl
+  });
+
+  if (simulateOnly) {
+    return {
+      ok: true,
+      simulated: true,
+      adminPhone: normalizePhoneE164(adminPhone),
+      adminEmail,
+      subject: formatted.subject,
+      smsBody: formatted.smsBody,
+      dispatchedAt: new Date().toISOString()
+    };
+  }
+
+  const [smsOutcome, emailOutcome] = await Promise.allSettled([
+    sendMasterTwilioSmsToContractor({
+      toPhone: adminPhone,
+      bodyText: formatted.smsBody,
+      providerConfig
+    }),
+    dispatchViaResendEmail({
+      contractor: {
+        ownerName: 'Tiberius Lead & Sale Alerts',
+        companyName: 'Tiberius Smart Sites',
+        workEmail: formatted.leadEmail || 'recon@send.tiberius.ai'
+      },
+      recipientEmail: adminEmail,
+      recipientName: 'Tiberius Admin',
+      subject: formatted.subject,
+      bodyText: formatted.text,
+      htmlBody: formatted.html,
+      token: 'admin-lead-sale-alert',
+      threadId: lead.id || `lead-${Date.now()}`,
+      providerConfig: {
+        ...providerConfig,
+        resendFromEmail: 'recon@send.tiberius.ai'
+      }
+    })
+  ]);
+
+  return {
+    ok: true,
+    adminPhone: normalizePhoneE164(adminPhone),
+    adminEmail,
+    subject: formatted.subject,
+    smsBody: formatted.smsBody,
+    adminSmsReceipt: smsOutcome.status === 'fulfilled' ? smsOutcome.value : { ok: false, error: smsOutcome.reason?.message },
+    adminEmailReceipt: emailOutcome.status === 'fulfilled' ? emailOutcome.value : { ok: false, error: emailOutcome.reason?.message },
+    dispatchedAt: new Date().toISOString()
+  };
+}
+
 module.exports = {
   INBOUND_REPLY_DOMAIN,
   normalizePhoneE164,
@@ -821,5 +1123,7 @@ module.exports = {
   dispatchContractorHotReplyAlertSms,
   formatPreTripEmailManifest,
   dispatchPreTripManifestEmail,
-  dispatchPreTripAdminSms
+  dispatchPreTripAdminSms,
+  formatAdminLeadAndSaleNotification,
+  dispatchAdminLeadAndSaleNotification
 };
