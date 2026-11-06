@@ -1133,92 +1133,95 @@ const VSL_CAPTIONS = [
   { start: 25.3, end: 29.8, html: 'They are expensive <span class="vsl-cap-gold">digital brochures</span> sitting on the internet collecting dust.' },
   { start: 29.8, end: 35.3, html: 'Business owners either pay thousands of dollars upfront for a pretty design that does nothing—or worse,' },
   { start: 35.3, end: 41.1, html: 'they get trapped paying every single month to some <span class="vsl-cap-gold">GoHighLevel reseller</span> on a cookie-cutter template' },
-  { start: 41.1, end: 44.8, html: 'that just sits there, hoping somebody fills out a 10-line contact form.' },
-  { start: 44.8, end: 49.6, html: 'Think about what actually happens during a normal workday when you’re out on a job site,' },
-  { start: 49.6, end: 54.8, html: 'driving between estimates, or finally sitting down with your family for dinner.' },
-  { start: 54.8, end: 60.5, html: 'A homeowner finds your business on Google, clicks on your site, and has <span class="vsl-cap-gold">one quick question</span> before they book.' },
-  { start: 60.5, end: 64.5, html: 'Nobody wants to fill out an email form and wait <span class="vsl-cap-gold">two days</span> for a reply.' },
-  { start: 64.5, end: 67.5, html: 'If they cannot get an answer and get on your schedule <span class="vsl-cap-green">right away</span>,' },
-  { start: 67.5, end: 73.0, html: 'they bounce right back to Google, call the next contractor on the list, and <span class="vsl-cap-gold">that job is gone for good.</span>' },
-  { start: 73.0, end: 79.5, html: 'Even worse, when you do knock a job out of the park, you get busy and forget to chase down the <span class="vsl-cap-gold">Google review.</span>' },
-  { start: 79.5, end: 86.5, html: 'So a competitor with half your experience ends up outranking you on Google Maps simply because they have more <span class="vsl-cap-gold">5-star reviews.</span>' },
-  { start: 86.5, end: 92.1, html: 'Once you see how many high-ticket jobs quietly leak out of a traditional website every single week,' },
-  { start: 92.1, end: 94.6, html: 'it completely changes how you look at your business.' },
-  { start: 94.6, end: 100.5, html: 'That is why we engineered <span class="vsl-cap-gold">Tiberius Smart Sites</span> from the ground up as true <span class="vsl-cap-green">functional websites.</span>' },
-  { start: 100.5, end: 103.8, html: 'When you switch to a <span class="vsl-cap-green">functional website</span> built the Tiberius way,' },
-  { start: 103.8, end: 107.8, html: 'your site stops acting like a poster on the wall—' },
-  { start: 107.8, end: 112.6, html: 'and starts working like your sharpest <span class="vsl-cap-gold">24/7 sales rep, receptionist, and reputation manager</span> rolled into one.' },
-  { start: 112.6, end: 116.8, html: 'It starts with <span class="vsl-cap-gold">superior AI lead capture</span> built by Tiberius.' },
-  { start: 116.8, end: 121.4, html: 'The very second a visitor lands on your page, your site <span class="vsl-cap-green">actively engages with them.</span>' },
-  { start: 121.4, end: 125.7, html: 'It qualifies the scope of their project and captures their details <span class="vsl-cap-green">on the spot</span>—' },
-  { start: 125.7, end: 128.1, html: 'instead of waiting on a boring contact form.' },
-  { start: 128.1, end: 133.0, html: 'Plus, you have an <span class="vsl-cap-gold">AI voice receptionist</span> ready to pick up the phone whenever your hands are full,' },
-  { start: 133.0, end: 136.7, html: 'answering customer questions and <span class="vsl-cap-green">booking appointments</span> straight onto your calendar' },
-  { start: 136.7, end: 139.6, html: 'while your competitors are still letting calls roll to voicemail.' },
-  { start: 139.6, end: 143.8, html: 'Then comes the <span class="vsl-cap-gold">follow-up magic</span>—and this is the part that totally kicks ass!' },
-  { start: 143.8, end: 149.6, html: 'Seriously, this is where business owners see the <span class="vsl-cap-green">biggest jump in booked jobs</span> right out of the gate.' },
-  { start: 149.6, end: 157.9, html: 'Huge numbers of estimates go cold simply because nobody has the bandwidth to call and text every prospect 5 or 6 times while running a crew.' },
-  { start: 157.9, end: 164.1, html: 'Just like the text that hit your phone a minute ago, our functional websites handle all of that <span class="vsl-cap-gold">follow-up magic automatically.</span>' },
-  { start: 164.1, end: 169.0, html: 'Every web inquiry, every single conversation, and every pending quote gets nurtured' },
-  { start: 169.0, end: 174.0, html: 'with natural, well-timed <span class="vsl-cap-green">text and email check-ins</span> until they book the job on your schedule.' },
-  { start: 174.0, end: 177.7, html: 'You never have to wake up at midnight wondering who you forgot to call back.' },
-  { start: 177.7, end: 179.8, html: 'Oh, wait a sec—almost forgot!' },
-  { start: 179.8, end: 184.9, html: 'You need more <span class="vsl-cap-gold">5-star reviews</span>, right? Well, we got you covered, and we’re going to town!' },
-  { start: 184.9, end: 192.8, html: 'To keep the whole engine feeding itself every month, we build <span class="vsl-cap-green">automated 5-star review generation</span> right into your daily workflow.' },
-  { start: 192.8, end: 198.5, html: 'The moment you wrap up a job, a quick automated request goes straight to your customer’s phone asking how everything went.' },
-  { start: 198.5, end: 204.7, html: 'Happy customers get guided directly to your Google Business Profile to drop a <span class="vsl-cap-gold">5-star review in 30 seconds flat,</span>' },
-  { start: 204.7, end: 211.0, html: 'while any private concerns get routed <span class="vsl-cap-green">straight to you first</span>, so you can make things right before they touch the public internet.' },
-  { start: 211.0, end: 215.8, html: 'As those <span class="vsl-cap-gold">5-star reviews</span> stack up week after week, Google pushes your business higher up the local Map Pack,' },
-  { start: 215.8, end: 220.3, html: 'sending even more <span class="vsl-cap-green">high-intent traffic</span> right back into your site.' },
-  { start: 220.3, end: 222.4, html: 'I mean, how cool is that? Okay—' },
-  { start: 222.4, end: 228.5, html: 'here is the <span class="vsl-cap-gold">biggest advantage</span> of building the Tiberius way instead of signing up with a typical marketing agency.' },
-  { start: 228.5, end: 232.8, html: 'Most <span class="vsl-cap-gold">GoHighLevel resellers</span>—and those guys are everywhere, right?—' },
-  { start: 232.8, end: 236.6, html: 'what they do is <span class="vsl-cap-gold">lock you into renting</span> their template forever.' },
-  { start: 236.6, end: 240.9, html: 'You pay them month after month for years, and the second you decide to stop paying,' },
-  { start: 240.9, end: 244.9, html: 'they pull the plug and <span class="vsl-cap-gold">hold your website hostage</span>—leaving you with nothing.' },
-  { start: 244.9, end: 250.0, html: 'Absolutely nothing. And quite frankly, that does suck. But get this:' },
-  { start: 250.0, end: 254.9, html: 'What we at Tiberius believe is that you should actually <span class="vsl-cap-green">own your digital real estate,</span>' },
-  { start: 254.9, end: 258.8, html: 'because your <span class="vsl-cap-gold">Tiberius Smart Site</span> is an investment in your business growth.' },
-  { start: 258.8, end: 262.6, html: 'And that is why we give you <span class="vsl-cap-green">two simple paths to complete ownership.</span>' },
-  { start: 262.6, end: 267.8, html: 'One: you can buy your custom Smart Site outright from Day 1 for <span class="vsl-cap-green">$2,400</span>,' },
-  { start: 267.8, end: 272.2, html: 'which <span class="vsl-cap-gold">saves you over $1,100</span> and eliminates monthly lease payments completely.' },
-  { start: 272.2, end: 275.8, html: 'Or two: if you want to keep more cash in your pocket upfront,' },
-  { start: 275.8, end: 280.7, html: 'you can start on our <span class="vsl-cap-gold">12-month Rent-to-Own plan</span> for just <span class="vsl-cap-green">$297 a month.</span>' },
-  { start: 280.7, end: 284.2, html: 'With Rent-to-Own, we launch your custom build in <span class="vsl-cap-green">7 days.</span>' },
-  { start: 284.2, end: 290.2, html: 'You can buy it out anytime you want, and after 12 payments, <span class="vsl-cap-gold">that website is 100% yours to keep.</span>' },
-  { start: 290.2, end: 293.7, html: 'Best of all, this is a <span class="vsl-cap-green">completely risk-free investment.</span>' },
-  { start: 293.7, end: 298.3, html: 'Every build is backed by our <span class="vsl-cap-green">🛡️ 30-Day 100% Money-Back Guarantee.</span>' },
-  { start: 298.3, end: 302.1, html: 'And that’s for both plans—doesn’t matter, <span class="vsl-cap-gold">your investment is safe.</span>' },
-  { start: 302.1, end: 306.4, html: 'For example, you can start with the <span class="vsl-cap-green">$297 Rent-to-Own plan</span> today,' },
-  { start: 306.4, end: 310.0, html: 'let us build and launch your custom functional website in <span class="vsl-cap-gold">7 days,</span>' },
-  { start: 310.0, end: 312.8, html: 'and test-drive the entire system for a <span class="vsl-cap-green">full month.</span>' },
-  { start: 312.8, end: 316.9, html: 'If you are not thrilled with the build and the leads it captures in your first 30 days,' },
-  { start: 316.9, end: 321.4, html: 'we <span class="vsl-cap-green">refund your $297 in full</span> with no hard feelings.' },
-  { start: 321.4, end: 324.5, html: 'But deep down, you know that’s not going to happen, right?' },
-  { start: 324.5, end: 329.7, html: '<span class="vsl-cap-gold">Tiberius is the best</span>, and you’re going to see some serious move-the-needle results—no doubt about it.' },
-  { start: 329.7, end: 334.4, html: 'When you combine <span class="vsl-cap-gold">functional websites</span> with superior AI lead capture,' },
-  { start: 334.4, end: 339.0, html: 'relentless follow-up magic, <span class="vsl-cap-gold">automated 5-star reviews</span>, and <span class="vsl-cap-green">true ownership,</span>' },
-  { start: 339.0, end: 345.6, html: 'you stop chasing leads by hand and let your website <span class="vsl-cap-green">fill your calendar</span>—while you focus on what you do best.' },
-  { start: 345.6, end: 348.5, html: 'So here is all you need to do <span class="vsl-cap-gold">right now:</span>' },
-  { start: 348.5, end: 353.3, html: 'Look right below this video, where we already highlighted the option you picked on the last page.' },
-  { start: 353.3, end: 360.6, html: 'Choose whether you want to start on the <span class="vsl-cap-green">$297/mo Rent-to-Own plan</span>, or buy your site outright to <span class="vsl-cap-gold">save over $1,100.</span>' },
-  { start: 360.6, end: 363.7, html: 'And after that, just <span class="vsl-cap-green">click the button below</span> to lock in your build.' },
-  { start: 363.7, end: 368.1, html: 'Now, the second you complete that checkout, <span class="vsl-cap-gold">two things happen immediately:</span>' },
-  { start: 368.1, end: 375.3, html: 'First, you’ll go straight to a quick <span class="vsl-cap-green">2-minute onboarding page</span> where we grab your logo, service areas, and calendar preferences' },
-  { start: 375.3, end: 378.2, html: 'so you do not have to lift a finger on the tech side.' },
-  { start: 378.2, end: 382.4, html: 'Second, my team gets to work right away, and within the next <span class="vsl-cap-green">7 days,</span>' },
-  { start: 382.4, end: 386.9, html: 'we will hand you the keys to your brand-new <span class="vsl-cap-gold">functional website</span>—completely live,' },
-  { start: 386.9, end: 391.5, html: 'wired up to your phone, and backed by our full <span class="vsl-cap-green">30-Day Money-Back Guarantee.</span>' },
-  { start: 391.5, end: 397.0, html: 'So that’s it! Go ahead and <span class="vsl-cap-green">click your plan right below this video right now</span>, and let’s get your site built.' },
-  { start: 397.0, end: 400.5, html: 'Thank you, and I will see you on the other side!' },
-  { start: 400.5, end: 445.0, html: '👇 <span class="vsl-cap-gold">Select Your Plan Below</span> (<span class="vsl-cap-green">$297/mo Rent-to-Own</span> or <span class="vsl-cap-green">$2,400 Buy Outright</span>) • 30-Day Money-Back Guarantee' }
+  { start: 41.1, end: 44.7, html: 'that just sits there, hoping somebody fills out a 10-line contact form.' },
+  { start: 44.7, end: 49.5, html: 'Think about what actually happens during a normal workday when you’re out on a job site,' },
+  { start: 49.5, end: 54.6, html: 'driving between estimates, or finally sitting down with your family for dinner.' },
+  { start: 54.6, end: 60.4, html: 'A homeowner finds your business on Google, clicks on your site, and has <span class="vsl-cap-gold">one quick question</span> before they book.' },
+  { start: 60.4, end: 64.4, html: 'Nobody wants to fill out an email form and wait <span class="vsl-cap-gold">two days</span> for a reply.' },
+  { start: 64.4, end: 67.4, html: 'If they cannot get an answer and get on your schedule <span class="vsl-cap-green">right away</span>,' },
+  { start: 67.4, end: 72.9, html: 'they bounce right back to Google, call the next contractor on the list, and <span class="vsl-cap-gold">that job is gone for good.</span>' },
+  { start: 72.9, end: 79.4, html: 'Even worse, when you do knock a job out of the park, you get busy and forget to chase down the <span class="vsl-cap-gold">Google review.</span>' },
+  { start: 79.4, end: 86.4, html: 'So a competitor with half your experience ends up outranking you on Google Maps simply because they have more <span class="vsl-cap-gold">5-star reviews.</span>' },
+  { start: 86.4, end: 92.0, html: 'Once you see how many high-ticket jobs quietly leak out of a traditional website every single week,' },
+  { start: 92.0, end: 94.5, html: 'it completely changes how you look at your business.' },
+  { start: 94.5, end: 100.3, html: 'That is why we engineered <span class="vsl-cap-gold">Tiberius Smart Sites</span> from the ground up as true <span class="vsl-cap-green">functional websites.</span>' },
+  { start: 100.3, end: 103.6, html: 'When you switch to a <span class="vsl-cap-green">functional website</span> built the Tiberius way,' },
+  { start: 103.6, end: 107.6, html: 'your site stops acting like a poster on the wall—' },
+  { start: 107.6, end: 112.4, html: 'and starts working like your sharpest <span class="vsl-cap-gold">24/7 sales rep, receptionist, and reputation manager</span> rolled into one.' },
+  { start: 112.4, end: 116.5, html: 'It starts with <span class="vsl-cap-gold">superior AI lead capture</span> built by Tiberius.' },
+  { start: 116.5, end: 121.2, html: 'The very second a visitor lands on your page, your site <span class="vsl-cap-green">actively engages with them.</span>' },
+  { start: 121.2, end: 125.5, html: 'It qualifies the scope of their project and captures their details <span class="vsl-cap-green">on the spot</span>—' },
+  { start: 125.5, end: 127.9, html: 'instead of waiting on a boring contact form.' },
+  { start: 127.9, end: 132.8, html: 'Plus, you have an <span class="vsl-cap-gold">AI voice receptionist</span> ready to pick up the phone whenever your hands are full,' },
+  { start: 132.8, end: 136.5, html: 'answering customer questions and <span class="vsl-cap-green">booking appointments</span> straight onto your calendar' },
+  { start: 136.5, end: 139.4, html: 'while your competitors are still letting calls roll to voicemail.' },
+  { start: 139.4, end: 143.5, html: 'Then comes the <span class="vsl-cap-gold">follow-up magic</span>—and this is the part that totally kicks ass!' },
+  { start: 143.5, end: 149.3, html: 'Seriously, this is where business owners see the <span class="vsl-cap-green">biggest jump in booked jobs</span> right out of the gate.' },
+  { start: 149.3, end: 157.6, html: 'Huge numbers of estimates go cold simply because nobody has the bandwidth to call and text every prospect 5 or 6 times while running a crew.' },
+  { start: 157.6, end: 163.8, html: 'Just like the text that hit your phone a minute ago, our functional websites handle all of that <span class="vsl-cap-gold">follow-up magic automatically.</span>' },
+  { start: 163.8, end: 168.7, html: 'Every web inquiry, every single conversation, and every pending quote gets nurtured' },
+  { start: 168.7, end: 173.7, html: 'with natural, well-timed <span class="vsl-cap-green">text and email check-ins</span> until they book the job on your schedule.' },
+  { start: 173.7, end: 177.3, html: 'You never have to wake up at midnight wondering who you forgot to call back.' },
+  { start: 177.3, end: 179.3, html: 'Oh, wait a sec—almost forgot!' },
+  { start: 179.3, end: 184.4, html: 'You need more <span class="vsl-cap-gold">5-star reviews</span>, right? Well, we got you covered, and we’re going to town!' },
+  { start: 184.4, end: 192.3, html: 'To keep the whole engine feeding itself every month, we build <span class="vsl-cap-green">automated 5-star review generation</span> right into your daily workflow.' },
+  { start: 192.3, end: 198.0, html: 'The moment you wrap up a job, a quick automated request goes straight to your customer’s phone asking how everything went.' },
+  { start: 198.0, end: 204.2, html: 'Happy customers get guided directly to your Google Business Profile to drop a <span class="vsl-cap-gold">5-star review in 30 seconds flat,</span>' },
+  { start: 204.2, end: 210.6, html: 'while any private concerns get routed <span class="vsl-cap-green">straight to you first</span>, so you can make things right before they touch the public internet.' },
+  { start: 210.6, end: 215.3, html: 'As those <span class="vsl-cap-gold">5-star reviews</span> stack up week after week, Google pushes your business higher up the local Map Pack,' },
+  { start: 215.3, end: 219.8, html: 'sending even more <span class="vsl-cap-green">high-intent traffic</span> right back into your site.' },
+  { start: 219.8, end: 221.8, html: 'I mean, how cool is that? Okay—' },
+  { start: 221.8, end: 227.9, html: 'here is the <span class="vsl-cap-gold">biggest advantage</span> of building the Tiberius way instead of signing up with a typical marketing agency.' },
+  { start: 227.9, end: 232.2, html: 'Most <span class="vsl-cap-gold">GoHighLevel resellers</span>—and those guys are everywhere, right?—' },
+  { start: 232.2, end: 236.0, html: 'what they do is <span class="vsl-cap-gold">lock you into renting</span> their template forever.' },
+  { start: 236.0, end: 240.3, html: 'You pay them month after month for years, and the second you decide to stop paying,' },
+  { start: 240.3, end: 244.3, html: 'they pull the plug and <span class="vsl-cap-gold">hold your website hostage</span>—leaving you with nothing.' },
+  { start: 244.3, end: 249.4, html: 'Absolutely nothing. And quite frankly, that does suck. But get this:' },
+  { start: 249.4, end: 254.3, html: 'What we at Tiberius believe is that you should actually <span class="vsl-cap-green">own your digital real estate,</span>' },
+  { start: 254.3, end: 258.2, html: 'because your <span class="vsl-cap-gold">Tiberius Smart Site</span> is an investment in your business growth.' },
+  { start: 258.2, end: 262.0, html: 'And that is why we give you <span class="vsl-cap-green">two simple paths to complete ownership.</span>' },
+  { start: 262.0, end: 267.2, html: 'One: you can buy your custom Smart Site outright from Day 1 for <span class="vsl-cap-green">$2,400</span>,' },
+  { start: 267.2, end: 271.5, html: 'which <span class="vsl-cap-gold">saves you over $1,100</span> and eliminates monthly lease payments completely.' },
+  { start: 271.5, end: 275.2, html: 'Or two: if you want to keep more cash in your pocket upfront,' },
+  { start: 275.2, end: 280.1, html: 'you can start on our <span class="vsl-cap-gold">12-month Rent-to-Own plan</span> for just <span class="vsl-cap-green">$297 a month.</span>' },
+  { start: 280.1, end: 283.6, html: 'With Rent-to-Own, we launch your custom build in <span class="vsl-cap-green">7 days.</span>' },
+  { start: 283.6, end: 289.6, html: 'You can buy it out anytime you want, and after 12 payments, <span class="vsl-cap-gold">that website is 100% yours to keep.</span>' },
+  { start: 289.6, end: 293.1, html: 'Best of all, this is a <span class="vsl-cap-green">completely risk-free investment.</span>' },
+  { start: 293.1, end: 297.7, html: 'Every build is backed by our <span class="vsl-cap-green">🛡️ 30-Day 100% Money-Back Guarantee.</span>' },
+  { start: 297.7, end: 301.5, html: 'And that’s for both plans—doesn’t matter, <span class="vsl-cap-gold">your investment is safe.</span>' },
+  { start: 301.5, end: 305.8, html: 'For example, you can start with the <span class="vsl-cap-green">$297 Rent-to-Own plan</span> today,' },
+  { start: 305.8, end: 309.4, html: 'let us build and launch your custom functional website in <span class="vsl-cap-gold">7 days,</span>' },
+  { start: 309.4, end: 312.2, html: 'and test-drive the entire system for a <span class="vsl-cap-green">full month.</span>' },
+  { start: 312.2, end: 316.3, html: 'If you are not thrilled with the build and the leads it captures in your first 30 days,' },
+  { start: 316.3, end: 320.8, html: 'we <span class="vsl-cap-green">refund your $297 in full</span> with no hard feelings.' },
+  { start: 320.8, end: 323.9, html: 'But deep down, you know that’s not going to happen, right?' },
+  { start: 323.9, end: 329.1, html: '<span class="vsl-cap-gold">Tiberius is the best</span>, and you’re going to see some serious move-the-needle results—no doubt about it.' },
+  { start: 329.1, end: 333.8, html: 'When you combine <span class="vsl-cap-gold">functional websites</span> with superior AI lead capture,' },
+  { start: 333.8, end: 338.4, html: 'relentless follow-up magic, <span class="vsl-cap-gold">automated 5-star reviews</span>, and <span class="vsl-cap-green">true ownership,</span>' },
+  { start: 338.4, end: 345.0, html: 'you stop chasing leads by hand and let your website <span class="vsl-cap-green">fill your calendar</span>—while you focus on what you do best.' },
+  { start: 345.0, end: 347.9, html: 'So here is all you need to do <span class="vsl-cap-gold">right now:</span>' },
+  { start: 347.9, end: 352.7, html: 'Look right below this video, where we already highlighted the option you picked on the last page.' },
+  { start: 352.7, end: 360.0, html: 'Choose whether you want to start on the <span class="vsl-cap-green">$297/mo Rent-to-Own plan</span>, or buy your site outright to <span class="vsl-cap-gold">save over $1,100.</span>' },
+  { start: 360.0, end: 363.0, html: 'And after that, just <span class="vsl-cap-green">click the button below</span> to lock in your build.' },
+  { start: 363.0, end: 367.5, html: 'Now, the second you complete that checkout, <span class="vsl-cap-gold">two things happen immediately:</span>' },
+  { start: 367.5, end: 374.7, html: 'First, you’ll go straight to a quick <span class="vsl-cap-green">2-minute onboarding page</span> where we grab your logo, service areas, and calendar preferences' },
+  { start: 374.7, end: 377.5, html: 'so you do not have to lift a finger on the tech side.' },
+  { start: 377.5, end: 381.8, html: 'Second, my team gets to work right away, and within the next <span class="vsl-cap-green">7 days,</span>' },
+  { start: 381.8, end: 386.3, html: 'we will hand you the keys to your brand-new <span class="vsl-cap-gold">functional website</span>—completely live,' },
+  { start: 386.3, end: 390.9, html: 'wired up to your phone, and backed by our full <span class="vsl-cap-green">30-Day Money-Back Guarantee.</span>' },
+  { start: 390.9, end: 396.4, html: 'So that’s it! Go ahead and <span class="vsl-cap-green">click your plan right below this video right now</span>, and let’s get your site built.' },
+  { start: 396.4, end: 399.65, html: 'Thank you, and I will see you on the other side!' },
+  { start: 399.65, end: 416.0, html: '👇 <span class="vsl-cap-gold">Ready to Own Your Custom Smart Site?</span> Select Your Plan Below (<span class="vsl-cap-green">$297/mo Rent-to-Own</span> or <span class="vsl-cap-green">$2,400 Buy Outright</span>)' },
+  { start: 416.0, end: 433.0, html: '⚡ <span class="vsl-cap-gold">Custom Built &amp; Live in 7 Days</span> • 3-Second AI Text Rescue + Photo Quote Calculator + 5-Star Review Engine' },
+  { start: 433.0, end: 450.0, html: '🛡️ <span class="vsl-cap-green">100% Risk-Free Investment:</span> Protected by Our 30-Day 100% Money-Back Guarantee • Zero Hostage Contracts' },
+  { start: 450.0, end: 470.0, html: '👇 <span class="vsl-cap-gold">Click Your Plan Below Right Now</span> to Lock In Your 7-Day Build Slot — Or <span class="vsl-cap-green">Text Us 24/7</span> With Any Questions!' }
 ];
 
 const VSL_CHAPTER_BREAKPOINTS = [
   { idx: 0, start: 0, label: 'CHAPTER 1 OF 4 • INSTANT SMS + FUNCTIONAL SITES' },
-  { idx: 1, start: 112.8, label: 'CHAPTER 2 OF 4 • AI LEAD CAPTURE & FOLLOW-UP MAGIC' },
-  { idx: 2, start: 180.0, label: 'CHAPTER 3 OF 4 • AUTOMATED 5-STAR REVIEW ENGINE' },
-  { idx: 3, start: 228.7, label: 'CHAPTER 4 OF 4 • $297/MO RENT-TO-OWN & 30-DAY GUARANTEE' }
+  { idx: 1, start: 112.4, label: 'CHAPTER 2 OF 4 • AI LEAD CAPTURE & FOLLOW-UP MAGIC' },
+  { idx: 2, start: 179.3, label: 'CHAPTER 3 OF 4 • AUTOMATED 5-STAR REVIEW ENGINE' },
+  { idx: 3, start: 227.9, label: 'CHAPTER 4 OF 4 • $297/MO RENT-TO-OWN & 30-DAY GUARANTEE' }
 ];
 
 function formatVslTime(sec) {
@@ -1286,6 +1289,8 @@ function initStep2Controls() {
   // Live Video + Styled On-Player VSL Captions Synchronization
   const videoEl = document.getElementById('watch-walkthrough-video');
   const playOverlay = document.getElementById('watch-video-play-overlay');
+  const endCtaOverlay = document.getElementById('vsl-end-cta-overlay');
+  const endCtaReplayBtn = document.getElementById('vsl-end-cta-replay-btn');
   const captionStage = document.getElementById('vsl-styled-caption-stage');
   const captionBox = document.getElementById('vsl-styled-caption-box');
   const ccToggleBtn = document.getElementById('vsl-cc-toggle-btn');
@@ -1293,6 +1298,7 @@ function initStep2Controls() {
   const timecodeEl = document.getElementById('vsl-timecode-display');
   const statusPill = document.getElementById('vsl-playing-indicator');
 
+  const END_CTA_START_TIME = 399.65;
   let lastCaptionHtml = '';
   let captionsEnabled = true;
 
@@ -1302,6 +1308,13 @@ function initStep2Controls() {
       // Keep native browser track hidden while custom styled captions are visible on stage
       videoEl.textTracks[i].mode = 'hidden';
     }
+  }
+
+  function syncEndCtaOverlay(t, forceShow = false) {
+    if (!endCtaOverlay) return;
+    const shouldShow = forceShow || t >= END_CTA_START_TIME;
+    endCtaOverlay.classList.toggle('is-visible', shouldShow);
+    endCtaOverlay.setAttribute('aria-hidden', shouldShow ? 'false' : 'true');
   }
 
   function updateVslCaptionForTime(t) {
@@ -1323,6 +1336,8 @@ function initStep2Controls() {
       lastCaptionHtml = nextHtml;
     }
 
+    syncEndCtaOverlay(t);
+
     // Sync active chapter button based on current playback timestamp
     let chapterIdx = 0;
     for (let i = VSL_CHAPTER_BREAKPOINTS.length - 1; i >= 0; i -= 1) {
@@ -1335,9 +1350,12 @@ function initStep2Controls() {
       selectVslChapter(chapterIdx, { seekVideo: false });
     }
 
-    // Update timecode display (6:40 spoken walkthrough length or full video duration)
+    // Update timecode display
     if (timecodeEl) {
-      const totalDur = videoEl && Number.isFinite(videoEl.duration) && videoEl.duration > 0 ? Math.min(videoEl.duration, 400) : 400;
+      const totalDur =
+        videoEl && Number.isFinite(videoEl.duration) && videoEl.duration > 0
+          ? videoEl.duration
+          : 468;
       timecodeEl.textContent = `${formatVslTime(t)} / ${formatVslTime(totalDur)}`;
     }
   }
@@ -1364,6 +1382,23 @@ function initStep2Controls() {
       state.vslPlaying = false;
       const bp = VSL_CHAPTER_BREAKPOINTS[state.activeChapterIdx] || VSL_CHAPTER_BREAKPOINTS[0];
       if (statusPill) statusPill.textContent = `⏸ PAUSED • ${bp.label}`;
+    });
+    videoEl.addEventListener('ended', () => {
+      state.vslPlaying = false;
+      syncEndCtaOverlay(videoEl.duration || END_CTA_START_TIME, true);
+      if (statusPill) statusPill.textContent = '✓ WALKTHROUGH COMPLETE • SELECT YOUR PLAN BELOW';
+    });
+  }
+
+  if (endCtaReplayBtn && videoEl) {
+    endCtaReplayBtn.addEventListener('click', () => {
+      syncEndCtaOverlay(0, false);
+      try {
+        videoEl.currentTime = 0;
+        videoEl.play().catch(() => {});
+      } catch (_err) {
+        // Ignore seek errors
+      }
     });
   }
 
