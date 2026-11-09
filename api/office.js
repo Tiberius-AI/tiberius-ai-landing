@@ -551,8 +551,9 @@ function getBudgetStatus(store, workspaceId) {
 function getFullWorkspaceState(store, workspaceId = 'tiberius-hq') {
   const wsId = store.workspaces[workspaceId] ? workspaceId : 'tiberius-hq';
   const ws = store.workspaces[wsId];
+  const budget = getBudgetStatus(store, wsId);
   return {
-    workspace: ws,
+    workspace: { ...ws, budget },
     actors: store.actors[wsId] || [],
     sops: store.sops[wsId] || [],
     dossiers: store.dossiers[wsId] || [],
@@ -561,7 +562,7 @@ function getFullWorkspaceState(store, workspaceId = 'tiberius-hq') {
     bossEmails: store.bossEmails[wsId] || [],
     shiftLogs: store.shiftLogs[wsId] || [],
     browserObservations: store.browserObservations[wsId] || [],
-    budgetStatus: getBudgetStatus(store, wsId),
+    budgetStatus: budget,
     deploy: {
       publicHttpsUrl: 'https://tiberius.ai/office',
       lanUrl: 'https://tiberius.ai/office',
