@@ -30,6 +30,18 @@
       "destination": "/alfred-ai/index.html"
     },
     {
+      "source": "/office",
+      "destination": "/office/index.html"
+    },
+    {
+      "source": "/office-space",
+      "destination": "/office/index.html"
+    },
+    {
+      "source": "/api/office/:route*",
+      "destination": "/api/office?route=:route*"
+    },
+    {
       "source": "/recon",
       "destination": "/recon/index.html"
     },
