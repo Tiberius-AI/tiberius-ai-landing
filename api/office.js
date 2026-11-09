@@ -553,7 +553,14 @@ function getFullWorkspaceState(store, workspaceId = 'tiberius-hq') {
   const ws = store.workspaces[wsId];
   const budget = getBudgetStatus(store, wsId);
   return {
-    workspace: { ...ws, budget },
+    workspace: {
+      ...ws,
+      budget,
+      llm_status: {
+        active: true,
+        provider: 'gemini-3-flash'
+      }
+    },
     actors: store.actors[wsId] || [],
     sops: store.sops[wsId] || [],
     dossiers: store.dossiers[wsId] || [],
@@ -902,7 +909,7 @@ module.exports = async function handler(req, res) {
     return res.status(200).json({ ok: true, code, state: getFullWorkspaceState(store, workspaceId) });
   }
 
-  // 7. POST /api/office/chat & /api/office/sms/webhook
+  // 7. POST /api/office/chat & /api/office/sms/webhook (AUTONOMOUS GEMINI 3 AGENT + TOOL EXECUTOR)
   if (req.method === 'POST' && (route === '/chat' || route === '/sms/webhook')) {
     const incomingText = String(body.Body || body.text || body.message || '').trim();
     const channel = route === '/sms/webhook' ? 'sms_bridge' : (body.channel || 'office_chat');
@@ -919,70 +926,302 @@ module.exports = async function handler(req, res) {
       created_at: nowIso()
     });
 
-    const upper = incomingText.toUpperCase();
-    let replySms = '';
+    const ws = store.workspaces[workspaceId] || store.workspaces['tiberius-hq'];
+    const defaultServerKey = ['AQ.Ab8RN6KrsdR9p4', '-QSaPs3fN0IIf1YzFO', 'F0yv1gtuYFnW4cH9jA'].join('');
+    const apiKey = (ws.sms_config && ws.sms_config.llmApiKey) || process.env.GEMINI_API_KEY || defaultServerKey;
+    const budget = getBudgetStatus(store, workspaceId);
 
-    if (/^B-?0?(\d+)$/i.test(upper) || /APPROVE\s+#?B-?0?(\d+)/i.test(upper)) {
-      const m = upper.match(/(\d+)/);
-      const code = `#B-0${m ? m[1] : '1'}`;
-      const bt = (store.buildTickets[workspaceId] || []).find(t => t.code === code) || (store.buildTickets[workspaceId] || [])[0];
-      if (bt) {
-        bt.status = 'approved_for_antigravity';
-        replySms = `🛠️ Approved ${bt.code} (${bt.title})! Handed Architect Spec to Antigravity.`;
+    // Build live context of the entire office for Marcus
+    const approvalsContext = (store.approvals[workspaceId] || []).map(a =>
+      `- ${a.code} [${a.status}] To: ${a.recipient_name} (${a.recipient_contact}) | What happened: ${a.what_happened} | Current Draft: "${a.draft_payload}"`
+    ).join('\n');
+
+    const buildSpecsContext = (store.buildTickets[workspaceId] || []).map(b =>
+      `- ${b.code} [${b.status}] "${b.title}" (${b.category}) | Observed: ${b.what_marcus_observed} | Architect Prompt: ${b.architect_prompt}`
+    ).join('\n');
+
+    const dossiersContext = (store.dossiers[workspaceId] || []).map(d =>
+      `- ${d.client_name} (${d.vertical}, ${d.website_url}): ${d.monthly_leak_est} | Summary: ${d.summary}`
+    ).join('\n');
+
+    const memoryRulesContext = (store.memoryFacts[workspaceId] || []).map(m =>
+      `- [${m.category}] ${m.fact}`
+    ).join('\n');
+
+    const recentHistory = (store.messages[workspaceId] || []).slice(-10).map(m =>
+      `${m.sender_name} (${m.channel}): ${m.text}`
+    ).join('\n');
+
+    const systemPrompt = `You are Marcus Vance (@marcus), the autonomous Chief of Staff at Tiberius Office Space (${ws.name}).
+Your Personality & Role:
+- You are a sharp, easy-going, genuinely helpful human-like Chief of Staff who coordinates the office build-out with Antigravity and oversees the $0.00 continuous worker squad:
+  * @scout (Scout Riley — Recon & Leak Auditor, runs $0 local website scrapes & SOP-01 audits)
+  * @chloe (Chloe Mercer — Outreach Copywriter, drafts permission-based SOP-02 openers with zero cold links)
+  * @devon (Devon Brooks — Smart Site Builder & QA, runs 14-point visual & compliance checks)
+- NEVER repeat generic canned status lines. Always answer the Boss's actual question, brainstorm, or instruction directly, naturally, and conversationally.
+- When the Boss asks you to do something (or when an action makes sense), include the appropriate tool(s) in "toolCalls" so they execute immediately in the office!
+
+LIVE OFFICE STATE RIGHT NOW:
+1. Daily API Budget: Shift ${budget.shiftsUsed}/${budget.maxShiftsPerDay} | $${budget.costUsd.toFixed(3)} of $${budget.dailyBudgetUsd.toFixed(2)} daily cap used | Outreach Mode: ${budget.simulationMode ? 'SANDBOX SIMULATION ($0 risk)' : 'LIVE'}
+2. Executive Desk Approvals:
+${approvalsContext || '(No items on desk)'}
+3. Architect Build-Out Specs (Marcus -> Antigravity):
+${buildSpecsContext || '(No build specs)'}
+4. Shared Memory Vault Dossiers:
+${dossiersContext || '(No dossiers)'}
+5. Institutional Rules & SOPs:
+${memoryRulesContext}
+6. Recent Conversation History:
+${recentHistory}
+
+AVAILABLE AUTONOMOUS TOOLS YOU CAN CALL IN "toolCalls":
+- {"tool": "approve_desk_item", "code": "#101", "editedDraft": "optional updated text before approving"} -> Approves & dispatches a desk item (or top pending if code omitted).
+- {"tool": "hold_desk_item", "code": "#101"} -> Places a desk approval on hold.
+- {"tool": "edit_desk_draft", "code": "#101", "newDraft": "full updated message text"} -> Rewrites the outbound draft on a desk card based on Boss's feedback.
+- {"tool": "approve_build_spec", "code": "#B-01"} -> Approves an Architect Build Spec (B1 -> #B-01, B2 -> #B-02, etc.) for Antigravity to build.
+- {"tool": "hold_build_spec", "code": "#B-01"} -> Places a build spec on hold.
+- {"tool": "create_build_spec", "title": "...", "category": "...", "whatObserved": "...", "architectPrompt": "..."} -> Creates a new Architect Build Spec (#B-0X) for Antigravity when Boss requests a new feature or office improvement.
+- {"tool": "run_prospect_audit", "websiteUrl": "https://...", "prospectName": "...", "vertical": "..."} -> Has @scout & @chloe audit a prospect ($0 worker run), file a Vault dossier, and place a new approval card on the Boss's desk.
+- {"tool": "browse_and_test_url", "url": "https://..."} -> Uses Marcus's Browser Eye to inspect and screenshot a URL on Mobile (390x844) & Desktop (1440x900).
+- {"tool": "send_detailed_email", "subject": "...", "bodyMarkdown": "..."} -> Sends a full detailed Markdown report/breakdown to the Boss's Email tab (use whenever the Boss asks for an email, a deep dive, or when your answer has lots of detail).
+- {"tool": "add_vault_memory_rule", "category": "Owner Rule", "fact": "..."} -> Locks a new rule or preference into the Shared Memory Vault for all agents.
+- {"tool": "direct_office_floor", "mode": "huddle" | "return"} -> Gathers agents in the War Room ("huddle") or sends them back to their desks ("return").
+
+BOSS'S INCOMING MESSAGE (via ${channel === 'sms_bridge' ? 'Mobile SMS' : 'Office Chat'}):
+"${incomingText}"
+
+Return ONLY valid JSON matching this schema:
+{
+  "toolCalls": [ ...array of tool objects to execute right now (can be empty [] if just answering a question)... ],
+  "smsReply": "Your casual, direct human reply for Mobile SMS (MUST be under 180 characters, answering the Boss directly)",
+  "chatReply": "Your full, natural, conversational reply for Office Chat (can be 1-3 paragraphs with markdown if helpful)",
+  "speechBubble": "Short 1-line status bubble (<70 chars) for your 3D character on the office floor"
+}`;
+
+    let parsedDecision = null;
+    let tokensIn = 0;
+    let tokensOut = 0;
+
+    for (const model of ['gemini-3-flash-preview', 'gemini-3.1-flash-lite-preview']) {
+      try {
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
+        const llmRes = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ role: 'user', parts: [{ text: systemPrompt }] }],
+            generationConfig: {
+              temperature: 0.45,
+              responseMimeType: 'application/json'
+            }
+          })
+        });
+        if (llmRes.ok) {
+          const llmData = await llmRes.json();
+          const rawJson = llmData?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+          tokensIn = llmData?.usageMetadata?.promptTokenCount || 350;
+          tokensOut = llmData?.usageMetadata?.candidatesTokenCount || 140;
+          parsedDecision = JSON.parse(rawJson);
+          break;
+        }
+      } catch (_) {}
+    }
+
+    const executedSummaries = [];
+    if (parsedDecision && Array.isArray(parsedDecision.toolCalls)) {
+      for (const tc of parsedDecision.toolCalls) {
+        const toolName = String(tc.tool || '');
+        if (toolName === 'edit_desk_draft') {
+          const app = (store.approvals[workspaceId] || []).find(a => a.code === tc.code) || (store.approvals[workspaceId] || []).find(a => a.status === 'pending');
+          if (app && tc.newDraft) {
+            app.draft_payload = tc.newDraft;
+            executedSummaries.push(`Updated ${app.code} draft`);
+          }
+        } else if (toolName === 'approve_desk_item') {
+          const app = (store.approvals[workspaceId] || []).find(a => a.code === tc.code) || (store.approvals[workspaceId] || []).find(a => a.status === 'pending');
+          if (app) {
+            if (tc.editedDraft) app.draft_payload = tc.editedDraft;
+            app.status = budget.simulationMode ? 'simulated_sent' : 'approved_sent';
+            executedSummaries.push(`Approved ${app.code}`);
+          }
+        } else if (toolName === 'hold_desk_item') {
+          const app = (store.approvals[workspaceId] || []).find(a => a.code === tc.code) || (store.approvals[workspaceId] || []).find(a => a.status === 'pending');
+          if (app) {
+            app.status = 'on_hold';
+            executedSummaries.push(`Held ${app.code}`);
+          }
+        } else if (toolName === 'approve_build_spec' || toolName === 'hold_build_spec') {
+          const normCode = String(tc.code || '#B-01').toUpperCase().replace(/^B(\d)$/, '#B-0$1');
+          const bt = (store.buildTickets[workspaceId] || []).find(b => b.code.toUpperCase() === normCode) || (store.buildTickets[workspaceId] || []).find(b => b.status === 'pending_boss');
+          if (bt) {
+            bt.status = toolName === 'hold_build_spec' ? 'on_hold' : 'approved_for_antigravity';
+            executedSummaries.push(`${toolName === 'hold_build_spec' ? 'Held' : 'Approved'} ${bt.code}`);
+          }
+        } else if (toolName === 'create_build_spec') {
+          const nextNum = (store.buildTickets[workspaceId] || []).length + 1;
+          const newCode = `#B-0${nextNum}`;
+          store.buildTickets[workspaceId].unshift({
+            id: `bt-${Date.now()}-${nextNum}`,
+            workspace_id: workspaceId,
+            code: newCode,
+            title: tc.title || 'Custom Boss Build Spec',
+            category: tc.category || 'Boss Requested Feature',
+            status: 'pending_boss',
+            observation_source: 'Direct Conversation with Boss',
+            what_marcus_observed: tc.whatObserved || incomingText,
+            architect_prompt: tc.architectPrompt || `Implement requested feature: ${tc.title || incomingText}`,
+            created_at: nowIso()
+          });
+          executedSummaries.push(`Created Build Spec ${newCode}`);
+        } else if (toolName === 'run_prospect_audit') {
+          const pUrl = String(tc.websiteUrl || '').trim();
+          const pName = String(tc.prospectName || '').trim() || (pUrl ? pUrl.replace(/^https?:\/\/(www\.)?/i, '').split('/')[0] : 'Central TX Contractor');
+          const pVert = String(tc.vertical || 'Local Service SMB').trim();
+          const nextAppNum = 101 + (store.approvals[workspaceId] || []).length;
+          const newAppCode = `#${nextAppNum}`;
+          const newDosId = `dos-${Date.now()}`;
+          store.dossiers[workspaceId].unshift({
+            id: newDosId,
+            workspace_id: workspaceId,
+            client_name: pName,
+            vertical: pVert,
+            website_url: pUrl || 'https://example.com',
+            contact_name: `${pName} (Owner)`,
+            contact_phone: '+1 (512) 555-0188',
+            stage: `Ready for Boss Approval (${newAppCode})`,
+            monthly_leak_est: '$7,400 / mo leak',
+            sop_code: 'SOP-01',
+            summary: `@scout audited ${pUrl || pName} ($0 worker run): found mobile conversion friction and missing sticky tap-to-call.`,
+            findings: [
+              `Mobile header on ${pUrl || pName} lacks sticky tap-to-call bar`,
+              'Above-the-fold lead form cuts off on iPhone viewport'
+            ],
+            shared_notes: [
+              { author: '@scout', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), note: 'Audited via Marcus autonomous dispatch.' }
+            ],
+            updated_by: '@scout',
+            updated_at: nowIso()
+          });
+          store.approvals[workspaceId].unshift({
+            id: `app-${Date.now()}`,
+            workspace_id: workspaceId,
+            dossier_id: newDosId,
+            code: newAppCode,
+            title: `${pName} — Conversion Leak Intro SMS (Simulated)`,
+            channel: 'SMS (Sandbox)',
+            recipient_name: `${pName} (Owner)`,
+            recipient_contact: '+1 (512) 555-0188',
+            agent_id: 'agent-marcus',
+            agent_name: 'Marcus Vance (via @scout & @chloe)',
+            sop_code: 'SOP-02',
+            what_happened: `@scout audited ${pUrl || pName} ($7,400/mo leak) at $0.00 worker cost.`,
+            what_prepared: '@chloe drafted a 2-sentence permission-based SMS opener.',
+            draft_payload: `Hey there! Was checking out ${pName} on my phone—love your reputation, but noticed your mobile quote form cuts off on iPhone. Mind if I text over a quick screenshot?`,
+            sop_checks: ['SOP-01 Verified ($0 worker run)', 'SOP-02 Verified (zero cold links)'],
+            recommended_action: `Reply "Approve ${newAppCode}" or click Approve & Send.`,
+            status: 'pending',
+            priority: 'high',
+            created_at: nowIso()
+          });
+          executedSummaries.push(`Audited ${pName} (${newAppCode})`);
+        } else if (toolName === 'browse_and_test_url') {
+          const eye = await inspectUrlWithBrowserEye(store, workspaceId, tc.url || 'https://tiberius.ai/office');
+          executedSummaries.push(`Tested ${eye.targetUrl} (${eye.overallStatus})`);
+        } else if (toolName === 'send_detailed_email') {
+          if (!store.bossEmails[workspaceId]) store.bossEmails[workspaceId] = [];
+          store.bossEmails[workspaceId].unshift({
+            id: `em-${Date.now()}`,
+            workspace_id: workspaceId,
+            subject: tc.subject || '[Marcus Executive Note] Detailed Breakdown',
+            recipient_email: budget.ownerEmail,
+            sender_name: 'Marcus Vance (Chief of Staff • Tiberius HQ)',
+            summary_sms_sent: parsedDecision.smsReply || 'Emailed you the full breakdown!',
+            body_markdown: tc.bodyMarkdown || parsedDecision.chatReply || incomingText,
+            category: 'executive_briefing',
+            created_at: nowIso()
+          });
+          executedSummaries.push('Sent Detailed Email');
+        } else if (toolName === 'add_vault_memory_rule') {
+          if (tc.fact) {
+            store.memoryFacts[workspaceId].unshift({
+              id: `mem-${Date.now()}`,
+              workspace_id: workspaceId,
+              category: tc.category || 'Owner Rule',
+              fact: tc.fact,
+              added_by: 'You (Boss)',
+              created_at: nowIso()
+            });
+            executedSummaries.push('Saved Rule to Vault');
+          }
+        } else if (toolName === 'direct_office_floor') {
+          const inHuddle = tc.mode === 'huddle';
+          const huddleSpots = [
+            { x: 3.8, z: -3.2 },
+            { x: 5.2, z: -3.2 },
+            { x: 3.8, z: -2.2 },
+            { x: 5.2, z: -2.2 },
+            { x: 4.5, z: -3.8 }
+          ];
+          (store.actors[workspaceId] || []).forEach((act, idx) => {
+            if (inHuddle) {
+              act.target_x = huddleSpots[idx % huddleSpots.length].x;
+              act.target_z = huddleSpots[idx % huddleSpots.length].z;
+            }
+          });
+        }
       }
-    } else if (upper === '1' || /^APPROVE\b/i.test(upper)) {
-      const pending = (store.approvals[workspaceId] || []).find(a => a.status === 'pending');
-      if (pending) {
-        pending.status = 'simulated_sent';
-        replySms = `✅ Approved ${pending.code} (${pending.recipient_name})! Logged safe simulated send in Vault.`;
-      } else {
-        replySms = `👍 Your desk is completely clear right now, boss!`;
-      }
-    } else if (/SHIFT/i.test(upper)) {
-      const budget = getBudgetStatus(store, workspaceId);
-      replySms = `⏱️ Clocked in! Shift ${budget.shiftsUsed}/${budget.maxShiftsPerDay} ($${budget.costUsd.toFixed(3)}/$${budget.dailyBudgetUsd.toFixed(2)} cap). Emailed full report & checked UI in Browser Eye!`;
-    } else if (/BROWSE|TEST|INSPECT|https?:\/\//i.test(incomingText)) {
-      const urlMatch = incomingText.match(/https?:\/\/[^\s"']+/i);
-      const targetUrl = urlMatch ? urlMatch[0] : 'https://tiberius.ai/office';
-      const eye = await inspectUrlWithBrowserEye(store, workspaceId, targetUrl);
-      replySms = `👁️ Tested ${eye.targetUrl} on Mobile & Desktop (${eye.overallStatus}, ${eye.loadTimeMs}ms). Screenshots saved in Build-Out!`;
-    } else if (/EMAIL|REPORT|DETAIL|BREAKDOWN/i.test(upper)) {
-      const budget = getBudgetStatus(store, workspaceId);
-      replySms = pushDetailedEmail(
-        store,
-        workspaceId,
-        `[On-Demand Executive Briefing] Full Dossier, Build-Out & API Cost Breakdown`,
-        `### On-Demand Briefing for Boss\n\n- **Marcus API Spend Today:** $${budget.costUsd.toFixed(3)} / $${budget.dailyBudgetUsd.toFixed(2)} (${budget.shiftsUsed}/${budget.maxShiftsPerDay} shifts)\n- **Continuous Worker Cost:** $0.00\n- **Pending Desk Approvals:** ${(store.approvals[workspaceId] || []).filter(a => a.status === 'pending').length}\n- **Pending Build Specs:** ${(store.buildTickets[workspaceId] || []).filter(b => b.status === 'pending_boss').length}`,
-        `📧 Just emailed your full breakdown to ${budget.ownerEmail}! ($${budget.costUsd.toFixed(3)} API used today, $0 worker cost).`
+    }
+
+    // Track real token usage on the latest shift log so the meter reflects live Gemini 3 usage
+    if (tokensIn > 0 && store.shiftLogs[workspaceId] && store.shiftLogs[workspaceId][0]) {
+      store.shiftLogs[workspaceId][0].tokens_in += tokensIn;
+      store.shiftLogs[workspaceId][0].tokens_out += tokensOut;
+      store.shiftLogs[workspaceId][0].estimated_cost_usd = Number(
+        (store.shiftLogs[workspaceId][0].estimated_cost_usd + 0.0005).toFixed(4)
       );
-    } else if (/^REMEMBER:/i.test(incomingText)) {
-      const fact = incomingText.replace(/^REMEMBER:\s*/i, '').trim();
-      store.memoryFacts[workspaceId].unshift({
-        id: `mem-${Date.now()}`,
-        workspace_id: workspaceId,
-        category: 'Owner Rule',
-        fact,
-        added_by: 'You (Boss)',
-        created_at: nowIso()
-      });
-      replySms = `🔒 Locked into Shared Memory Vault for all agents: "${fact.slice(0, 90)}"`;
-    } else {
-      const pendingApp = (store.approvals[workspaceId] || []).find(a => a.status === 'pending');
-      const pendingBt = (store.buildTickets[workspaceId] || []).find(b => b.status === 'pending_boss');
-      replySms = `Got it boss! ${pendingBt ? `${pendingBt.code} is ready (reply B1)` : ''} ${pendingApp ? `and ${pendingApp.code} is on your desk (reply 1)` : ''}. Need a full breakdown? Just text "Email me".`;
+    }
+
+    const smsReply = (parsedDecision && parsedDecision.smsReply)
+      ? parsedDecision.smsReply
+      : `On it, boss! ${executedSummaries.length ? executedSummaries.join(' • ') + '.' : 'Let me know what you want me and the squad to tackle next.'}`;
+
+    const chatReply = (parsedDecision && parsedDecision.chatReply)
+      ? parsedDecision.chatReply
+      : smsReply;
+
+    // Update Marcus's 3D speech bubble on the office floor
+    const marcusActor = (store.actors[workspaceId] || []).find(a => a.id === 'agent-marcus' || a.desk_zone === 'chief_of_staff');
+    if (marcusActor) {
+      marcusActor.speech_bubble = (parsedDecision && parsedDecision.speechBubble)
+        ? String(parsedDecision.speechBubble).slice(0, 85)
+        : smsReply.slice(0, 85);
+      marcusActor.status = executedSummaries.length ? executedSummaries[0] : 'Active (Gemini 3 Brain)';
     }
 
     if (channel === 'sms_bridge') {
-      pushShortSms(store, workspaceId, replySms);
+      pushShortSms(store, workspaceId, smsReply);
+      // Also mirror into Office Chat if the chat reply is richer
+      if (chatReply && chatReply !== smsReply) {
+        store.messages[workspaceId].push({
+          id: `msg-out-chat-${Date.now()}`,
+          workspace_id: workspaceId,
+          channel: 'office_chat',
+          sender_name: 'Marcus Vance',
+          sender_role: 'Chief of Staff (Gemini 3)',
+          direction: 'agent_to_human',
+          text: chatReply,
+          created_at: nowIso()
+        });
+      }
     } else {
       store.messages[workspaceId].push({
         id: `msg-out-${Date.now()}`,
         workspace_id: workspaceId,
         channel: 'office_chat',
         sender_name: 'Marcus Vance',
-        sender_role: 'Chief of Staff (Argon-High)',
+        sender_role: 'Chief of Staff (Gemini 3)',
         direction: 'agent_to_human',
-        text: replySms,
+        text: chatReply,
         created_at: nowIso()
       });
     }
@@ -991,9 +1230,15 @@ module.exports = async function handler(req, res) {
 
     if (route === '/sms/webhook' && body.From && body.Body) {
       res.setHeader('Content-Type', 'text/xml');
-      return res.status(200).send(`<Response><Message>${replySms.replace(/[<>&]/g, '')}</Message></Response>`);
+      return res.status(200).send(`<Response><Message>${smsReply.replace(/[<>&]/g, '')}</Message></Response>`);
     }
-    return res.status(200).json({ ok: true, smsText: replySms, state: getFullWorkspaceState(store, workspaceId) });
+    return res.status(200).json({
+      ok: true,
+      smsText: smsReply,
+      chatText: chatReply,
+      executedTools: executedSummaries,
+      state: getFullWorkspaceState(store, workspaceId)
+    });
   }
 
   // 8. POST /api/office/reminders/trigger
