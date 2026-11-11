@@ -22,7 +22,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
-const STORE_PATH = path.join(os.tmpdir(), 'tiberius-office-space-v1.json');
+const STORE_PATH = path.join(os.tmpdir(), 'tiberius-office-space-v2.json');
 
 function nowIso() {
   return new Date().toISOString();
@@ -69,16 +69,19 @@ function getInitialStore() {
           id: 'human-boss',
           workspace_id: 'tiberius-hq',
           name: 'You (Boss)',
-          handle: '@you',
+          handle: '@boss',
           role: 'Founder & Executive Approver',
           kind: 'human',
-          avatar_color: '#f59e0b',
-          shirt_color: '#d97706',
-          desk_zone: 'executive_suite',
-          x: -5.6,
-          z: -2.2,
-          target_x: -5.6,
-          target_z: -2.2,
+          actor_type: 'human',
+          avatar_color: '#dc2626',
+          shirt_color: '#b91c1c',
+          desk_zone: 'executive_desk',
+          home_x: -6.06,
+          home_z: -2.31,
+          x: -6.06,
+          z: -2.31,
+          target_x: -6.06,
+          target_z: -2.31,
           status: 'Mobile SMS Active',
           current_task: 'Reviewing Executive Desk & Build Specs',
           speech_bubble: 'Text me short updates (<180 chars); email the deep dives!',
@@ -89,15 +92,18 @@ function getInitialStore() {
           workspace_id: 'tiberius-hq',
           name: 'Marcus Vance',
           handle: '@marcus',
-          role: 'Chief of Staff (Argon-High • Shift-Metered)',
+          role: 'Chief of Staff (Gemini 3 • Shift-Metered)',
           kind: 'agent',
-          avatar_color: '#3b82f6',
-          shirt_color: '#2563eb',
+          actor_type: 'agent',
+          avatar_color: '#2563eb',
+          shirt_color: '#1d4ed8',
           desk_zone: 'chief_of_staff',
-          x: -2.2,
-          z: 0.6,
-          target_x: -2.2,
-          target_z: 0.6,
+          home_x: -2.41,
+          home_z: 1.65,
+          x: -3.95,
+          z: -0.98,
+          target_x: -3.95,
+          target_z: -0.98,
           status: 'Between Shifts ($0 Idle)',
           current_task: 'Coordinating Build-Out & $0 Worker Automations',
           speech_bubble: 'Shift #1 complete ($0.012 API). Reply "B1" to approve Build Spec #B-01 or "1" for Desk #101!',
@@ -110,13 +116,16 @@ function getInitialStore() {
           handle: '@scout',
           role: 'Recon & Leak Auditor ($0 Worker)',
           kind: 'agent',
+          actor_type: 'agent',
           avatar_color: '#10b981',
           shirt_color: '#059669',
-          desk_zone: 'bullpen_recon',
-          x: 1.8,
-          z: 1.2,
-          target_x: 1.8,
-          target_z: 1.2,
+          desk_zone: 'bullpen_scout',
+          home_x: 2.39,
+          home_z: 2.05,
+          x: 2.39,
+          z: 2.05,
+          target_x: 2.39,
+          target_z: 2.05,
           status: 'Running $0 Local Audits',
           current_task: 'Filing SOP-01 Conversion Leak Dossiers in Vault',
           speech_bubble: 'Filed 2 simulated prospect audits in the Vault at $0.00 token cost!',
@@ -129,13 +138,16 @@ function getInitialStore() {
           handle: '@chloe',
           role: 'Outreach Copywriter ($0 Worker)',
           kind: 'agent',
-          avatar_color: '#ec4899',
-          shirt_color: '#db2777',
-          desk_zone: 'bullpen_copy',
-          x: 4.4,
-          z: 1.2,
-          target_x: 4.4,
-          target_z: 1.2,
+          actor_type: 'agent',
+          avatar_color: '#8b5cf6',
+          shirt_color: '#7c3aed',
+          desk_zone: 'bullpen_chloe',
+          home_x: 5.19,
+          home_z: 2.05,
+          x: 5.19,
+          z: 2.05,
+          target_x: 5.19,
+          target_z: 2.05,
           status: 'Drafting Simulated Openers',
           current_task: 'Preparing SOP-02 Permission-Based SMS Openers',
           speech_bubble: 'Prepared simulated outreach drafts on your desk — zero external texts sent without approval.',
@@ -148,16 +160,41 @@ function getInitialStore() {
           handle: '@devon',
           role: 'Smart Site Builder & QA ($0 Worker)',
           kind: 'agent',
-          avatar_color: '#8b5cf6',
-          shirt_color: '#7c3aed',
-          desk_zone: 'bullpen_qa',
-          x: 3.1,
-          z: 3.4,
-          target_x: 3.1,
-          target_z: 3.4,
+          actor_type: 'agent',
+          avatar_color: '#0ea5e9',
+          shirt_color: '#0284c7',
+          desk_zone: 'bullpen_devon',
+          home_x: 3.79,
+          home_z: 4.55,
+          x: 3.79,
+          z: 4.55,
+          target_x: 3.79,
+          target_z: 4.55,
           status: '14/14 QA Checks Passed',
           current_task: 'Verifying Mobile Layout & Compliance Gates',
           speech_bubble: 'All mobile & desktop viewport checks green on tiberius.ai/office!',
+          carrying_folder: 0
+        },
+        {
+          id: 'human-sarah',
+          workspace_id: 'tiberius-hq',
+          name: 'Sarah Chen',
+          handle: '@sarah',
+          role: 'Client Success & Brand Ops (Human)',
+          kind: 'human',
+          actor_type: 'human',
+          avatar_color: '#ec4899',
+          shirt_color: '#db2777',
+          desk_zone: 'war_room',
+          home_x: 5.15,
+          home_z: -4.28,
+          x: 5.15,
+          z: -4.28,
+          target_x: 5.15,
+          target_z: -4.28,
+          status: 'Shared Vault Synced',
+          current_task: 'Reviewing Brand Assets in War Room',
+          speech_bubble: 'Updated client brand assets in Vault Drawer #3 — ready for Devon & Chloe!',
           carrying_folder: 0
         }
       ],
@@ -1156,16 +1193,20 @@ Return ONLY valid JSON matching this schema:
         } else if (toolName === 'direct_office_floor') {
           const inHuddle = tc.mode === 'huddle';
           const huddleSpots = [
-            { x: 3.8, z: -3.2 },
-            { x: 5.2, z: -3.2 },
-            { x: 3.8, z: -2.2 },
-            { x: 5.2, z: -2.2 },
-            { x: 4.5, z: -3.8 }
+            { x: 4.1, z: -1.9 },
+            { x: 6.1, z: -1.9 },
+            { x: 3.95, z: -4.35 },
+            { x: 6.35, z: -4.35 },
+            { x: 7.05, z: -3.2 },
+            { x: 5.15, z: -4.28 }
           ];
           (store.actors[workspaceId] || []).forEach((act, idx) => {
             if (inHuddle) {
               act.target_x = huddleSpots[idx % huddleSpots.length].x;
               act.target_z = huddleSpots[idx % huddleSpots.length].z;
+            } else if (typeof act.home_x === 'number') {
+              act.target_x = act.home_x;
+              act.target_z = act.home_z;
             }
           });
         }
@@ -1282,18 +1323,20 @@ Return ONLY valid JSON matching this schema:
   if (req.method === 'POST' && route === '/office/huddle') {
     const inHuddle = body.mode === 'huddle';
     const huddleSpots = [
-      { x: 3.8, z: -3.2 },
-      { x: 5.2, z: -3.2 },
-      { x: 3.8, z: -2.2 },
-      { x: 5.2, z: -2.2 },
-      { x: 4.5, z: -3.8 }
+      { x: 4.1, z: -1.9 },
+      { x: 6.1, z: -1.9 },
+      { x: 3.95, z: -4.35 },
+      { x: 6.35, z: -4.35 },
+      { x: 7.05, z: -3.2 },
+      { x: 5.15, z: -4.28 }
     ];
     const homeSpots = {
-      'human-boss': { x: -5.6, z: -2.2 },
-      'agent-marcus': { x: -2.2, z: 0.6 },
-      'agent-scout': { x: 1.8, z: 1.2 },
-      'agent-chloe': { x: 4.4, z: 1.2 },
-      'agent-devon': { x: 3.1, z: 3.4 }
+      'human-boss': { x: -6.06, z: -2.31 },
+      'agent-marcus': { x: -2.41, z: 1.65 },
+      'agent-scout': { x: 2.39, z: 2.05 },
+      'agent-chloe': { x: 5.19, z: 2.05 },
+      'agent-devon': { x: 3.79, z: 4.55 },
+      'human-sarah': { x: 5.15, z: -4.28 }
     };
     (store.actors[workspaceId] || []).forEach((act, idx) => {
       const target = inHuddle ? (huddleSpots[idx % huddleSpots.length]) : (homeSpots[act.id] || { x: act.x, z: act.z });
