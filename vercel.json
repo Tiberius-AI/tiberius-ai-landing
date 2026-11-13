@@ -46,6 +46,10 @@
       "destination": "/hunter/index.html"
     },
     {
+      "source": "/hunter2",
+      "destination": "/hunter2/index.html"
+    },
+    {
       "source": "/account-scout",
       "destination": "/hunter/index.html"
     },
