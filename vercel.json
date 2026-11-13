@@ -42,6 +42,14 @@
       "destination": "/api/office?route=:route*"
     },
     {
+      "source": "/hunter",
+      "destination": "/hunter/index.html"
+    },
+    {
+      "source": "/account-scout",
+      "destination": "/hunter/index.html"
+    },
+    {
       "source": "/recon",
       "destination": "/recon/index.html"
     },
