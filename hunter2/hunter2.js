@@ -1,9 +1,9 @@
 /* ==========================================================================
    TIBERIUS ROOFER EDITION (HUNTER 2) — INTERACTIVE CLIENT LOGIC
    - Accessible Two-Avatar Tablist (`tabs` guide: focusgroup + hidden="until-found")
-   - Paired 90s Walkthrough Video Stage + Beat Jump Controls
+   - Paired 90s Walkthrough Video Stage + Chapter Jump Controls
    - Interactive "Try It From Your Truck" Proof Station (SMS + Real Audio + Permit Card)
-   - Interactive 2-Slider Roofing Replacement Math ROI Calculator
+   - Interactive 2-Slider 1-Job Math Calculator ($199/mo Recon & $47/mo Smart Site Bundle)
    - Modal `<dialog closedby="any">` + Safari Fallback (`light-dismiss-a-dialog`)
    - Deferred `:user-invalid` + `aria-invalid` Sync (`validate-input-after-interaction`)
    ========================================================================== */
@@ -39,7 +39,7 @@
   }
 
   /* ------------------------------------------------------------------------
-     2. Two Roofer Avatars Accessible Tablist (`⛈️ Storm` vs `🏠 Retail & HOA`)
+     2. Two Roofer Battles Accessible Tablist
      ------------------------------------------------------------------------ */
   const tablist = document.querySelector('[role="tablist"]');
   if (tablist) {
@@ -106,7 +106,7 @@
   }
 
   /* ------------------------------------------------------------------------
-     3. Paired 90-Second Video Walkthrough Stage + Chapter Jumps
+     3. 90-Second Video Walkthrough Stage + Chapter Jumps
      ------------------------------------------------------------------------ */
   const walkthroughVideo = document.getElementById('walkthrough-video');
   const posterBtn = document.getElementById('video-poster-btn');
@@ -118,7 +118,6 @@
       try {
         walkthroughVideo.currentTime = sec;
       } catch {
-        // Metadata still loading; seek once loadedmetadata fires
         walkthroughVideo.addEventListener(
           'loadedmetadata',
           () => {
@@ -152,7 +151,7 @@
   }
 
   /* ------------------------------------------------------------------------
-     4. Section 3A: Live Sub-8-Second SMS Speed-to-Lead Simulator
+     4. Section 3A: Live Missed-Call Text Simulator
      ------------------------------------------------------------------------ */
   const simPhoneInput = document.getElementById('sim-phone-input');
   const simSmsBtn = document.getElementById('sim-sms-btn');
@@ -166,11 +165,11 @@
       simRunning = true;
 
       const rawPhone = (simPhoneInput && simPhoneInput.value.trim()) || '(830) 555-0194';
-      simSmsBtn.textContent = 'Rescuing Call...';
+      simSmsBtn.textContent = 'Sending Reply...';
 
       simThreadEl.innerHTML = `
         <div class="r2-msg r2-msg-missed">
-          ☎ MISSED CALL FROM ${escapeText(rawPhone)} (Owner on 8/12 Roof Pitch)
+          ☎ MISSED CALL FROM ${escapeText(rawPhone)} (Owner Busy on a Ladder)
         </div>
       `;
 
@@ -178,30 +177,30 @@
       const tick = window.setInterval(() => {
         elapsed += 0.6;
         if (simTimerEl) {
-          simTimerEl.textContent = `RESPONSE: ${Math.min(4.2, elapsed).toFixed(1)}s`;
+          simTimerEl.textContent = `REPLIED IN: ${Math.min(4.2, elapsed).toFixed(1)}s`;
         }
         if (elapsed >= 4.2) {
           window.clearInterval(tick);
           const aiBubble = document.createElement('div');
           aiBubble.className = 'r2-msg r2-msg-ai';
           aiBubble.textContent =
-            'Apex Roofing here — sorry we missed you while our crew is up on a steep tear-off! Is this an active roof leak, storm/hail damage, or a replacement quote? Text your street address & we can roll a truck.';
+            'Apex Roofing here — sorry we missed your call while we are on a job! Do you have an active roof leak or need a free quote? Text your address and we can swing by.';
           simThreadEl.appendChild(aiBubble);
 
           window.setTimeout(() => {
             const replyBubble = document.createElement('div');
             replyBubble.className = 'r2-msg r2-msg-homeowner';
             replyBubble.textContent =
-              '412 Oak Creek Dr — pipe boot drip in master bath after Tuesday’s hail cell. 18-yr shingles. Tomorrow AM open?';
+              '412 Oak Creek Drive — water spot on our bedroom ceiling after Tuesday’s storm. Tomorrow morning open?';
             simThreadEl.appendChild(replyBubble);
 
             const crmBadge = document.createElement('div');
             crmBadge.className = 'r2-crm-sync-tag';
             crmBadge.textContent =
-              '✓ Saved $16,400 RCV Job • Synced to JobNimbus & Texted to Owner F-250';
+              '✓ Saved $14,500 Roof Job • Texted Straight to Your Phone';
             simThreadEl.appendChild(crmBadge);
 
-            simSmsBtn.textContent = '✓ Rescued in 4.2s (Run Again)';
+            simSmsBtn.textContent = '✓ Saved in 4 Seconds (Test Again)';
             simRunning = false;
           }, 550);
         }
@@ -262,54 +261,54 @@
       if (audioTranscript) {
         if (cur < 6.5) {
           audioTranscript.textContent =
-            '“Thanks for calling Apex Roofing. Our crews are up on an 8/12 pitch right now, so let’s get your roof taken care of fast...”';
+            '“Thanks for calling Apex Roofing. Our crew is out on a job right now, so let’s help you fast.”';
         } else if (cur < 14.5) {
           audioTranscript.textContent =
-            '“I pulled up 412 Oak Creek Drive — is this an active ceiling leak or hail damage from Tuesday’s storm cell?”';
+            '“I see 412 Oak Creek Drive. Do you have an active roof leak or need a replacement quote?”';
         } else {
           audioTranscript.textContent =
-            '“Got it, active pipe-boot drip on an 18-year architectural shingle roof. Locked into tomorrow’s 8:30 AM ladder inspection!”';
+            '“Got it — active roof leak on an 18-year-old home. You are booked for tomorrow at 8:30 AM!”';
         }
       }
     });
   }
 
   /* ------------------------------------------------------------------------
-     6. Section 3C: Live County Permit & Aging Roof Recon Card Switcher
+     6. Section 3C: Live County Permit & Owner Card Switcher
      ------------------------------------------------------------------------ */
   const PERMIT_RECORDS = [
     {
-      id: 'CAD PARCEL #4419-B',
-      val: '684 Sqs • $168K Est',
-      title: 'Oakridge Medical Plaza — 68,400 SF Flat TPO',
-      zip: 'ZIP 78130 • Built 2008',
-      contact: 'Dana Alvarez, CPM (11 Plazas)',
-      signal: 'Zero Re-Roof Permits in 18 Yrs',
-      scope: 'Annual Leak PMA + TPO Recover',
+      id: 'COUNTY RECORD #4419-B',
+      val: '$168,000 Est Job',
+      title: 'Oakridge Medical Plaza — Commercial Office Building',
+      zip: 'ZIP 78130 • 18 Yrs Old',
+      contact: 'Dana Alvarez • Manager',
+      signal: 'No Roof Permit in 18 Yrs',
+      scope: 'Full Commercial Roof Quote',
       opener:
-        '1-Tap Walk SMS: “Morning Dana — crew is 5 mins off Oakridge Thu; want 6 free scupper, parapet & pitch-pan photos for your Q2 owner file?”',
+        '1-Tap Text: “Morning Dana — our crew is near Oakridge Thursday. Want six free roof inspection photos for your owner report?”',
     },
     {
       id: 'PERMIT #BLD-2026-8841',
-      val: '$38,400 Valuation',
-      title: '412 Oak Creek Dr — 44-Sq Steep-Slope + Patio Tie-In',
-      zip: 'ZIP 78132 • 10/12 Pitch',
-      contact: 'R. & M. Henderson (Homeowner)',
-      signal: 'Structural Tie-In + 19-Yr Shingles',
-      scope: 'Class 4 Impact Architectural Tear-Off',
+      val: '$38,400 Permit Value',
+      title: '412 Oak Creek Dr — Large Home Addition',
+      zip: 'ZIP 78132 • Filed Yesterday',
+      contact: 'Robert Henderson • Homeowner',
+      signal: 'New Addition + 19-Yr Roof',
+      scope: 'Full Roof Replacement Quote',
       opener:
-        '1-Tap Alert: Structural rear addition filed yesterday with no roofing sub named on permit — 19-year GAF Timberline tie-in window.',
+        '1-Tap Text: “Hi Robert — saw your new addition permit on Oak Creek Drive. Want a fast quote to match the main roof?”',
     },
     {
-      id: 'HOA CERT #88412-TX',
-      val: '214 Doors • $380K Est',
-      title: 'Creekside Villas HOA — 26 Townhome Buildings',
+      id: 'COUNTY RECORD #88412',
+      val: '$380,000 Est Job',
+      title: 'Creekside Townhomes — 26 Buildings',
       zip: 'ZIP 78130 • 17-Yr Roofs',
-      contact: 'Marcus Vance, CMCA (9 HOAs)',
-      signal: 'New CAM Assigned 19 Days Ago',
-      scope: '$24K/yr Gutter/Valley PMA + Phase-1',
+      contact: 'Marcus Vance • Property Manager',
+      signal: 'New Manager Hired 19 Days Ago',
+      scope: 'Multi-Building Roof Quote',
       opener:
-        '1-Tap Walk SMS: “Hey Marcus — saw Sterling took over Creekside Villas (214 roofs). Want a free 1-page valley & granule-loss map before board packet?”',
+        '1-Tap Text: “Hey Marcus — saw your team took over Creekside Townhomes. Want a free roof photo report before your board meeting?”',
     },
   ];
 
@@ -335,7 +334,7 @@
   }
 
   /* ------------------------------------------------------------------------
-     7. Section 4: Interactive "1 Roof Pays for 3 Years" Replacement Math ROI
+     7. Section 4: Interactive "1 Job Pays for Years" Calculator
      ------------------------------------------------------------------------ */
   const ticketSlider = document.getElementById('ticket-slider');
   const missedSlider = document.getElementById('missed-slider');
@@ -347,18 +346,17 @@
   const stackMonthsOutput = document.getElementById('stack-months-output');
   const roiPunchline = document.getElementById('roi-punchline');
 
-  const SCOUT_MONTHLY = 197;
-  const FULL_STACK_MONTHLY = 297 + 197; // $494/mo ($297 Own-It Smart Site + $197 Account Scout)
+  const RECON_MONTHLY = 199;
+  const FULL_STACK_MONTHLY = 297 + 47; // $344/mo ($297 Own-It Smart Site + $47 Recon Bundle)
 
   const updateRoiCalculator = () => {
     if (!ticketSlider || !missedSlider) return;
     const ticket = Number(ticketSlider.value) || 14500;
     const missed = Number(missedSlider.value) || 6;
 
-    // Conservative 33.3% (1-in-3) close rate on warm roof calls & quotes sitting in truck
     const monthlyLeak = Math.round((ticket * missed) / 3);
     const annualLeak = monthlyLeak * 12;
-    const scoutMonths = Math.floor(ticket / SCOUT_MONTHLY);
+    const scoutMonths = Math.floor(ticket / RECON_MONTHLY);
     const stackMonths = Math.floor(ticket / FULL_STACK_MONTHLY);
 
     const fmtUsd = (n) => `$${n.toLocaleString('en-US')}`;
@@ -366,13 +364,13 @@
     if (ticketOutput) ticketOutput.textContent = fmtUsd(ticket);
     if (missedOutput) missedOutput.textContent = `${missed} calls / quotes`;
     if (monthlyLeakOutput) monthlyLeakOutput.textContent = `${fmtUsd(monthlyLeak)}/mo`;
-    if (annualLeakOutput) annualLeakOutput.textContent = `${fmtUsd(annualLeak)}/yr leaking to competitors`;
+    if (annualLeakOutput) annualLeakOutput.textContent = `${fmtUsd(annualLeak)}/yr going to other roofers`;
     if (scoutMonthsOutput) scoutMonthsOutput.textContent = `${scoutMonths} Mos`;
     if (stackMonthsOutput) stackMonthsOutput.textContent = `${stackMonths} Mos`;
 
     if (roiPunchline) {
       roiPunchline.textContent =
-        `Catching just ONE extra ${fmtUsd(ticket)} tear-off this year covers your $297/mo Own-It Smart Site + $197/mo Account Scout Radar for the next ${stackMonths} months (or ${scoutMonths} months of standalone Account Scout).`;
+        `One ${fmtUsd(ticket)} roof job pays for $199/mo Recon for ${scoutMonths} months. Or it covers your $297 Smart Site + $47 Recon bundle for ${stackMonths} months.`;
     }
   };
 
@@ -404,7 +402,6 @@
     });
   }
 
-  // Polite live region for screen-reader error announcements (`validate-input-after-interaction`)
   const announcer = document.createElement('div');
   announcer.setAttribute('aria-live', 'polite');
   announcer.classList.add('visually-hidden');
@@ -523,26 +520,26 @@
       const data = new FormData(claimForm);
       const zip = String(data.get('zip') || '').trim();
       const company = String(data.get('company_name') || '').trim();
-      const stack = String(data.get('selected_stack') || 'account_scout_197');
+      const stack = String(data.get('selected_stack') || 'recon_199');
       const stackLabel =
-        stack === 'full_stack_494'
-          ? 'Own-It Smart Site ($297) + Account Scout ($197)'
+        stack === 'full_stack_344'
+          ? 'Own-It Smart Site ($297) + Recon Bundle ($47/mo)'
           : stack === 'smart_site_297'
-          ? 'Own-It Roofing Smart Site ($297/mo • $200/mo Equity)'
-          : 'Account Scout Roofer Charter ($197/mo • 7-Day $0 Test Drive)';
+          ? 'Own-It Roofing Smart Site ($297/mo)'
+          : 'Recon Permit Radar ($199/mo • 7-Day $0 Trial)';
 
       if (claimSubmitBtn) {
         claimSubmitBtn.disabled = true;
-        claimSubmitBtn.textContent = 'VERIFYING ZIP EXCLUSIVITY...';
+        claimSubmitBtn.textContent = 'CHECKING ZIP SLOT...';
       }
 
       window.setTimeout(() => {
         if (claimStatus) {
           claimStatus.textContent =
-            `✓ ZIP ${zip} verified open for ${company} (${stackLabel}). $0.00 charged today — your Monday 6:45 AM roof drop & live SMS number setup link are queued.`;
+            `✓ Zip ${zip} is open for ${company} (${stackLabel}). $0 charged today — your 7:00 AM permit list is ready.`;
         }
         if (claimSubmitBtn) {
-          claimSubmitBtn.textContent = '✓ ROOFING TERRITORY RESERVED ($0 TODAY)';
+          claimSubmitBtn.textContent = '✓ ZIP SLOT RESERVED ($0 TODAY)';
         }
       }, 320);
     });

@@ -164,6 +164,13 @@ h3 {
   text-transform: uppercase;
   letter-spacing: 0.015em;
   margin: 0;
+  text-wrap: balance;
+}
+
+main p,
+main li,
+main blockquote {
+  text-wrap: pretty;
 }
 
 /* Local Split-Test Switcher Bar (Workspace copy only) */

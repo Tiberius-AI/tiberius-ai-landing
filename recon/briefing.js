@@ -223,16 +223,38 @@
       b.territoryZip === '78132' ||
       /new braunfels/i.test(String(b.metroCity || ''));
 
+    const cleanZipForStripe = (String(b.territoryZip || '78130').match(/\b\d{5}\b/) || ['78130'])[0];
+    const cleanTradeForStripe =
+      String(b.tradeName || 'Commercial_Concrete')
+        .replace(/[^A-Za-z0-9]+/g, '_')
+        .replace(/^_+|_+$/g, '')
+        .slice(0, 40) || 'Commercial_Concrete';
+    const stripeRefId = `${cleanZipForStripe}_${cleanTradeForStripe}`;
+    document.querySelectorAll('a[data-stripe-base]').forEach((link) => {
+      const base = link.getAttribute('data-stripe-base');
+      if (base) {
+        link.href = `${base}?client_reference_id=${encodeURIComponent(stripeRefId)}`;
+      }
+    });
+    const bt1Label = document.getElementById('briefing-tier-1-checkout-label');
+    const bt2Label = document.getElementById('briefing-tier-2-checkout-label');
+    const bt3Label = document.getElementById('briefing-tier-3-checkout-label');
+    if (bt1Label) bt1Label.textContent = `Start $199/Mo Trial in ${cleanZipForStripe} →`;
+    if (bt2Label) bt2Label.textContent = `Lock Zip ${cleanZipForStripe} — 7-Day Free Trial →`;
+    if (bt3Label) bt3Label.textContent = `Exclusive Lock ${cleanZipForStripe} — Free Trial →`;
+
     if (navTerritoryPill) {
       navTerritoryPill.textContent = isNewBraunfelsCorridor
-        ? `78130 / 78132 (New Braunfels) • ${b.tradeName}`
-        : `${b.territoryZip} (${b.metroCity || 'Local Metro'}) • ${b.tradeName}`;
+        ? '78130 / 78132 (New Braunfels) • LIVE'
+        : `${b.territoryZip} (${b.metroCity || 'Local Area'}) • LIVE`;
     }
     if (briefingTierBadge) {
-      briefingTierBadge.textContent = (b.tierLevel || 'TIER 2: COMMERCIAL PERMITS').toUpperCase();
+      briefingTierBadge.textContent = 'LOCAL PERMIT RADAR • $199/MO';
     }
     if (briefingExclusivityBadge && state.availability) {
-      briefingExclusivityBadge.textContent = state.availability.statusBadge;
+      briefingExclusivityBadge.textContent = state.availability.isAvailable
+        ? '✓ ZIP SLOT OPEN'
+        : '🔒 ZIP SOLD OUT';
     }
     const demoBadgeEl = document.getElementById('briefing-demo-badge');
     if (demoBadgeEl) {
@@ -247,23 +269,21 @@
       const zipLabel = isNewBraunfelsCorridor ? '78130 / 78132' : b.territoryZip;
       const isSampleDemo = !c.isRealClient || isDemoPreview || b.magicToken === 'demo-7am-briefing';
       if (state.isHistoricalView && b.viewingDate) {
-        briefingMainTitle.textContent = `Archived Briefing (${b.viewingDate}): ${unlockedCards.length} ${b.tradeName} Opportunities in ${zipLabel}.`;
+        briefingMainTitle.textContent = `Saved List (${b.viewingDate}): ${unlockedCards.length} Local Jobs in ${zipLabel}.`;
       } else if (isSampleDemo) {
-        briefingMainTitle.textContent = `Example Recon Briefing: ${unlockedCards.length} Sample ${b.tradeName} Opportunities in ${zipLabel}.`;
+        briefingMainTitle.textContent = `Sample 7:00 AM List: ${unlockedCards.length} Local Permits in ${zipLabel}.`;
       } else {
-        briefingMainTitle.textContent = `07:00 AM Briefing: ${unlockedCards.length} Researched ${b.tradeName} Opportunities in ${zipLabel}.`;
+        briefingMainTitle.textContent = `7:00 AM List: ${unlockedCards.length} New Local Jobs in ${zipLabel}.`;
       }
     }
     if (briefingSubtitle) {
-      const isSampleDemo = !c.isRealClient || isDemoPreview || b.magicToken === 'demo-7am-briefing';
-      briefingSubtitle.textContent = isSampleDemo
-        ? `Illustrative Demo Briefing showing how Recon organizes municipal permits (${b.portalName || 'Municipal Portals'}) & property records (${b.countyCad || 'County Appraisal District'}). Nothing sends without your approval.`
-        : `Researched from ${b.portalName || 'Municipal Portals'} & cross-referenced against ${b.countyCad || 'County Appraisal District Tax Rolls'}. Nothing sends without your approval.`;
+      briefingSubtitle.textContent =
+        'Pulled overnight from local permit offices and county property records. Reach owners first—nothing sends without your tap.';
     }
     if (briefingApprovedCounter) {
       briefingApprovedCounter.textContent = state.isHistoricalView
-        ? `Deals Approved (${b.viewingDate || 'Archive'}): ${approvedCount}/${unlockedCards.length}`
-        : `Deals Approved This Morning: ${approvedCount}/${unlockedCards.length}`;
+        ? `Jobs Approved (${b.viewingDate || 'Saved'}): ${approvedCount}/${unlockedCards.length}`
+        : `Jobs Approved Today: ${approvedCount}/${unlockedCards.length}`;
     }
 
     if (calibratorTradeSelect && b.tradeName) {
@@ -389,14 +409,14 @@
     if (!Array.isArray(unlockedCards) || unlockedCards.length === 0) {
       briefingCardsGrid.innerHTML = `
         <div class="col-span-full bg-white border border-slate-200 rounded-2xl p-8 text-center">
-          <div class="font-mono-telemetry text-xs text-slate-500 font-bold mb-2">🛰️ SCRAPING NEW UNSEEN MUNICIPAL PERMITS...</div>
-          <p class="text-sm text-slate-600 mb-4">All prior batch cards have been processed in your deduplication ledger. Pulling fresh unseen permits from municipal portals now.</p>
+          <div class="font-mono-telemetry text-xs text-slate-500 font-bold mb-2">🛰️ PULLING NEW LOCAL BUILDING PERMITS...</div>
+          <p class="text-sm text-slate-600 mb-4">Checking local permit offices now for fresh high-dollar jobs in your zip code.</p>
           <button
             type="button"
             id="empty-queue-scrape-now-btn"
             class="btn-trust-emerald px-4 py-2 rounded-xl text-xs font-mono-telemetry font-bold cursor-pointer"
           >
-            🛰️ Scrape Fresh Live Permits Now
+            🛰️ Pull Fresh Live Permits Now
           </button>
         </div>
       `;
@@ -529,42 +549,80 @@
               </div>
             </div>
 
-            <!-- 1-Tap Approve & Send + Native Handoff Buttons -->
+            <!-- Client-Owned Email + Personal Phone SMS Dispatch Buttons -->
             <div class="pt-3 border-t border-slate-200 space-y-2">
-              <button
-                type="button"
-                data-action="approve-send"
-                data-channel="CLOUD_DISPATCH"
-                data-card-id="${card.id}"
-                class="btn-trust-emerald w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-center cursor-pointer"
-              >
-                [ ✓ Approve &amp; Send ]
-              </button>
+              ${
+                state.contractor &&
+                state.contractor.clientEmailConfig &&
+                state.contractor.clientEmailConfig.isSmtpReady
+                  ? `
+                    <button
+                      type="button"
+                      data-action="approve-send"
+                      data-channel="CLIENT_EMAIL"
+                      data-card-id="${card.id}"
+                      class="btn-trust-emerald w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-bold text-center cursor-pointer"
+                    >
+                      ⚡ Approve &amp; 1-Tap Send (My Shop Email)
+                    </button>
+                    <button
+                      type="button"
+                      data-action="approve-send"
+                      data-channel="NATIVE_SMS"
+                      data-card-id="${card.id}"
+                      class="btn-outline-slate w-full py-2.5 px-3 rounded-xl text-xs font-bold text-center cursor-pointer"
+                    >
+                      📱 Approve &amp; Text from My Phone
+                    </button>
+                  `
+                  : `
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        data-action="approve-send"
+                        data-channel="CLIENT_EMAIL"
+                        data-card-id="${card.id}"
+                        class="btn-trust-emerald py-2.5 px-3 rounded-xl text-xs font-bold text-center cursor-pointer"
+                      >
+                        ✉️ Send from My Email
+                      </button>
+                      <button
+                        type="button"
+                        data-action="approve-send"
+                        data-channel="NATIVE_SMS"
+                        data-card-id="${card.id}"
+                        class="btn-outline-slate py-2.5 px-3 rounded-xl text-xs font-bold text-center cursor-pointer"
+                      >
+                        📱 Text from My Phone
+                      </button>
+                    </div>
+                  `
+              }
 
               <div class="grid grid-cols-3 gap-1.5">
-                <a
-                  href="${smsHref}"
-                  data-action="native-handoff"
-                  data-channel="NATIVE_SMS"
+                <button
+                  type="button"
+                  data-action="approve-send"
+                  data-channel="GMAIL_WEB"
                   data-card-id="${card.id}"
-                  class="btn-outline-slate py-2 px-2 rounded-lg text-[11px] font-bold text-center inline-flex items-center justify-center gap-1"
+                  class="btn-outline-slate py-1.5 px-2 rounded-lg text-[11px] font-bold text-center inline-flex items-center justify-center gap-1 cursor-pointer"
                 >
-                  <span>📱 Text</span>
-                </a>
-                <a
-                  href="${mailtoHref}"
-                  data-action="native-handoff"
-                  data-channel="NATIVE_EMAIL"
+                  <span>📨 Gmail</span>
+                </button>
+                <button
+                  type="button"
+                  data-action="approve-send"
+                  data-channel="OUTLOOK_WEB"
                   data-card-id="${card.id}"
-                  class="btn-outline-slate py-2 px-2 rounded-lg text-[11px] font-bold text-center inline-flex items-center justify-center gap-1"
+                  class="btn-outline-slate py-1.5 px-2 rounded-lg text-[11px] font-bold text-center inline-flex items-center justify-center gap-1 cursor-pointer"
                 >
-                  <span>✉️ Mail</span>
-                </a>
+                  <span>📨 Outlook</span>
+                </button>
                 <button
                   type="button"
                   data-action="copy-intro"
                   data-card-id="${card.id}"
-                  class="btn-outline-slate py-2 px-2 rounded-lg text-[11px] font-bold text-center inline-flex items-center justify-center gap-1 cursor-pointer"
+                  class="btn-outline-slate py-1.5 px-2 rounded-lg text-[11px] font-bold text-center inline-flex items-center justify-center gap-1 cursor-pointer"
                 >
                   <span>📋 Copy</span>
                 </button>
@@ -587,7 +645,7 @@
 
     briefingLockedVault.classList.remove('hidden');
     if (lockedVaultHeading) {
-      lockedVaultHeading.textContent = `${lockedCards.length} Additional Recon Opportunities in ${briefing.territoryZip} (Illustrative Demo Preview — 3 Sample Cards Shown)`;
+      lockedVaultHeading.textContent = `${lockedCards.length} More High-Dollar Local Jobs Waiting in ${briefing.territoryZip}`;
     }
 
     lockedOverflowGrid.innerHTML = lockedCards
@@ -744,7 +802,7 @@
     if (sentCards.length === 0) {
       sentLogsContainer.innerHTML = `
         <p class="text-xs font-mono-telemetry text-slate-500">
-          No cards dispatched yet this morning. Tap [ ✓ Approve &amp; Send ] on any card above to log and dispatch your 4-sentence intro.
+          Nothing sent yet today. Tap Send on any permit card above to reach the property owner first.
         </p>
       `;
       return;
@@ -866,6 +924,24 @@
         state.isHistoricalView = Boolean(data.briefing.isHistoricalView);
         state.editingCardId = null;
         renderAll();
+
+        const dr = data.dispatchReceipt;
+        if (payload.action === 'approve-send' && dr) {
+          const ch = String(payload.dispatchChannel || 'CLIENT_EMAIL').toUpperCase();
+          if (ch.includes('SMS') && dr.nativeSimUri) {
+            window.location.href = dr.nativeSimUri;
+          } else if (dr.handoffRequired) {
+            if (ch === 'GMAIL_WEB' && dr.gmailWebUri) {
+              window.open(dr.gmailWebUri, '_blank', 'noopener');
+            } else if (ch === 'OUTLOOK_WEB' && dr.outlookWebUri) {
+              window.open(dr.outlookWebUri, '_blank', 'noopener');
+            } else if (dr.preferredComposeUri && dr.preferredComposeUri.startsWith('https://')) {
+              window.open(dr.preferredComposeUri, '_blank', 'noopener');
+            } else if (dr.mailtoUri) {
+              window.location.href = dr.mailtoUri;
+            }
+          }
+        }
       }
     } catch (_err) {
       // Optimistic UI fallback if offline
@@ -873,7 +949,7 @@
         const card = state.briefing.cards.find((c) => c.id === payload.cardId);
         if (card && payload.action === 'approve-send') {
           card.approvalStatus = 'sent';
-          card.dispatchChannel = payload.dispatchChannel || 'CLOUD_DISPATCH';
+          card.dispatchChannel = payload.dispatchChannel || 'CLIENT_EMAIL';
           card.approvedTimeLabel = '07:01:18 AM';
         } else if (card && payload.action === 'reset-card') {
           card.approvalStatus = 'ready';
@@ -917,7 +993,7 @@
       if (action === 'approve-send') {
         const editorEl = document.getElementById(`draft-editor-${cardId}`);
         const updatedText = editorEl ? editorEl.value : undefined;
-        const channel = target.getAttribute('data-channel') || 'CLOUD_DISPATCH';
+        const channel = target.getAttribute('data-channel') || 'CLIENT_EMAIL';
         sendCardAction({
           action: 'approve-send',
           cardId,
@@ -928,10 +1004,13 @@
       }
 
       if (action === 'native-handoff') {
+        const editorEl = document.getElementById(`draft-editor-${cardId}`);
+        const updatedText = editorEl ? editorEl.value : undefined;
         const channel = target.getAttribute('data-channel') || 'NATIVE_SMS';
         sendCardAction({
           action: 'approve-send',
           cardId,
+          updatedDraftBody: updatedText,
           dispatchChannel: channel
         });
         return;
@@ -1012,7 +1091,7 @@
     const territoryZip = calibratorZipInput ? calibratorZipInput.value.trim() : '78130';
     const landmarkReference = calibratorLandmarkInput ? calibratorLandmarkInput.value.trim() : '';
 
-    if (calibratorApplyBtn) calibratorApplyBtn.textContent = 'Calibrating...';
+    if (calibratorApplyBtn) calibratorApplyBtn.textContent = 'Updating...';
     try {
       const resp = await fetch('/api/recon/briefing', {
         method: 'POST',
@@ -1044,7 +1123,7 @@
     } catch (_err) {
       // Ignore
     } finally {
-      if (calibratorApplyBtn) calibratorApplyBtn.textContent = 'Recalibrate Cards →';
+      if (calibratorApplyBtn) calibratorApplyBtn.textContent = 'Update List →';
     }
   }
 
@@ -1074,7 +1153,7 @@
     runNightSweepBtn.addEventListener('click', async () => {
       const zipCode = calibratorZipInput ? calibratorZipInput.value.trim() : '78130';
       const primaryTrade = calibratorTradeSelect ? calibratorTradeSelect.value : 'Commercial Concrete';
-      runNightSweepBtn.textContent = 'Running 2:00 AM Sweep...';
+      runNightSweepBtn.textContent = 'Checking Permits...';
       try {
         const resp = await fetch('/api/recon/cron-morning', {
           method: 'POST',
@@ -1101,15 +1180,14 @@
           if (nightSweepBanner && nightSweepText) {
             const scanned = data.stages.stage1_0200am_portalRecon.totalRowsScanned;
             const matches = data.stages.stage2_0430am_cadXRayAndContacts.parcelsVerified;
-            const batchTag = data.batchLabel ? ` • ROTATED TO ${data.batchLabel.toUpperCase()}` : '';
-            nightSweepText.textContent = `✓ 02:00 AM SWEEP COMPLETE FOR ${zipCode}: ${scanned} PORTAL ROWS SCANNED • ${matches} CAD TAX ROLL PARCELS VERIFIED${batchTag}`;
+            nightSweepText.textContent = `✓ NIGHT CHECK COMPLETE IN ${zipCode}: ${scanned} PERMITS CHECKED • ${matches} OWNER RECORDS MATCHED`;
             nightSweepBanner.classList.remove('hidden');
           }
         }
       } catch (_err) {
         // Ignore
       } finally {
-        runNightSweepBtn.textContent = '⚡ Re-Run 2:00 AM Sweep';
+        runNightSweepBtn.textContent = '⚡ Refresh Night Check';
       }
     });
   }
@@ -1124,7 +1202,7 @@
         ? calibratorLandmarkInput.value.trim()
         : '';
 
-      liveZeroApiBtn.textContent = '🛰️ Crawling Live Permits & Websites...';
+      liveZeroApiBtn.textContent = '🛰️ Pulling Live Permits...';
       try {
         const resp = await fetch('/api/recon/live-agent', {
           method: 'POST',
@@ -1143,7 +1221,7 @@
           if (Array.isArray(state.briefing.cards)) {
             state.briefing.cards.forEach((c, idx) => {
               c.isLockedOverflow = false;
-              c.unlockedBadge = `LIVE SCRAPED #${idx + 1}`;
+              c.unlockedBadge = `LIVE PERMIT #${idx + 1}`;
             });
           }
           if (data.historyDates) state.historyDates = data.historyDates;
@@ -1154,19 +1232,51 @@
           state.isHistoricalView = false;
           renderAll();
           if (nightSweepBanner && nightSweepText) {
-            nightSweepText.textContent = `🛰️ ZERO-API LIVE AGENT COMPLETE (${data.elapsedSeconds}s): PULLED ${data.distinctPermitsEnriched || data.cards?.length || 9} UNLOCKED PERMITS IN ${territoryZip} + CRAWLED LIVE CONTRACTOR WEBSITES & EMAILS`;
+            nightSweepText.textContent = `🛰️ LIVE PERMIT PULL COMPLETE: ${data.distinctPermitsEnriched || data.cards?.length || 9} NEW LOCAL JOBS LOADED IN ${territoryZip}`;
             nightSweepBanner.classList.remove('hidden');
           }
         }
       } catch (_err) {
         // Ignore
       } finally {
-        liveZeroApiBtn.textContent = '🛰️ Pull Real Live Permits (Zero-API Agent)';
+        liveZeroApiBtn.textContent = '🛰️ Pull Fresh Live Permits';
       }
     });
   }
 
+  function emitProspectPreviewRadarBeacon(eventType = 'PREVIEW_BRIEFING_OPENED', cardId = '') {
+    try {
+      if (!activeToken || !String(activeToken).startsWith('preview-')) return;
+      if (urlParams.get('viewer') === 'admin') return;
+      fetch('/api/recon/meta-outreach', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'track_preview_event',
+          token: activeToken,
+          eventType,
+          cardId: cardId || undefined
+        })
+      }).catch(() => {});
+    } catch (_e) {
+      // Non-blocking radar beacon
+    }
+  }
+
+  if (briefingCardsGrid) {
+    briefingCardsGrid.addEventListener(
+      'toggle',
+      (ev) => {
+        if (ev.target && ev.target.tagName === 'DETAILS' && ev.target.open) {
+          emitProspectPreviewRadarBeacon('PREVIEW_CAD_XRAY_CLICKED');
+        }
+      },
+      true
+    );
+  }
+
   loadBriefing();
+  emitProspectPreviewRadarBeacon('PREVIEW_BRIEFING_OPENED');
 
   /* ==========================================================================
      21ST.DEV ("G3") WEBGL1 'SILK' SHADER & PIXEL-GRID FOOTER ENGINE

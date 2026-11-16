@@ -70,6 +70,10 @@
       "destination": "/recon/briefing.html"
     },
     {
+      "source": "/recon/watch",
+      "destination": "/recon/watch.html"
+    },
+    {
       "source": "/recon/command",
       "destination": "/recon/command.html"
     },
