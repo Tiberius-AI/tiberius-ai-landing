@@ -221,7 +221,7 @@ const VSL_CHAPTERS = [
     tag: 'CHAPTER 1 • 0:00 • SMART SITE + INSTANT SMS',
     heading: '1. Custom AI Smart Site + 3-Second Text Follow-Up',
     desc: 'Instead of a brochure website where 92% of visitors leave without calling, your Smart Site starts a live text conversation within 3 seconds, collects job photos, and books qualified estimates automatically.',
-    image: 'demos/remodel-1.webp',
+    image: '/demos/remodel-1.webp',
     bullets: [
       '✓ Custom-built for your business to pre-screen leads and showcase your best work',
       '✓ Starts an instant 3-second text conversation to capture name, phone & project details',
@@ -235,7 +235,7 @@ const VSL_CHAPTERS = [
     tag: 'CHAPTER 2 • 1:18 • 5-STAR GOOGLE REVIEW ENGINE',
     heading: '2. Automated 5-Star Google Review Engine',
     desc: 'Every happy customer receives a polite, conversational text right after their job or visit with a direct 1-tap Google review link, while your site highlights your best 5-star reviews upfront.',
-    image: 'demos/local-cafe.webp',
+    image: '/demos/local-cafe.webp',
     bullets: [
       '✓ 1-Tap SMS review invites sent automatically after completed jobs or visits',
       '✓ Private feedback routing alerts you directly if a customer ever has an issue',
@@ -249,7 +249,7 @@ const VSL_CHAPTERS = [
     tag: 'CHAPTER 3 • 2:34 • MISSED-CALL AI TEXT RESCUE',
     heading: '3. 3-Second Missed-Call AI Text Rescue (Never Lose a Lead)',
     desc: 'When you are on a roof, with a client, or busy at the counter and miss a phone call, our AI immediately texts the caller back within 3 seconds, answers their questions, and books them onto your calendar.',
-    image: 'demos/remodel-2.webp',
+    image: '/demos/remodel-2.webp',
     bullets: [
       '✓ Instant SMS text-back within 3 seconds of any missed phone call',
       '✓ Trained on your exact services, ballpark price ranges & service area',
@@ -263,7 +263,7 @@ const VSL_CHAPTERS = [
     tag: 'CHAPTER 4 • 3:45 • TWO SIMPLE WAYS TO OWN',
     heading: '4. 12-Month Rent-to-Own ($297/mo) or Buy It Outright ($2,400)',
     desc: 'Most agencies charge $5,000+ upfront or hold your website hostage forever. With Tiberius Smart Sites, every dollar goes toward ownership: pay monthly for 12 months with Rent-to-Own ($297/mo) or buy it outright from Day 1 ($2,400).',
-    image: 'demos/pro-services.webp',
+    image: '/demos/pro-services.webp',
     bullets: [
       '✓ $297/mo 12-Month Rent-to-Own: $0 setup fee, then you own your website outright after 12 months',
       '✓ $2,400 Buy It Outright: You own your website from Day 1 with zero monthly lease payments',
@@ -860,7 +860,7 @@ function initModalHandlers() {
       }
 
       closeLeadModal();
-      window.location.href = `watch.html?${watchParams.toString()}`;
+      window.location.href = `/watch.html?${watchParams.toString()}`;
     });
   }
 }
@@ -958,7 +958,7 @@ function renderDemoShowcase(filterKey = 'all') {
             </div>
             <div class="macbook-screen-viewport">
               <img
-                src="${site.image.replace(/^\//, '')}"
+                src="${site.image}"
                 alt="${site.title} Full-Page Preview"
                 class="macbook-pan-img"
                 loading="eager"
@@ -1063,7 +1063,7 @@ function openLightbox(demoId) {
   if (badge) badge.textContent = site.categoryLabel.toUpperCase();
   if (title) title.textContent = site.title;
   if (fullImg) {
-    fullImg.src = site.image.replace(/^\//, '');
+    fullImg.src = site.image;
     fullImg.alt = `${site.title} Full Preview`;
   }
   if (highlights) {
@@ -1282,7 +1282,7 @@ function initStep2Controls() {
   const previewToggle = document.getElementById('preview-step-2-toggle');
   if (previewToggle) {
     previewToggle.addEventListener('click', () => {
-      window.location.href = 'watch.html';
+      window.location.href = '/watch.html';
     });
   }
 

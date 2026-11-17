@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>15-Minute Client Handoff &amp; 1-Click Cloud Browser Portal | Tiberius AI Employee™</title>
+  <meta name="description" content="Complete your 15-minute live handoff in 3 simple steps: sign into your Google account on your AI employee's private computer in the cloud, open QuickBooks or your schedule, and send your first text." />
+  <meta name="theme-color" content="#FFFFFF" />
+  <link rel="canonical" href="https://www.tiberius.ai/handoff" />
+  <link rel="icon" type="image/png" href="images/logo4.png" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            canvas: '#FFFFFF',
+            surface: '#F8FAFC',
+            surfaceMuted: '#F0F4F8',
+            borderSubtle: '#E2E8F0',
+            ink: '#0F172A',
+            bodySlate: '#475569',
+            mutedSlate: '#64748B',
+            cobalt: '#3E63DD',
+            cobaltHover: '#2563EB',
+            iceActive: '#F1FAFF',
+            statusBg: '#ECFDF5',
+            statusText: '#047857'
+          },
+          fontFamily: {
+            display: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          },
+          boxShadow: {
+            motion: '0 2px 32px rgba(15, 23, 42, 0.06), inset 0 0 0 1px #F1F2F4'
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    :root {
+      color-scheme: light;
+      --bg-canvas: #FFFFFF;
+      --bg-surface: #F8FAFC;
+      --bg-surface-muted: #F0F4F8;
+      --border-subtle: #E2E8F0;
+      --border-control: #64748B;
+      --text-ink: #0F172A;
+      --text-body: #475569;
+      --text-muted: #64748B;
+      --accent-cobalt: #3E63DD;
+      --accent-cobalt-hover: #2563EB;
+      --accent-ice: #F1FAFF;
+      --status-bg: #ECFDF5;
+      --status-text: #047857;
+      --danger-red: #DC2626;
+      --font-display: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+      --font-sans: 'Inter', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    body {
+      background-color: var(--bg-canvas);
+      color: var(--text-ink);
+      font-family: var(--font-sans);
+      accent-color: var(--accent-cobalt);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .visually-hidden:where(:not(:focus-within, :active)) {
+      position: absolute !important;
+      clip-path: inset(50%) !important;
+      overflow: hidden !important;
+      width: 1px !important;
+      height: 1px !important;
+      margin: -1px !important;
+      padding: 0 !important;
+      border: 0 !important;
+      white-space: nowrap !important;
+    }
+
+    .skip-link:focus-visible {
+      position: fixed;
+      top: 0.75rem;
+      left: 0.75rem;
+      z-index: 100;
+      padding: 0.75rem 1.25rem;
+      border-radius: 0.75rem;
+      background-color: #3E63DD;
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 0.875rem;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.16);
+    }
+
+    .portal-headline {
+      font-family: var(--font-display);
+      font-size: clamp(1.65rem, 1.15rem + 2.1vw, 2.85rem);
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      color: var(--text-ink);
+    }
+
+    .motion-card {
+      background-color: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      box-shadow: 0 2px 32px rgba(15, 23, 42, 0.06), inset 0 0 0 1px #F1F2F4;
+    }
+
+    .motion-surface-card {
+      background-color: #F8FAFC;
+      border: 1px solid #E2E8F0;
+    }
+
+    .tap-target {
+      min-height: 48px;
+      min-width: 48px;
+    }
+
+    @media (pointer: coarse) {
+      .tap-target,
+      .form-input {
+        min-height: 52px;
+      }
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.35rem;
+      margin-block-end: 1.15rem;
+    }
+
+    .field-group label {
+      font-weight: 600;
+      color: #0F172A;
+    }
+
+    .form-input {
+      font: inherit;
+      font-size: max(1rem, 1em);
+      padding: 0.75rem 1rem;
+      min-height: 48px;
+      width: 100%;
+      box-sizing: border-box;
+      border-radius: 0.75rem;
+      background-color: #FFFFFF;
+      border: 1.5px solid #64748B;
+      color: #0F172A;
+    }
+
+    .form-input:focus-visible,
+    button:focus-visible,
+    a:focus-visible,
+    input[type="checkbox"]:focus-visible,
+    h1[tabindex="-1"]:focus-visible,
+    h2[tabindex="-1"]:focus-visible {
+      outline: 3px solid #3E63DD;
+      outline-offset: 2px;
+    }
+
+    .form-input:user-invalid,
+    .form-input[aria-invalid="true"] {
+      border-color: var(--danger-red);
+      background-color: #FEF2F2;
+    }
+
+    input[type="checkbox"] {
+      accent-color: #3E63DD;
+      width: 1.25rem;
+      height: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    @supports not (accent-color: #3E63DD) {
+      input[type="checkbox"]:checked {
+        outline: 2px solid #3E63DD;
+      }
+    }
+
+    /* Motion-style Step Tracker Button (4px solid #3E63DD left border + #F1FAFF active fill) */
+    .step-tracker-item {
+      background-color: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-left: 4px solid #CBD5E1;
+      color: #64748B;
+      transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .step-tracker-item:hover {
+      background-color: #F1FAFF;
+    }
+
+    .step-tracker-item[aria-current="step"] {
+      background-color: #F1FAFF;
+      border-color: #3E63DD;
+      border-left: 4px solid #3E63DD;
+      color: #0F172A;
+      box-shadow: 0 4px 16px rgba(62, 99, 221, 0.08);
+    }
+
+    .step-tracker-item.step-done {
+      background-color: #FFFFFF;
+      border-color: #E2E8F0;
+      border-left: 4px solid #047857;
+      color: #0F172A;
+    }
+
+    @keyframes stageFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(5px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .stage-animate {
+        animation: stageFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      .progress-fill-bar {
+        transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+    }
+
+    ::view-transition-group(*) {
+      animation-duration: 220ms;
+      animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      ::view-transition-group(*),
+      ::view-transition-old(*),
+      ::view-transition-new(*) {
+        animation: none !important;
+      }
+    }
+
+    @media (forced-colors: active) {
+      .step-tracker-item[aria-current="step"] {
+        outline: 2px solid Highlight;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-[100dvh] flex flex-col bg-canvas text-ink selection:bg-iceActive selection:text-cobalt">
+
+  <!-- Accessible Skip Link -->
+  <a href="#portal-main-heading" class="visually-hidden skip-link">Skip to main content</a>
+
+  <!-- ========================================================================
+       STICKY HEADER (CLEAN WHITE MOTION PORTAL BAR)
+       ======================================================================== -->
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-white/95 border-b border-borderSubtle">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[76px] py-2.5 flex items-center justify-between gap-2.5">
+      <a href="/" class="flex items-center gap-3 tap-target py-1" aria-label="Back to Tiberius AI Homepage">
+        <img
+          src="images/logo4.png"
+          alt=""
+          width="42"
+          height="42"
+          style="aspect-ratio: 1 / 1;"
+          class="w-10 h-10 rounded-xl object-contain bg-cobalt border border-cobalt p-1.5 shadow-sm shrink-0"
+          onerror="this.style.display='none';document.getElementById('fallbackLogoOnboard').classList.remove('hidden');"
+        />
+        <span id="fallbackLogoOnboard" class="hidden w-10 h-10 rounded-xl bg-cobalt text-white font-display font-extrabold text-lg flex items-center justify-center shrink-0" aria-hidden="true">
+          T
+        </span>
+        <div>
+          <span class="block font-display font-extrabold text-sm sm:text-lg text-ink leading-tight">
+            Tiberius <span class="text-cobalt">15-Min Handoff</span>
+          </span>
+          <span class="hidden sm:block text-xs font-mono text-statusText font-semibold">
+            ● PRIVATE CLOUD COMPUTER READY FOR LOGIN
+          </span>
+        </div>
+      </a>
+
+      <div class="flex items-center gap-2 shrink-0">
+        <button
+          type="button"
+          id="toggleAllStepsViewBtn"
+          class="tap-target px-3 sm:px-3.5 py-2 rounded-xl bg-surface hover:bg-surfaceMuted border border-borderSubtle text-[11px] sm:text-xs font-mono font-bold text-ink transition whitespace-nowrap"
+        >
+          All 3 Steps
+        </button>
+        <a
+          href="/"
+          class="tap-target inline-flex items-center justify-center px-3 sm:px-3.5 py-2 rounded-xl border border-borderSubtle bg-white hover:bg-surface text-xs font-bold text-bodySlate transition whitespace-nowrap"
+        >
+          ← Homepage
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 py-8 sm:py-12">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+
+      <!-- ====================================================================
+           HERO / SESSION BANNER (CLEAN WHITE MOTION CARD)
+           ==================================================================== -->
+      <section class="motion-card rounded-2xl p-6 sm:p-8">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div class="space-y-2.5 max-w-2xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-iceActive border border-cobalt/30 text-cobalt font-mono text-xs font-bold">
+              <span>15-MINUTE LIVE CLIENT HANDOFF • ZERO PASSWORDS SHARED WITH US</span>
+            </div>
+            <h1 id="portal-main-heading" tabindex="-1" class="portal-headline font-extrabold">
+              Welcome, <span id="clientWelcomeName" class="text-cobalt">Boss</span> — Let’s Hand Over the Keys to Your AI Employee
+            </h1>
+            <p class="text-bodySlate text-sm sm:text-base">
+              You stay on the tools — your AI employee handles the office work, QuickBooks, and your schedule from its own computer in the cloud. Follow these 3 quick steps (5 minutes each) to lock it to your phone.
+            </p>
+          </div>
+
+          <!-- Client Cloud Computer Status Card -->
+          <div class="shrink-0 rounded-xl bg-surface border border-borderSubtle p-4 space-y-2.5 min-w-[275px]">
+            <div class="flex items-center justify-between gap-3 text-xs font-mono">
+              <span class="text-mutedSlate">COMPANY:</span>
+              <span id="clientCompanyBadge" class="text-ink font-bold text-right">Apex Roofing &amp; Exteriors</span>
+            </div>
+            <div class="flex items-center justify-between gap-3 text-xs font-mono">
+              <span class="text-mutedSlate">PROGRAMS:</span>
+              <span id="clientProgramsBadge" class="text-bodySlate font-semibold text-right">QuickBooks + Schedule</span>
+            </div>
+            <div class="flex items-center justify-between gap-3 text-xs font-mono">
+              <span class="text-mutedSlate">CLOUD COMPUTER:</span>
+              <span class="px-2 py-0.5 rounded bg-statusBg text-statusText font-bold">● ONLINE (Dedicated)</span>
+            </div>
+            <div class="flex items-center justify-between gap-3 text-xs font-mono">
+              <span class="text-mutedSlate">APPROVAL MODE:</span>
+              <span id="clientPlanBadge" class="text-cobalt font-bold text-right">Asks for Your OK First</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           MOTION-STYLE 3-STEP VISUAL PROGRESS TRACKER
+           ==================================================================== -->
+      <nav aria-label="15-Minute Handoff Progress" class="space-y-3">
+        <!-- Overall Progress Bar -->
+        <div class="flex items-center justify-between text-xs font-mono text-bodySlate">
+          <span>HANDOFF PROGRESS</span>
+          <span id="overallProgressLabel" class="font-bold text-cobalt">Step 1 of 3 (Minutes 0–5)</span>
+        </div>
+        <div class="h-2 w-full rounded-full bg-surfaceMuted border border-borderSubtle overflow-hidden">
+          <div id="overallProgressBar" class="h-full bg-cobalt progress-fill-bar" style="width: 33%;"></div>
+        </div>
+
+        <ol role="list" class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+          <li>
+            <button
+              type="button"
+              id="trackerStep1"
+              class="step-tracker-item w-full h-full text-left rounded-xl p-4 tap-target"
+              aria-current="step"
+              data-goto-step="1"
+            >
+              <span class="flex items-center justify-between text-xs font-mono mb-1.5">
+                <span class="text-cobalt font-bold">STEP 1 • MIN 0–5</span>
+                <span id="trackerBadge1" class="px-2 py-0.5 rounded bg-cobalt text-white font-bold">Active Step</span>
+              </span>
+              <span class="block font-display font-bold text-sm sm:text-base text-ink">
+                1. Sign into Google / Gemini on Your Cloud Computer
+              </span>
+            </button>
+          </li>
+
+          <li>
+            <button
+              type="button"
+              id="trackerStep2"
+              class="step-tracker-item w-full h-full text-left rounded-xl p-4 tap-target"
+              data-goto-step="2"
+            >
+              <span class="flex items-center justify-between text-xs font-mono mb-1.5">
+                <span class="text-mutedSlate font-bold">STEP 2 • MIN 5–10</span>
+                <span id="trackerBadge2" class="px-2 py-0.5 rounded bg-white border border-borderSubtle text-mutedSlate font-bold">Up Next</span>
+              </span>
+              <span class="block font-display font-bold text-sm sm:text-base text-ink">
+                2. Open QuickBooks or Your Schedule in Tab 2
+              </span>
+            </button>
+          </li>
+
+          <li>
+            <button
+              type="button"
+              id="trackerStep3"
+              class="step-tracker-item w-full h-full text-left rounded-xl p-4 tap-target"
+              data-goto-step="3"
+            >
+              <span class="flex items-center justify-between text-xs font-mono mb-1.5">
+                <span class="text-mutedSlate font-bold">STEP 3 • MIN 10–15</span>
+                <span id="trackerBadge3" class="px-2 py-0.5 rounded bg-white border border-borderSubtle text-mutedSlate font-bold">Final Step</span>
+              </span>
+              <span class="block font-display font-bold text-sm sm:text-base text-ink">
+                3. Tap Start on Telegram &amp; Send First Text
+              </span>
+            </button>
+          </li>
+        </ol>
+      </nav>
+
+      <!-- Scoped Transition Viewport for Steps 1–3 -->
+      <div id="stepPanelsViewport" class="space-y-8">
+
+        <!-- ==================================================================
+             STEP 1 (MINUTES 0-5): GOOGLE / GEMINI SIGN-IN ON PRIVATE CLOUD PC
+             ================================================================== -->
+        <section id="stepPanel1" class="motion-card rounded-2xl border-t-4 border-t-cobalt p-6 sm:p-8 space-y-6">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-borderSubtle pb-4">
+            <span class="font-mono text-xs font-bold uppercase text-cobalt">
+              STEP 1 OF 3 • MINUTES 0–5
+            </span>
+            <span class="text-xs font-mono text-mutedSlate">
+              100% Your Own Account • Zero Markup
+            </span>
+          </div>
+
+          <h2 id="stepHeading1" tabindex="-1" class="font-display font-extrabold text-2xl sm:text-3xl text-ink">
+            Step 1 (Minutes 0–5): Sign into your Google / Gemini account inside your AI Employee's private cloud computer.
+          </h2>
+
+          <p class="text-bodySlate text-sm sm:text-base">
+            We build your AI employee with <strong class="text-ink">its own private computer in the cloud</strong>. Click the button below to open its screen right inside your browser, then sign into your own Google / Gemini account once so you control your own data and pay zero markup.
+          </p>
+
+          <!-- 1-Click Cloud Browser Launch + Interactive Motion Visual Screen -->
+          <div class="rounded-2xl bg-surface border border-borderSubtle p-5 sm:p-6 space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div class="flex-1">
+                <label for="cloudBrowserUrl" class="block text-xs font-mono uppercase text-bodySlate font-bold mb-1.5">
+                  YOUR AI EMPLOYEE'S 1-CLICK PRIVATE CLOUD COMPUTER LINK:
+                </label>
+                <input
+                  type="url"
+                  id="cloudBrowserUrl"
+                  name="cloud_browser_url"
+                  class="form-input font-mono text-sm"
+                  value="https://cloud-desk-01.tiberius.ai:6901"
+                  autocorrect="off"
+                  autocapitalize="none"
+                  spellcheck="false"
+                  enterkeyhint="done"
+                />
+              </div>
+              <div class="flex flex-wrap items-center gap-2.5 sm:pt-5">
+                <a
+                  id="openCloudComputerLink"
+                  href="https://cloud-desk-01.tiberius.ai:6901"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="tap-target inline-flex items-center justify-center px-5 py-3.5 rounded-xl bg-cobalt hover:bg-cobaltHover text-white font-extrabold text-sm transition shadow-sm"
+                >
+                  🖥️ 1-Click: Open Cloud Computer →
+                </a>
+                <button
+                  type="button"
+                  id="simulateCloudScreenBtn"
+                  class="tap-target px-4 py-3.5 rounded-xl bg-white hover:bg-iceActive border border-borderSubtle text-xs font-bold text-cobalt transition"
+                >
+                  Test Sign-In Preview ✓
+                </button>
+              </div>
+            </div>
+
+            <!-- Motion-Style Cloud Browser Window Visual Explanation -->
+            <div id="cloudDesktopSimulator" class="rounded-xl bg-white border border-borderSubtle shadow-sm overflow-hidden">
+              <!-- Browser Chrome & Tabs -->
+              <div class="px-4 py-2.5 bg-surfaceMuted border-b border-borderSubtle flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <div class="flex items-center gap-1.5 mr-2" aria-hidden="true">
+                    <span class="w-2.5 h-2.5 rounded-full bg-slate-300"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-slate-300"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-slate-300"></span>
+                  </div>
+                  <span class="px-2.5 py-1 rounded-md bg-white border border-cobalt/30 text-cobalt font-mono text-xs font-bold">
+                    Tab 1: Google / Gemini
+                  </span>
+                  <span class="px-2.5 py-1 rounded-md bg-surface text-mutedSlate font-mono text-xs">
+                    Tab 2: QuickBooks / Schedule
+                  </span>
+                </div>
+                <span id="cloudStep1StatusPill" class="px-2.5 py-0.5 rounded bg-iceActive text-cobalt font-mono text-xs font-bold">
+                  ● Private Cloud Screen Ready
+                </span>
+              </div>
+
+              <!-- Animated 3-Step Visual Guide Inside Cloud Window -->
+              <div class="p-4 sm:p-5 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs sm:text-sm">
+                <div class="p-3.5 rounded-xl bg-iceActive border-l-4 border-cobalt space-y-1">
+                  <span class="font-mono text-[11px] font-bold uppercase text-cobalt block">1. Open Screen</span>
+                  <p class="font-bold text-ink">Click the 1-Click Link Above</p>
+                  <p class="text-bodySlate text-xs">Opens your AI employee's private desktop right inside Chrome or Safari.</p>
+                </div>
+                <div id="cloudStep1CardB" class="p-3.5 rounded-xl bg-surface border border-borderSubtle space-y-1 transition">
+                  <span class="font-mono text-[11px] font-bold uppercase text-bodySlate block">2. Sign Into Google</span>
+                  <p class="font-bold text-ink">Sign In &amp; Check "Stay Signed In"</p>
+                  <p class="text-bodySlate text-xs">Logs your own Google / Gemini account into Tab 1 with zero agency markup.</p>
+                </div>
+                <div id="cloudStep1CardC" class="p-3.5 rounded-xl bg-surface border border-borderSubtle space-y-1 transition">
+                  <span class="font-mono text-[11px] font-bold uppercase text-bodySlate block">3. Ready for Tab 2</span>
+                  <p class="font-bold text-ink">Session Stays Locked to You</p>
+                  <p class="text-bodySlate text-xs">Your AI employee is now awake on your own private computer in the cloud.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 1 Completion Checkbox -->
+          <div class="p-4 rounded-xl bg-iceActive border border-cobalt/30 flex items-center gap-3">
+            <input type="checkbox" id="checkStep1Done" name="step1_done" />
+            <label for="checkStep1Done" class="text-sm sm:text-base font-semibold text-ink cursor-pointer">
+              I signed into my Google / Gemini account on my AI employee's private cloud computer.
+            </label>
+          </div>
+
+          <div class="flex items-center justify-end pt-2">
+            <button
+              type="button"
+              id="toStep2Btn"
+              class="tap-target px-6 py-3.5 rounded-xl bg-cobalt hover:bg-cobaltHover text-white font-extrabold text-sm sm:text-base transition shadow-sm"
+            >
+              Continue to Step 2 (QuickBooks &amp; Schedule) →
+            </button>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             STEP 2 (MINUTES 5-10): OPEN QUICKBOOKS OR SCHEDULE IN TAB 2
+             ================================================================== -->
+        <section id="stepPanel2" class="motion-card rounded-2xl border-t-4 border-t-cobalt p-6 sm:p-8 space-y-6" hidden>
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-borderSubtle pb-4">
+            <span class="font-mono text-xs font-bold uppercase text-cobalt">
+              STEP 2 OF 3 • MINUTES 5–10
+            </span>
+            <span class="text-xs font-mono text-statusText font-bold">
+              You Type Your Own Password • We Never See It
+            </span>
+          </div>
+
+          <h2 id="stepHeading2" tabindex="-1" class="font-display font-extrabold text-2xl sm:text-3xl text-ink">
+            Step 2 (Minutes 5–10): Open QuickBooks or your scheduling program in Tab 2 and click 'Remember this computer.'
+          </h2>
+
+          <p class="text-bodySlate text-sm sm:text-base">
+            Inside that same private cloud computer window, open <strong class="text-ink">Tab 2</strong>, sign into the programs you already run — your books (QuickBooks), your schedule (Jobber, Housecall Pro, ServiceTitan), and your email — and check <strong class="text-cobalt">"Remember this computer."</strong>
+          </p>
+
+          <!-- Split Grid: Tab 2 Visual Explanation + Program Checklist -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+
+            <!-- Left (5 cols): Visual Tab 2 Browser Mockup -->
+            <div class="lg:col-span-5 rounded-2xl bg-surface border border-borderSubtle overflow-hidden flex flex-col justify-between">
+              <div>
+                <div class="px-3.5 py-2.5 bg-surfaceMuted border-b border-borderSubtle flex items-center justify-between gap-2">
+                  <div class="flex items-center gap-1.5">
+                    <span class="px-2 py-0.5 rounded bg-surface text-mutedSlate font-mono text-[11px]">Tab 1</span>
+                    <span class="px-2.5 py-0.5 rounded bg-white border border-cobalt/30 text-cobalt font-mono text-[11px] font-bold">
+                      Tab 2: QuickBooks &amp; Schedule
+                    </span>
+                  </div>
+                  <span class="font-mono text-[11px] font-bold text-statusText bg-statusBg px-2 py-0.5 rounded">🔒 Private</span>
+                </div>
+                <div class="p-4 space-y-3 text-xs">
+                  <div class="p-3 rounded-xl bg-white border border-borderSubtle space-y-2">
+                    <div class="flex items-center justify-between">
+                      <span class="font-bold text-ink">QuickBooks / Jobber Sign-In</span>
+                      <span class="font-mono text-cobalt font-semibold">Tab 2</span>
+                    </div>
+                    <div class="p-2 rounded bg-surface border border-borderSubtle font-mono text-mutedSlate">
+                      office@yourcompany.com • ••••••••
+                    </div>
+                    <div class="p-2.5 rounded-lg bg-iceActive border-l-4 border-cobalt flex items-center gap-2 font-semibold text-ink">
+                      <span class="w-4 h-4 rounded bg-cobalt text-white flex items-center justify-center text-[10px]" aria-hidden="true">✓</span>
+                      <span>Remember this computer</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="px-4 py-2.5 bg-white border-t border-borderSubtle text-xs text-bodySlate">
+                <strong class="text-ink">Zero password sharing:</strong> You type your password straight into your own cloud browser.
+              </div>
+            </div>
+
+            <!-- Right (7 cols): Checkboxes for Programs Logged Into -->
+            <fieldset class="lg:col-span-7 p-5 rounded-2xl bg-surface border border-borderSubtle">
+              <legend class="font-display font-bold text-sm text-ink px-2">
+                Check Off the Programs You Signed Into in Tab 2:
+              </legend>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mt-3">
+                <div class="flex items-center gap-3 p-3.5 rounded-xl bg-white border border-borderSubtle">
+                  <input type="checkbox" id="progQuickBooks" name="prog_quickbooks" checked />
+                  <label for="progQuickBooks" class="text-sm font-semibold text-ink cursor-pointer">
+                    QuickBooks Online (Books &amp; Late Invoices)
+                  </label>
+                </div>
+                <div class="flex items-center gap-3 p-3.5 rounded-xl bg-white border border-borderSubtle">
+                  <input type="checkbox" id="progSchedule" name="prog_schedule" checked />
+                  <label for="progSchedule" class="text-sm font-semibold text-ink cursor-pointer">
+                    Schedule &amp; Quotes (Jobber / Housecall Pro / ServiceTitan)
+                  </label>
+                </div>
+                <div class="flex items-center gap-3 p-3.5 rounded-xl bg-white border border-borderSubtle">
+                  <input type="checkbox" id="progEmail" name="prog_email" />
+                  <label for="progEmail" class="text-sm font-semibold text-ink cursor-pointer">
+                    Company Email &amp; Calendar (Gmail / Outlook)
+                  </label>
+                </div>
+                <div class="flex items-center gap-3 p-3.5 rounded-xl bg-iceActive border border-cobalt/30">
+                  <input type="checkbox" id="progRememberDevice" name="prog_remember" checked />
+                  <label for="progRememberDevice" class="text-sm font-semibold text-cobalt cursor-pointer">
+                    Checked "Remember this computer" on login
+                  </label>
+                </div>
+              </div>
+            </fieldset>
+
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+            <button
+              type="button"
+              id="backToStep1Btn"
+              class="tap-target px-5 py-3 rounded-xl bg-surface hover:bg-surfaceMuted border border-borderSubtle text-xs sm:text-sm font-bold text-ink transition"
+            >
+              ← Back to Step 1
+            </button>
+            <button
+              type="button"
+              id="toStep3Btn"
+              class="tap-target px-6 py-3.5 rounded-xl bg-cobalt hover:bg-cobaltHover text-white font-extrabold text-sm sm:text-base transition shadow-sm"
+            >
+              Continue to Step 3 (Phone Text Lock) →
+            </button>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             STEP 3 (MINUTES 10-15): TAP START ON TELEGRAM & SEND FIRST TEXT
+             ================================================================== -->
+        <section id="stepPanel3" class="motion-card rounded-2xl border-t-4 border-t-cobalt p-6 sm:p-8 space-y-6" hidden>
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-borderSubtle pb-4">
+            <span class="font-mono text-xs font-bold uppercase text-cobalt">
+              STEP 3 OF 3 • MINUTES 10–15
+            </span>
+            <span class="px-2.5 py-0.5 rounded bg-statusBg text-statusText font-mono text-xs font-bold">
+              Locked Strictly to Your Cell Phone
+            </span>
+          </div>
+
+          <h2 id="stepHeading3" tabindex="-1" class="font-display font-extrabold text-2xl sm:text-3xl text-ink">
+            Step 3 (Minutes 10–15): Tap Start on your private Telegram contact and send your first voice note or text.
+          </h2>
+
+          <p class="text-bodySlate text-sm sm:text-base">
+            You talk or text from the drive between jobs, just like texting an office manager in your contacts. Tap the button below on your phone to open your private AI Office Manager contact, tap <strong class="text-ink">Start</strong>, and send your first message.
+          </p>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+            <!-- Left Column: 1-Tap Telegram Link + First Message Templates -->
+            <div class="lg:col-span-6 space-y-4">
+              <div class="p-5 rounded-2xl bg-surface border border-borderSubtle space-y-3">
+                <span class="block font-mono text-xs text-cobalt font-bold">
+                  📱 1-TAP PRIVATE PHONE LINK
+                </span>
+                <p class="text-sm text-bodySlate">
+                  Open your private AI Office Manager on your phone (locked strictly to your cell number):
+                </p>
+                <a
+                  href="https://t.me/ApexRoofingOffice_bot"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="w-full tap-target inline-flex items-center justify-center px-5 py-3.5 rounded-xl bg-cobalt hover:bg-cobaltHover text-white font-extrabold text-sm transition shadow-sm"
+                >
+                  📲 Open Private Telegram Contact &amp; Tap Start →
+                </a>
+              </div>
+
+              <!-- Copyable First-Day Text Commands -->
+              <div class="p-5 rounded-2xl bg-surface border border-borderSubtle space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="font-mono text-xs text-ink font-bold uppercase">
+                    TAP TO COPY OR TEST YOUR FIRST TEXT:
+                  </span>
+                  <span id="copyConfirmBadge" class="text-xs font-mono text-statusText font-bold hidden" role="status" aria-live="polite">
+                    ✓ Copied!
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  data-prompt="Hey, check my open estimates and late invoices in QuickBooks and tell me what's sitting on the table, then set a reminder to check this for me every weekday at 7:30 AM."
+                  class="prompt-preset-btn w-full text-left p-3.5 rounded-xl bg-white hover:bg-iceActive border border-borderSubtle hover:border-cobalt text-xs sm:text-sm text-bodySlate transition"
+                >
+                  <span class="block font-mono text-xs text-cobalt font-bold mb-1">1. Morning QuickBooks &amp; Estimate Check (Recommended First Text)</span>
+                  "Hey, check my open estimates and late invoices in QuickBooks and tell me what's sitting on the table, then set a reminder to check this for me every weekday at 7:30 AM."
+                </button>
+
+                <button
+                  type="button"
+                  data-prompt="Check my schedule for every estimate over $3,000 from the last 30 days that hasn't signed yet, and draft a friendly follow-up text for my OK."
+                  class="prompt-preset-btn w-full text-left p-3.5 rounded-xl bg-white hover:bg-iceActive border border-borderSubtle hover:border-cobalt text-xs sm:text-sm text-bodySlate transition"
+                >
+                  <span class="block font-mono text-xs text-cobalt font-bold mb-1">2. Unsigned Quote Follow-Up</span>
+                  "Check my schedule for every estimate over $3,000 from the last 30 days that hasn't signed yet, and draft a friendly follow-up text for my OK."
+                </button>
+              </div>
+            </div>
+
+            <!-- Right Column: Live First-Text Phone Simulator with 1-Tap Approve -->
+            <div class="lg:col-span-6 rounded-2xl bg-surface border border-borderSubtle p-5 space-y-4">
+              <div class="flex items-center justify-between border-b border-borderSubtle pb-3">
+                <div>
+                  <span class="block font-display font-bold text-base text-ink">Live Handoff Test Phone</span>
+                  <span class="block font-mono text-xs text-statusText font-bold">● Connected to Private Cloud Computer</span>
+                </div>
+                <span class="px-2.5 py-1 rounded bg-white border border-borderSubtle text-xs font-mono text-bodySlate">Asks Your OK</span>
+              </div>
+
+              <div id="testPhoneTranscript" class="space-y-3 min-h-[220px] max-h-[300px] overflow-y-auto pr-1" role="log" aria-live="polite">
+                <div class="p-3.5 rounded-2xl rounded-tl-none bg-white border border-borderSubtle text-xs sm:text-sm text-bodySlate">
+                  <span class="block font-mono text-xs text-cobalt font-bold mb-1">AI Office Manager</span>
+                  Ready when you are, Boss! My private cloud computer has QuickBooks and your schedule open. Send your first text below to test me live.
+                </div>
+              </div>
+
+              <form id="liveTestTextForm" action="#stepPanel3" method="POST" aria-label="Send a test text to your AI employee">
+                <div class="field-group mb-2">
+                  <label for="testTextMessage" class="text-xs font-mono uppercase text-ink">
+                    Type or Paste Your First Text Command:
+                  </label>
+                  <input
+                    type="text"
+                    id="testTextMessage"
+                    name="test_text_message"
+                    class="form-input text-sm"
+                    value="Hey, check my open estimates and late invoices in QuickBooks and tell me what's sitting on the table."
+                    enterkeyhint="send"
+                    required
+                  />
+                </div>
+                <button
+                  type="submit"
+                  class="w-full tap-target py-3 px-4 rounded-xl bg-cobalt hover:bg-cobaltHover text-white font-extrabold text-sm transition shadow-sm"
+                >
+                  Send First Text to My AI Employee →
+                </button>
+              </form>
+            </div>
+
+          </div>
+
+          <!-- Final Handoff Complete Banner -->
+          <div id="handoffCompleteBanner" class="p-5 rounded-2xl bg-iceActive border border-cobalt/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div class="space-y-1">
+              <h3 class="font-display font-bold text-lg text-ink">
+                Ready to Wrap Up Your 15-Minute Handoff?
+              </h3>
+              <p class="text-xs sm:text-sm text-bodySlate">
+                Your AI employee is now watching QuickBooks and your schedule from its own computer in the cloud — and will text you at 7:30 AM tomorrow with This Morning's Work Log.
+              </p>
+            </div>
+            <div class="flex items-center gap-2.5 shrink-0">
+              <button
+                type="button"
+                id="backToStep2Btn"
+                class="tap-target px-4 py-2.5 rounded-xl bg-white hover:bg-surface border border-borderSubtle text-xs font-bold text-ink transition"
+              >
+                ← Step 2
+              </button>
+              <button
+                type="button"
+                id="finishHandoffBtn"
+                class="tap-target px-5 py-3 rounded-xl bg-cobalt hover:bg-cobaltHover text-white font-extrabold text-xs sm:text-sm transition shadow-sm"
+              >
+                ✓ Complete 15-Min Handoff
+              </button>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="border-t border-borderSubtle bg-surface py-8 mt-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-mutedSlate">
+      <p>© 2026 Tiberius AI • 15-Minute Client Handoff Portal</p>
+      <div class="flex flex-wrap items-center gap-5">
+        <a href="/smartsites" class="hover:text-ink transition">Smart Sites ($297/mo)</a>
+        <a href="/" class="text-cobalt hover:underline font-semibold">← Return to Tiberius.ai Homepage</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       PORTAL JAVASCRIPT (SCOPED TRANSITIONS + STEP FOCUS + 1-TAP PHONE APPROVE)
+       ======================================================================== -->
+  <script>
+    (function () {
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const supportsScopedTransition = 'startViewTransition' in Element.prototype;
+      const stepPanelsViewport = document.getElementById('stepPanelsViewport');
+
+      function runScopedUpdate(scopeEl, updateDOM) {
+        if (!scopeEl || prefersReducedMotion || !supportsScopedTransition) {
+          updateDOM();
+          return;
+        }
+        try {
+          const transition = scopeEl.startViewTransition(() => {
+            updateDOM();
+          });
+          if (transition && transition.ready) {
+            transition.ready.catch(() => {});
+          }
+        } catch (_) {
+          updateDOM();
+        }
+      }
+
+      // Personalize header status card from index.html query params
+      const params = new URLSearchParams(window.location.search);
+      const ownerParam = params.get('owner');
+      const companyParam = params.get('company');
+      const programsParam = params.get('programs');
+      const planParam = params.get('plan');
+
+      if (ownerParam) {
+        document.getElementById('clientWelcomeName').textContent = ownerParam;
+      }
+      if (companyParam) {
+        document.getElementById('clientCompanyBadge').textContent = companyParam;
+      }
+      if (programsParam) {
+        document.getElementById('clientProgramsBadge').textContent = programsParam;
+      }
+      if (planParam) {
+        document.getElementById('clientPlanBadge').textContent =
+          planParam === 'managed-997-197' ? 'Managed Care ($197/mo)' : 'Turnkey Ownership ($1,497)';
+      }
+
+      const cloudUrlInput = document.getElementById('cloudBrowserUrl');
+      const openCloudLink = document.getElementById('openCloudComputerLink');
+      cloudUrlInput.addEventListener('input', () => {
+        const val = cloudUrlInput.value.trim();
+        if (val) openCloudLink.setAttribute('href', val);
+      });
+
+      // Step 1 Interactive Cloud Screen Preview Toggle
+      const simulateCloudScreenBtn = document.getElementById('simulateCloudScreenBtn');
+      const cloudStep1StatusPill = document.getElementById('cloudStep1StatusPill');
+      const cloudStep1CardB = document.getElementById('cloudStep1CardB');
+      const cloudStep1CardC = document.getElementById('cloudStep1CardC');
+      const checkStep1Done = document.getElementById('checkStep1Done');
+      let step1Simulated = false;
+
+      simulateCloudScreenBtn.addEventListener('click', () => {
+        step1Simulated = !step1Simulated;
+        if (step1Simulated) {
+          cloudStep1StatusPill.textContent = '✓ Signed Into Google on Cloud PC';
+          cloudStep1StatusPill.className = 'px-2.5 py-0.5 rounded bg-statusBg text-statusText font-mono text-xs font-bold';
+          cloudStep1CardB.className = 'p-3.5 rounded-xl bg-iceActive border-l-4 border-cobalt space-y-1 transition';
+          cloudStep1CardC.className = 'p-3.5 rounded-xl bg-statusBg border border-statusText/30 space-y-1 transition';
+          simulateCloudScreenBtn.textContent = '✓ Google Signed In (Reset)';
+          checkStep1Done.checked = true;
+        } else {
+          cloudStep1StatusPill.textContent = '● Private Cloud Screen Ready';
+          cloudStep1StatusPill.className = 'px-2.5 py-0.5 rounded bg-iceActive text-cobalt font-mono text-xs font-bold';
+          cloudStep1CardB.className = 'p-3.5 rounded-xl bg-surface border border-borderSubtle space-y-1 transition';
+          cloudStep1CardC.className = 'p-3.5 rounded-xl bg-surface border border-borderSubtle space-y-1 transition';
+          simulateCloudScreenBtn.textContent = 'Test Sign-In Preview ✓';
+        }
+      });
+
+      let showAllSteps = false;
+      let activeStep = 1;
+
+      const panels = {
+        1: document.getElementById('stepPanel1'),
+        2: document.getElementById('stepPanel2'),
+        3: document.getElementById('stepPanel3')
+      };
+      const headings = {
+        1: document.getElementById('stepHeading1'),
+        2: document.getElementById('stepHeading2'),
+        3: document.getElementById('stepHeading3')
+      };
+      const trackers = {
+        1: document.getElementById('trackerStep1'),
+        2: document.getElementById('trackerStep2'),
+        3: document.getElementById('trackerStep3')
+      };
+      const badges = {
+        1: document.getElementById('trackerBadge1'),
+        2: document.getElementById('trackerBadge2'),
+        3: document.getElementById('trackerBadge3')
+      };
+      const overallProgressBar = document.getElementById('overallProgressBar');
+      const overallProgressLabel = document.getElementById('overallProgressLabel');
+      const stepLabels = {
+        1: 'Step 1 of 3 (Minutes 0–5)',
+        2: 'Step 2 of 3 (Minutes 5–10)',
+        3: 'Step 3 of 3 (Minutes 10–15)'
+      };
+
+      function goToStep(stepNum, moveFocus = true) {
+        activeStep = stepNum;
+        if (overallProgressBar) {
+          overallProgressBar.style.width = `${Math.round((stepNum / 3) * 100)}%`;
+        }
+        if (overallProgressLabel && stepLabels[stepNum]) {
+          overallProgressLabel.textContent = stepLabels[stepNum];
+        }
+
+        const applyDomState = () => {
+          [1, 2, 3].forEach((n) => {
+            if (showAllSteps) {
+              panels[n].hidden = false;
+            } else {
+              panels[n].hidden = n !== stepNum;
+            }
+
+            if (n === stepNum) {
+              trackers[n].setAttribute('aria-current', 'step');
+              trackers[n].classList.remove('step-done');
+              badges[n].textContent = 'Active Step';
+              badges[n].className = 'px-2 py-0.5 rounded bg-cobalt text-white font-bold';
+            } else if (n < stepNum) {
+              trackers[n].removeAttribute('aria-current');
+              trackers[n].classList.add('step-done');
+              badges[n].textContent = '✓ Done';
+              badges[n].className = 'px-2 py-0.5 rounded bg-statusBg text-statusText font-bold';
+            } else {
+              trackers[n].removeAttribute('aria-current');
+              trackers[n].classList.remove('step-done');
+              badges[n].textContent = n === 3 ? 'Final Step' : 'Up Next';
+              badges[n].className = 'px-2 py-0.5 rounded bg-white border border-borderSubtle text-mutedSlate font-bold';
+            }
+          });
+
+          if (moveFocus && headings[stepNum]) {
+            headings[stepNum].focus();
+          }
+        };
+
+        runScopedUpdate(stepPanelsViewport, applyDomState);
+      }
+
+      document.getElementById('toStep2Btn').addEventListener('click', () => {
+        checkStep1Done.checked = true;
+        goToStep(2, true);
+      });
+
+      document.getElementById('backToStep1Btn').addEventListener('click', () => {
+        goToStep(1, true);
+      });
+
+      document.getElementById('toStep3Btn').addEventListener('click', () => {
+        goToStep(3, true);
+      });
+
+      document.getElementById('backToStep2Btn').addEventListener('click', () => {
+        goToStep(2, true);
+      });
+
+      document.querySelectorAll('[data-goto-step]').forEach((item) => {
+        item.addEventListener('click', () => {
+          const target = parseInt(item.getAttribute('data-goto-step'), 10);
+          goToStep(target, true);
+        });
+      });
+
+      const toggleAllStepsViewBtn = document.getElementById('toggleAllStepsViewBtn');
+      toggleAllStepsViewBtn.addEventListener('click', () => {
+        showAllSteps = !showAllSteps;
+        toggleAllStepsViewBtn.textContent = showAllSteps ? 'Step-by-Step View' : 'All 3 Steps';
+        goToStep(activeStep, false);
+      });
+
+      const testTextMessage = document.getElementById('testTextMessage');
+      const copyConfirmBadge = document.getElementById('copyConfirmBadge');
+
+      document.querySelectorAll('.prompt-preset-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const text = btn.getAttribute('data-prompt');
+          testTextMessage.value = text;
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).catch(() => {});
+          }
+          copyConfirmBadge.classList.remove('hidden');
+          setTimeout(() => copyConfirmBadge.classList.add('hidden'), 2000);
+          testTextMessage.focus();
+        });
+      });
+
+      const liveTestTextForm = document.getElementById('liveTestTextForm');
+      const testPhoneTranscript = document.getElementById('testPhoneTranscript');
+
+      testTextMessage.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.isComposing) {
+          e.preventDefault();
+          liveTestTextForm.requestSubmit();
+        }
+      });
+
+      liveTestTextForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const msg = testTextMessage.value.trim();
+        if (!msg) return;
+
+        const ownerBubble = document.createElement('div');
+        ownerBubble.className = 'p-3.5 rounded-2xl rounded-tr-none bg-cobalt text-white font-semibold text-xs sm:text-sm ml-8 stage-animate';
+        ownerBubble.textContent = msg;
+        testPhoneTranscript.appendChild(ownerBubble);
+
+        setTimeout(() => {
+          const aiBubble = document.createElement('div');
+          aiBubble.className = 'p-3.5 rounded-2xl rounded-tl-none bg-iceActive border border-cobalt/30 text-xs sm:text-sm text-bodySlate space-y-2 stage-animate';
+
+          const header = document.createElement('span');
+          header.className = 'block font-mono text-xs text-cobalt font-bold';
+          header.textContent = 'AI Office Manager • Just Now';
+
+          const body = document.createElement('p');
+          body.className = 'text-ink';
+          body.textContent = 'On it, Boss! I just checked QuickBooks and your schedule on my cloud computer: you have 3 invoices past 30 days ($8,400 total) and 4 unsigned estimates from last week ($28,500). I set your 7:30 AM weekday briefing and drafted polite follow-ups — want me to send them?';
+
+          const approveBtn = document.createElement('button');
+          approveBtn.type = 'button';
+          approveBtn.className = 'w-full tap-target py-2 px-3 rounded-xl bg-cobalt hover:bg-cobaltHover text-white font-bold text-xs transition shadow-sm';
+          approveBtn.textContent = '[Tap to Approve] — Send All Follow-Ups';
+
+          approveBtn.addEventListener('click', () => {
+            approveBtn.disabled = true;
+            approveBtn.textContent = '✓ Approved & Sent From Cloud Computer';
+            approveBtn.className = 'w-full tap-target py-2 px-3 rounded-xl bg-statusBg text-statusText border border-statusText/30 font-bold text-xs transition';
+          });
+
+          aiBubble.appendChild(header);
+          aiBubble.appendChild(body);
+          aiBubble.appendChild(approveBtn);
+          testPhoneTranscript.appendChild(aiBubble);
+          testPhoneTranscript.scrollTop = testPhoneTranscript.scrollHeight;
+        }, 280);
+
+        testPhoneTranscript.scrollTop = testPhoneTranscript.scrollHeight;
+      });
+
+      const finishHandoffBtn = document.getElementById('finishHandoffBtn');
+      finishHandoffBtn.addEventListener('click', () => {
+        [1, 2, 3].forEach((n) => {
+          trackers[n].removeAttribute('aria-current');
+          trackers[n].classList.add('step-done');
+          badges[n].textContent = '✓ Completed';
+          badges[n].className = 'px-2 py-0.5 rounded bg-statusBg text-statusText font-bold';
+        });
+        if (overallProgressBar) overallProgressBar.style.width = '100%';
+        if (overallProgressLabel) overallProgressLabel.textContent = '✓ All 3 Steps Completed!';
+        finishHandoffBtn.textContent = '✓ Handoff Complete — 7:30 AM Work Log Active!';
+        finishHandoffBtn.className = 'tap-target px-5 py-3 rounded-xl bg-statusBg text-statusText border border-statusText/30 font-extrabold text-xs sm:text-sm transition';
+      });
+    })();
+  </script>
+</body>
+</html>

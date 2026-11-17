@@ -6,8 +6,28 @@
   },
   "rewrites": [
     {
+      "source": "/smartsites",
+      "destination": "/smartsites/index.html"
+    },
+    {
+      "source": "/smartsites/",
+      "destination": "/smartsites/index.html"
+    },
+    {
+      "source": "/handoff",
+      "destination": "/handoff.html"
+    },
+    {
+      "source": "/handoff.html",
+      "destination": "/handoff.html"
+    },
+    {
+      "source": "/ai-employee/onboarding",
+      "destination": "/handoff.html"
+    },
+    {
       "source": "/nb",
-      "destination": "/?loc=nb"
+      "destination": "/smartsites/index.html?loc=nb"
     },
     {
       "source": "/nb-test",
@@ -19,7 +39,7 @@
     },
     {
       "source": "/tx",
-      "destination": "/?loc=tx"
+      "destination": "/smartsites/index.html?loc=tx"
     },
     {
       "source": "/watch",

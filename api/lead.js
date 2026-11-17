@@ -52,6 +52,10 @@ function buildWelcomeSmsBody(lead) {
     )}"! Our team will also be making a custom Smart Site mock-up for ${bizLabel} for you to try soon. Reply here anytime with your business type + city or follow-up questions!`;
   }
 
+  if (lead.source === 'ai-employee-handoff') {
+    return `Hey ${firstName}! Your Tiberius AI Employee 24-hour build (${lead.ownershipPreference || '$1,497 Turnkey Ownership'}) for ${bizLabel} is reserved. Complete your 15-minute live handoff preview at https://www.tiberius.ai/handoff or reply here anytime with questions!`;
+  }
+
   if (lead.source === 'home-3-sec-sms-simulator') {
     return `⚡ Tiberius 3-Second AI Text Demo (${lead.industry}): Boom—delivered in under 3 seconds! This is how fast your Smart Site texts back missed calls & new leads. Want us to make a custom mock-up site for your business to try out soon? Reply with your business name + what you do!`;
   }
