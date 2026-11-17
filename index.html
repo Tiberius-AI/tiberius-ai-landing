@@ -451,7 +451,8 @@
     }
 
     /* Mode switcher tabs with shape indicator (never color alone per WCAG 1.4.1) */
-    .mode-switch-tab {
+    .mode-switch-tab,
+    .battlecard-filter-tab {
       position: relative;
       transition: background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
     }
@@ -904,6 +905,78 @@
       border-color: var(--danger-red);
       background-color: #FEF2F2;
     }
+
+    /* VSL Player Shell, Poster Play Overlay & Chapter Bar */
+    .vsl-shell {
+      background: linear-gradient(135deg, #2563EB 0%, #4F46E5 50%, #059669 100%);
+      padding: 3px;
+      border-radius: 1.25rem;
+      box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12), 0 6px 20px rgba(37, 99, 235, 0.12);
+    }
+
+    .vsl-inner {
+      background-color: #0F172A;
+      border-radius: calc(1.25rem - 3px);
+      overflow: hidden;
+    }
+
+    .vsl-poster-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      background: radial-gradient(circle at center, rgba(15, 23, 42, 0.34) 0%, rgba(15, 23, 42, 0.66) 100%);
+      cursor: pointer;
+      border: 0;
+      width: 100%;
+      height: 100%;
+      padding: 1rem 1rem 2.85rem;
+      transition: background-color 0.2s ease;
+    }
+
+    .vsl-poster-overlay[hidden] {
+      display: none !important;
+    }
+
+    .vsl-play-circle {
+      width: 3.75rem;
+      height: 3.75rem;
+      border-radius: 9999px;
+      background-color: #3E63DD;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 12px 32px rgba(62, 99, 221, 0.55), 0 0 0 6px rgba(255, 255, 255, 0.22);
+      transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+
+    @media (min-width: 640px) {
+      .vsl-play-circle {
+        width: 4.75rem;
+        height: 4.75rem;
+      }
+    }
+
+    .vsl-poster-overlay:hover .vsl-play-circle {
+      background-color: #2563EB;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .vsl-poster-overlay:hover .vsl-play-circle {
+        transform: scale(1.06);
+      }
+    }
+
+    .vsl-chapter-btn[aria-current="true"] {
+      background-color: #F1FAFF;
+      border-color: #3E63DD;
+      color: #0F172A;
+      box-shadow: 0 2px 10px rgba(62, 99, 221, 0.12);
+    }
   </style>
 </head>
 <body class="min-h-[100dvh] flex flex-col bg-canvas text-ink selection:bg-iceActive selection:text-cobalt">
@@ -934,7 +1007,8 @@
 
       <!-- Desktop-Only Basic Menu (Between Logo & CTA) -->
       <nav aria-label="Primary" class="hidden md:flex items-center">
-        <ul role="list" class="flex items-center gap-5 lg:gap-8 text-sm font-semibold text-bodySlate whitespace-nowrap">
+        <ul role="list" class="flex items-center gap-5 lg:gap-7 text-sm font-semibold text-bodySlate whitespace-nowrap">
+          <li><a href="#video-walkthrough" class="hover:text-cobalt transition-colors py-2">2.5-Min Demo</a></li>
           <li><a href="#workflows" class="hover:text-cobalt transition-colors py-2">How It Works</a></li>
           <li><a href="#pricing" class="hover:text-cobalt transition-colors py-2">Pricing</a></li>
           <li><a href="/smartsites" class="hover:text-cobalt transition-colors py-2">Smart Sites</a></li>
@@ -981,7 +1055,7 @@
 
           <!-- Primary CTA Buttons (Mirrors Motion Screenshot 1 Zero-Friction Entry) -->
           <div class="pt-2 space-y-2.5">
-            <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3.5">
+            <div class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-center gap-3.5">
               <button
                 type="button"
                 data-open-trial-modal="truck-assistant"
@@ -989,6 +1063,14 @@
               >
                 Try Tiberius AI for Free
               </button>
+              <a
+                href="#video-walkthrough"
+                id="watchVslHeroBtn"
+                class="inline-flex items-center justify-center gap-2 tap-target px-6 py-4 rounded-xl bg-iceActive hover:bg-blue-100/70 text-ink border border-cobalt/35 font-bold text-sm transition"
+              >
+                <span class="text-cobalt" aria-hidden="true">▶</span>
+                <span>Watch 2.5-Min Live Demo</span>
+              </a>
               <a
                 href="#pricing"
                 class="inline-flex items-center justify-center tap-target px-6 py-4 rounded-xl bg-surface hover:bg-surfaceMuted text-ink border border-borderSubtle font-bold text-sm transition"
@@ -1357,6 +1439,160 @@
 
           </div>
         </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 1B: 2.5-MINUTE LIVE RESULTS & CASHFLOW VSL (#video-walkthrough)
+         Choreographed 1080p walkthrough narrated in ElevenLabs Alex voice with
+         frame-synced WebVTT captions, lazy loading, chapter bar, and transcript
+         ====================================================================== -->
+    <section id="video-walkthrough" aria-labelledby="vslHeading" class="py-16 sm:py-24 bg-surface border-b border-borderSubtle scroll-mt-24">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Section Header + Live Demo Sales Numbers Strip -->
+        <div class="max-w-3xl mx-auto text-center space-y-3 mb-8 sm:mb-10">
+          <span class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-cobalt/30 font-mono text-xs font-bold uppercase tracking-wider text-cobalt shadow-sm">
+            <span class="w-2 h-2 rounded-full bg-cobalt" aria-hidden="true"></span>
+            <span>2.5-MINUTE LIVE WALKTHROUGH • REAL SALES &amp; TIME-SAVED NUMBERS</span>
+          </span>
+          <h2 id="vslHeading" class="section-headline font-extrabold">
+            Watch Your AI Office Manager Recover <span class="text-cobalt">$23,200 in One Morning</span> — With Zero Dashboards to Learn
+          </h2>
+          <p class="text-bodySlate text-base sm:text-lg">
+            See how your AI employee chases overdue QuickBooks invoices, books slipped estimates, texts missed callers back in 6 seconds, and hands your evenings back — starting for $0 today.
+          </p>
+
+          <!-- 3 Concrete Demo Numbers Highlighted in the Video -->
+          <div class="pt-2 flex flex-wrap items-center justify-center gap-2.5 text-xs font-mono font-bold">
+            <span class="px-3 py-1.5 rounded-lg bg-white border border-borderSubtle text-ink shadow-sm">
+              ✓ $8,400 Late Invoices Chased
+            </span>
+            <span class="px-3 py-1.5 rounded-lg bg-statusBg border border-statusText/25 text-statusText shadow-sm">
+              ✓ $14,800 Unsold Quote Booked
+            </span>
+            <span class="px-3 py-1.5 rounded-lg bg-iceActive border border-cobalt/25 text-cobalt shadow-sm">
+              ✓ 520–832 Paperwork Hrs/Yr Saved
+            </span>
+          </div>
+        </div>
+
+        <!-- 1080p Video Player Frame (Lazy-Loaded Below the Fold with Explicit Dimensions) -->
+        <div class="vsl-shell">
+          <div class="vsl-inner relative aspect-video">
+            <video
+              id="aiEmployeeVslVideo"
+              controls
+              loading="lazy"
+              width="1920"
+              height="1080"
+              poster="images/ai-employee-vsl-poster.jpg"
+              preload="metadata"
+              playsinline
+              aria-details="vsl-transcript"
+              class="w-full h-full object-cover block"
+            >
+              <source src="video/tiberius-ai-employee-vsl.mp4" type="video/mp4" />
+              <track src="video/ai-employee-vsl-en.vtt" kind="captions" srclang="en" label="English" default />
+              Your browser does not support HTML5 video.
+            </video>
+
+            <!-- Click-to-Play Poster Overlay -->
+            <button
+              type="button"
+              id="vslPosterPlayBtn"
+              class="vsl-poster-overlay tap-target"
+              aria-label="Play 2.5-minute AI Office Manager walkthrough video with sound"
+            >
+              <span class="vsl-play-circle" aria-hidden="true">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M8 5.14v14l11-7-11-7z"></path>
+                </svg>
+              </span>
+              <span class="px-4 py-2 rounded-full bg-slate-950/85 border border-white/20 text-white font-display font-bold text-xs sm:text-sm shadow-lg">
+                ▶ Play 2.5-Min Live Demo (With Sound)
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Interactive Chapter Jump Bar -->
+        <div class="mt-4 grid grid-cols-2 sm:grid-cols-5 gap-2" role="group" aria-label="Jump to video chapter">
+          <button
+            type="button"
+            data-vsl-jump="0"
+            aria-current="true"
+            class="vsl-chapter-btn tap-target px-3 py-2.5 rounded-xl bg-white hover:bg-iceActive border border-borderSubtle text-left transition"
+          >
+            <span class="block font-mono text-[11px] font-bold text-cobalt">0:00</span>
+            <span class="block font-display font-bold text-xs text-ink leading-snug">No-Dashboard Promise</span>
+          </button>
+          <button
+            type="button"
+            data-vsl-jump="30.2"
+            class="vsl-chapter-btn tap-target px-3 py-2.5 rounded-xl bg-white hover:bg-iceActive border border-borderSubtle text-left transition"
+          >
+            <span class="block font-mono text-[11px] font-bold text-cobalt">0:30</span>
+            <span class="block font-display font-bold text-xs text-ink leading-snug">$23.2k Live Sales Demo</span>
+          </button>
+          <button
+            type="button"
+            data-vsl-jump="73.0"
+            class="vsl-chapter-btn tap-target px-3 py-2.5 rounded-xl bg-white hover:bg-iceActive border border-borderSubtle text-left transition"
+          >
+            <span class="block font-mono text-[11px] font-bold text-cobalt">1:13</span>
+            <span class="block font-display font-bold text-xs text-ink leading-snug">$88k–$177k Shop Math</span>
+          </button>
+          <button
+            type="button"
+            data-vsl-jump="108.4"
+            class="vsl-chapter-btn tap-target px-3 py-2.5 rounded-xl bg-white hover:bg-iceActive border border-borderSubtle text-left transition"
+          >
+            <span class="block font-mono text-[11px] font-bold text-cobalt">1:48</span>
+            <span class="block font-display font-bold text-xs text-ink leading-snug">Voice Note &amp; $49/mo Plan</span>
+          </button>
+          <button
+            type="button"
+            data-vsl-jump="149.4"
+            class="vsl-chapter-btn col-span-2 sm:col-span-1 tap-target px-3 py-2.5 rounded-xl bg-white hover:bg-iceActive border border-borderSubtle text-left transition"
+          >
+            <span class="block font-mono text-[11px] font-bold text-cobalt">2:29</span>
+            <span class="block font-display font-bold text-xs text-ink leading-snug">$0.00 7-Day Trial Flow</span>
+          </button>
+        </div>
+
+        <!-- Fast-Mover CTA Row + Expandable Accessible Verbatim Transcript -->
+        <div class="mt-6 motion-card rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
+          <div>
+            <p class="font-display font-extrabold text-sm sm:text-base text-ink">
+              Ready to test your AI Office Manager from your work truck for $0?
+            </p>
+            <p class="text-xs sm:text-sm text-bodySlate">
+              7-day free trial • Day-5 text reminder before any charge • Plans from $49/mo (or own outright later).
+            </p>
+          </div>
+          <button
+            type="button"
+            data-open-trial-modal="truck-assistant"
+            class="inline-flex items-center justify-center tap-target px-6 py-3.5 rounded-xl bg-cobalt hover:bg-cobaltHover text-white font-extrabold text-sm shadow-sm transition shrink-0"
+          >
+            Try Tiberius AI for Free ($0 Today) →
+          </button>
+        </div>
+
+        <details id="vsl-transcript" class="faq-item mt-4 rounded-xl bg-white border border-borderSubtle px-4 py-3 text-xs sm:text-sm text-bodySlate">
+          <summary class="tap-target font-semibold text-ink">
+            Read Full Video Transcript (2m 56s)
+          </summary>
+          <div class="pt-3 mt-2 border-t border-borderSubtle space-y-2.5 leading-relaxed">
+            <p><strong>[0:00]</strong> If you run a contracting or home-service business — I’m going to save you a lot of time right up front. I’m not some tech bro pitching you another complicated software dashboard with 50 buttons nobody on your crew has time to touch. But if you’re tired of working a full day in the field, only to come home at 8:30 at night and start a second shift chasing QuickBooks invoices, returning missed calls, and following up cold quotes — give me two minutes. I’m going to show you how an AI Office Manager puts that money back in your bank account and gives you your evenings back, starting for $0 today.</p>
+            <p><strong>[0:30]</strong> Watch the actual numbers right here on my screen. Every weekday at 7:30 AM while you’re grabbing coffee, your AI employee checks the programs you already run. First, it spots 3 QuickBooks invoices over 30 days late — $8,400 sitting unpaid — copies the pay links, and texts your phone. Nothing goes out behind your back. You tap approve once from your truck, and the reminders go out. Second, it checks last week’s unsigned estimates — $28,500 in open bids you got too busy to chase — sends friendly check-ins, and books a $14,800 job onto Tuesday’s calendar. Third, when a homeowner calls at 2:30 PM while you’re up on a ladder, it texts them back in 6 seconds and locks in the estimate before they call the next guy on Google.</p>
+            <p><strong>[1:13]</strong> Look at what that math actually means for your life. Even for a 1-to-2-crew shop spending 10 hours a week on paperwork and letting 4 quotes a month slip, saving just 1 in 4 open bids puts $88,800 back on your books, and hands you back over 500 hours a year. Run a multi-crew shop, and that jumps to $177,000 in recovered work. If that’s all you need to see, click Try Tiberius AI for Free right below to test it from your phone for 7 days at $0 today. However, if you’ve been burned by lead companies or clunky software before, give me 45 more seconds.</p>
+            <p><strong>[1:48]</strong> Contractors usually hesitate for two reasons. First, you think, “I’m terrible with computers, my guys will never use this.” Most tools fail because they force you to learn a whole new app. With Tiberius, there is no dashboard to learn — if you can send a 10-second voice note from your truck between jobs, your AI handles the rest. Second, you hate getting trapped in thousand-dollar agency retainers where you lose everything if you cancel. That’s why we flipped the model. You start on your phone for $0 today — then just $49 a month on our annual Truck Assistant plan, or $197 for a Dedicated Cloud Computer and missed-call line. And once it proves its worth after 30 days, you can even apply your first month toward buying out 100% ownership.</p>
+            <p><strong>[2:29]</strong> Here’s what happens when you click below. Answer two quick taps, sign in with one click, and your AI texts your cell phone in 60 seconds. We even text you a reminder 48 hours before your trial ends so there are never surprise charges. Worst case, you reply CANCEL before Day 7 and pay $0. Best case, it saves one slipped job this week, pays for itself for the next three years, and gives you your evenings back with your family. Click Try Tiberius AI for Free right below.</p>
+          </div>
+        </details>
 
       </div>
     </section>
@@ -5182,6 +5418,131 @@
           )}&plan=${encodeURIComponent(rawPlan)}`;
         }, 300);
       });
+
+      // VSL Player: Native media lazy-load IntersectionObserver fallback + Poster Play + Chapter Jumps
+      const vslVideo = document.getElementById('aiEmployeeVslVideo');
+      const vslPosterBtn = document.getElementById('vslPosterPlayBtn');
+      const vslChapterBtns = Array.from(document.querySelectorAll('[data-vsl-jump]'));
+      const watchVslHeroBtn = document.getElementById('watchVslHeroBtn');
+
+      if (vslVideo) {
+        const supportsLazyMedia = Object.hasOwn(HTMLMediaElement.prototype, 'loading');
+        let mediaObserver = null;
+
+        function hydrateVslMedia() {
+          let changed = false;
+          if (vslVideo.dataset.poster) {
+            vslVideo.poster = vslVideo.dataset.poster;
+            delete vslVideo.dataset.poster;
+            changed = true;
+          }
+          if (vslVideo.dataset.preload) {
+            vslVideo.preload = vslVideo.dataset.preload;
+            delete vslVideo.dataset.preload;
+            changed = true;
+          }
+          for (const source of vslVideo.querySelectorAll('source[data-src]')) {
+            source.src = source.dataset.src;
+            delete source.dataset.src;
+            changed = true;
+          }
+          if (changed) {
+            vslVideo.load();
+          }
+          if (mediaObserver) {
+            mediaObserver.unobserve(vslVideo);
+            mediaObserver = null;
+          }
+        }
+
+        if (!supportsLazyMedia && 'IntersectionObserver' in window) {
+          if (vslVideo.hasAttribute('poster')) {
+            vslVideo.dataset.poster = vslVideo.getAttribute('poster');
+            vslVideo.removeAttribute('poster');
+          }
+          if (vslVideo.hasAttribute('preload') && vslVideo.getAttribute('preload') !== 'none') {
+            vslVideo.dataset.preload = vslVideo.getAttribute('preload');
+          }
+          vslVideo.preload = 'none';
+          for (const source of vslVideo.querySelectorAll('source[src]')) {
+            source.dataset.src = source.getAttribute('src');
+            source.removeAttribute('src');
+          }
+
+          mediaObserver = new IntersectionObserver(
+            (entries) => {
+              for (const entry of entries) {
+                if (!entry.isIntersecting) continue;
+                hydrateVslMedia();
+              }
+            },
+            { rootMargin: '250px 0px' }
+          );
+          mediaObserver.observe(vslVideo);
+        }
+
+        function setActiveChapterByTime(sec) {
+          let activeIdx = 0;
+          vslChapterBtns.forEach((btn, idx) => {
+            const jumpSec = parseFloat(btn.getAttribute('data-vsl-jump') || '0');
+            if (sec >= jumpSec - 0.3) activeIdx = idx;
+          });
+          vslChapterBtns.forEach((btn, idx) => {
+            if (idx === activeIdx) {
+              btn.setAttribute('aria-current', 'true');
+            } else {
+              btn.removeAttribute('aria-current');
+            }
+          });
+        }
+
+        function playVslAt(targetSec) {
+          hydrateVslMedia();
+          if (vslPosterBtn) vslPosterBtn.hidden = true;
+          if (typeof targetSec === 'number' && !Number.isNaN(targetSec)) {
+            const seekNow = () => {
+              try {
+                vslVideo.currentTime = targetSec;
+              } catch (_e) {}
+            };
+            if (vslVideo.readyState >= 1) {
+              seekNow();
+            } else {
+              vslVideo.addEventListener('loadedmetadata', seekNow, { once: true });
+            }
+            setActiveChapterByTime(targetSec);
+          }
+          vslVideo.play().catch(() => {});
+        }
+
+        if (vslPosterBtn) {
+          vslPosterBtn.addEventListener('click', () => {
+            playVslAt(null);
+            vslVideo.focus();
+          });
+        }
+
+        vslVideo.addEventListener('play', () => {
+          if (vslPosterBtn) vslPosterBtn.hidden = true;
+        });
+
+        vslVideo.addEventListener('timeupdate', () => {
+          setActiveChapterByTime(vslVideo.currentTime || 0);
+        });
+
+        vslChapterBtns.forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const sec = parseFloat(btn.getAttribute('data-vsl-jump') || '0');
+            playVslAt(sec);
+          });
+        });
+
+        if (watchVslHeroBtn) {
+          watchVslHeroBtn.addEventListener('click', () => {
+            hydrateVslMedia();
+          });
+        }
+      }
     })();
   </script>
 </body>
