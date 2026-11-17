@@ -22,6 +22,14 @@
       "destination": "/handoff.html"
     },
     {
+      "source": "/signup",
+      "destination": "/signup.html"
+    },
+    {
+      "source": "/signup.html",
+      "destination": "/signup.html"
+    },
+    {
       "source": "/ai-employee/onboarding",
       "destination": "/handoff.html"
     },

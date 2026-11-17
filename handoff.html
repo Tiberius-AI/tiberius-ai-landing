@@ -827,10 +827,11 @@
           <div>
             <p class="font-display font-bold text-xs uppercase tracking-wider text-ink mb-3">AI Employee</p>
             <ul role="list" class="space-y-2 text-bodySlate">
-              <li><a href="/" class="inline-block py-1 hover:text-cobalt transition-colors">AI Employee Home</a></li>
-              <li><a href="/#workflows" class="inline-block py-1 hover:text-cobalt transition-colors">How It Works</a></li>
-              <li><a href="/#pricing" class="inline-block py-1 hover:text-cobalt transition-colors">Pricing ($1,497)</a></li>
-              <li><a href="/handoff" aria-current="page" class="inline-block py-1 font-bold text-ink underline decoration-cobalt decoration-2 underline-offset-4">15-Min Handoff Portal</a></li>
+              <li><a href="index.html" class="inline-block py-1 hover:text-cobalt transition-colors">AI Employee Home</a></li>
+              <li><a href="index.html#workflows" class="inline-block py-1 hover:text-cobalt transition-colors">How It Works</a></li>
+              <li><a href="index.html#pricing" class="inline-block py-1 hover:text-cobalt transition-colors">Pricing (From $49/mo)</a></li>
+              <li><a href="signup.html" class="inline-block py-1 text-cobalt font-semibold hover:underline transition-colors">Start 7-Day Free Trial →</a></li>
+              <li><a href="handoff.html" aria-current="page" class="inline-block py-1 font-bold text-ink underline decoration-cobalt decoration-2 underline-offset-4">15-Min Handoff Portal</a></li>
             </ul>
           </div>
 
@@ -905,8 +906,14 @@
         document.getElementById('clientProgramsBadge').textContent = programsParam;
       }
       if (planParam) {
+        const planLabels = {
+          'truck-assistant': 'AI Truck Assistant (7-Day Trial)',
+          'office-manager': 'Full Office Manager (7-Day Trial)',
+          'managed-997-197': 'Managed Care ($197/mo)',
+          'turnkey-1497': 'Turnkey Ownership ($1,497)'
+        };
         document.getElementById('clientPlanBadge').textContent =
-          planParam === 'managed-997-197' ? 'Managed Care ($197/mo)' : 'Turnkey Ownership ($1,497)';
+          planLabels[planParam] || 'Asks for Your OK First';
       }
 
       const cloudUrlInput = document.getElementById('cloudBrowserUrl');

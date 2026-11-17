@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tiberius AI Employee™ | Stay on the Tools — Your AI Employee Handles the Office Work</title>
-  <meta name="description" content="You stay on the tools — your AI employee handles the office work, QuickBooks, and your schedule from its own computer in the cloud. Asks for your OK before anything goes out. $1,497 Turnkey Ownership or $997 + $197/mo Managed." />
+  <title>Tiberius AI Employee™ | Try Your AI Office Manager Free — Plans From $49/mo</title>
+  <meta name="description" content="Start your 7-day free trial ($0 due today, cancel in 1 click). Stay on the tools while your AI employee handles QuickBooks, quotes, missed calls, and your 7:30 AM briefing. Plans from $49/mo — unlock Turnkey Ownership later once you love it." />
   <meta name="theme-color" content="#FFFFFF" />
   <link rel="canonical" href="https://www.tiberius.ai/" />
   <link rel="icon" type="image/png" href="images/logo4.png" />
@@ -414,20 +414,495 @@
       }
     }
 
+    /* ========================================================================
+       M6: HIGH-CONTRAST OLD WAY VS. TIBERIUS WAY (#comparison)
+       ======================================================================== */
+    .comparison-wash {
+      background: linear-gradient(180deg, #EEF5FF 0%, #FFFFFF 220px);
+    }
+
+    .old-way-container {
+      background: linear-gradient(180deg, #FFF1F2 0%, #FFE4E6 100%);
+      background-color: #FFF1F2;
+      border: 2px solid #FECDD3;
+      box-shadow: 0 12px 32px rgba(225, 29, 72, 0.07);
+      transition: transform 0.22s ease, box-shadow 0.22s ease, opacity 0.22s ease;
+    }
+
+    .tiberius-way-shell {
+      background: linear-gradient(135deg, #2563EB 0%, #4F46E5 50%, #059669 100%);
+      padding: 3px;
+      border-radius: 1.25rem;
+      box-shadow: 0 18px 44px rgba(37, 99, 235, 0.18), 0 6px 20px rgba(5, 150, 105, 0.14);
+      transition: transform 0.22s ease, box-shadow 0.22s ease, opacity 0.22s ease;
+    }
+
+    .tiberius-way-inner {
+      background: linear-gradient(180deg, #F8FAFF 0%, #FFFFFF 100%);
+      border-radius: calc(1.25rem - 3px);
+    }
+
+    .comparison-spotlight-old .tiberius-way-shell {
+      opacity: 0.82;
+    }
+
+    .comparison-spotlight-new .old-way-container {
+      opacity: 0.78;
+    }
+
+    /* Mode switcher tabs with shape indicator (never color alone per WCAG 1.4.1) */
+    .mode-switch-tab {
+      position: relative;
+      transition: background-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .mode-switch-tab[aria-selected="true"]::after,
+    .battlecard-filter-tab[aria-selected="true"]::after {
+      content: "";
+      position: absolute;
+      inset: auto 0.65rem 0.2rem;
+      border-block-end: 3px solid currentColor;
+      border-radius: 999px;
+    }
+
+    /* Paired 1-to-1 transformation rows */
+    .old-pain-row {
+      background-color: rgba(255, 255, 255, 0.86);
+      border: 1px solid #FECDD3;
+      border-left: 4px solid #E11D48;
+      transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    .old-pain-row[data-row-active="true"] {
+      background-color: #FFFFFF;
+      border-color: #FB7185;
+      border-left: 4px solid #BE123C;
+      box-shadow: 0 6px 18px rgba(225, 29, 72, 0.12);
+    }
+
+    .new-fix-row {
+      background-color: #FFFFFF;
+      border: 1px solid #CBD5E1;
+      border-left: 4px solid #059669;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+      transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+    .new-fix-row[data-row-active="true"] {
+      background-color: #F0FDF4;
+      border-color: #2563EB;
+      border-left: 4px solid #2563EB;
+      box-shadow: 0 8px 22px rgba(37, 99, 235, 0.14);
+    }
+
+    .transform-connector-pill {
+      transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .transform-connector-pill[data-row-active="true"] {
+      background: linear-gradient(90deg, #2563EB 0%, #059669 100%);
+      color: #FFFFFF;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.24);
+    }
+
+    @keyframes softPulseDot {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.24);
+        opacity: 0.72;
+      }
+    }
+
+    @keyframes connectorSlide {
+      0%, 100% {
+        transform: translateX(0);
+      }
+      50% {
+        transform: translateX(3px);
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .pulse-indicator-dot {
+        animation: softPulseDot 2s ease-in-out infinite;
+      }
+
+      .transform-connector-pill[data-row-active="true"] .connector-arrow {
+        display: inline-block;
+        animation: connectorSlide 1.1s ease-in-out infinite;
+      }
+
+      .old-pain-row[data-row-active="true"],
+      .new-fix-row[data-row-active="true"] {
+        transform: translateY(-1px);
+      }
+    }
+
+    /* ========================================================================
+       M6: BRAND-CONSISTENT NATIVE RANGE SLIDER (modern-web-guidance: slider)
+       ======================================================================== */
+    input[type="range"].roi-slider {
+      --slider-track-size: 0.65rem;
+      --slider-thumb-size: 1.5rem;
+      --slider-track-radius: 999px;
+      --slider-thumb-radius: 50%;
+      /* >= 3:1 contrast against #FFFFFF / #F8FAFC card surface */
+      --slider-track-color: #94A3B8;
+      --slider-fill-color: #2563EB;
+      --slider-thumb-color: #2563EB;
+      --slider-direction: to right;
+
+      --attr-min: attr(min type(<number>), 0);
+      --attr-max: attr(max type(<number>), 100);
+      --control-value: attr(value type(<number>), 10);
+      --slider-progress: calc(
+        progress(var(--control-value), var(--attr-min), var(--attr-max)) * 100%
+      );
+
+      appearance: none;
+      inline-size: 100%;
+      block-size: 2.75rem;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    input[type="range"].roi-slider:dir(rtl) {
+      --slider-direction: to left;
+    }
+
+    @supports not (opacity: progress(1, 0, 100)) {
+      input[type="range"].roi-slider {
+        --slider-progress: calc(
+          (var(--control-value) - var(--attr-min)) /
+          (var(--attr-max) - var(--attr-min)) * 100%
+        );
+      }
+    }
+
+    /* WebKit/Blink track & thumb (declared in separate blocks per slider guide) */
+    input[type="range"].roi-slider::-webkit-slider-runnable-track {
+      block-size: var(--slider-track-size);
+      border: 0;
+      border-radius: var(--slider-track-radius);
+      background: linear-gradient(
+        var(--slider-direction),
+        var(--slider-fill-color) var(--slider-progress),
+        var(--slider-track-color) var(--slider-progress)
+      );
+    }
+
+    input[type="range"].roi-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      inline-size: var(--slider-thumb-size);
+      block-size: var(--slider-thumb-size);
+      margin-block-start: calc(
+        (var(--slider-track-size) - var(--slider-thumb-size)) / 2
+      );
+      border: 3px solid #FFFFFF;
+      border-radius: var(--slider-thumb-radius);
+      background: var(--slider-thumb-color);
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.25);
+    }
+
+    /* Firefox track, progress & thumb */
+    input[type="range"].roi-slider::-moz-range-track {
+      block-size: var(--slider-track-size);
+      border: 0;
+      border-radius: var(--slider-track-radius);
+      background: var(--slider-track-color);
+    }
+
+    input[type="range"].roi-slider::-moz-range-progress {
+      block-size: var(--slider-track-size);
+      border-radius: var(--slider-track-radius);
+      background: var(--slider-fill-color);
+    }
+
+    input[type="range"].roi-slider::-moz-range-thumb {
+      inline-size: var(--slider-thumb-size);
+      block-size: var(--slider-thumb-size);
+      border: 3px solid #FFFFFF;
+      border-radius: var(--slider-thumb-radius);
+      background: var(--slider-thumb-color);
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.25);
+    }
+
+    input[type="range"].roi-slider:focus-visible {
+      outline: 3px solid var(--slider-fill-color);
+      outline-offset: 4px;
+      border-radius: 0.5rem;
+    }
+
+    /* ========================================================================
+       M6: 4-WAY VISUAL BATTLECARD MATRIX (modern-web-guidance: responsive-table)
+       ======================================================================== */
+    .battlecard-table-wrapper {
+      overflow: auto;
+      max-inline-size: 100%;
+      container-type: inline-size;
+    }
+
+    .battlecard-table {
+      border-collapse: separate;
+      border-spacing: 0;
+      width: 100%;
+      --label-diy: "1. Doing It Yourself at Night";
+      --label-w2: "2. Part-Time W-2 Office Hire";
+      --label-agency: "3. Other AI Agencies & SaaS Tools";
+      --label-tiberius: "4. Tiberius AI Employee (100% Yours)";
+    }
+
+    .battlecard-table thead {
+      position: sticky;
+      inset-block-start: 0;
+      z-index: 2;
+    }
+
+    .battlecard-table tbody th {
+      position: sticky;
+      inset-inline-start: 0;
+      background-color: #F8FAFC;
+      z-index: 1;
+    }
+
+    .battlecard-winner-header {
+      background: linear-gradient(135deg, #2563EB 0%, #4F46E5 55%, #059669 100%);
+      color: #FFFFFF;
+    }
+
+    .battlecard-winner-cell {
+      background: linear-gradient(180deg, #F0F7FF 0%, #ECFDF5 100%);
+      border-inline: 2px solid #2563EB;
+    }
+
+    .battlecard-table tbody tr:last-child .battlecard-winner-cell {
+      border-block-end: 2px solid #059669;
+    }
+
+    /* Container query stacked cards on narrow screens (<860px, including 390px mobile) */
+    @container (width < 860px) {
+      .battlecard-table,
+      .battlecard-table thead,
+      .battlecard-table tbody,
+      .battlecard-table tr,
+      .battlecard-table th,
+      .battlecard-table td {
+        display: block;
+      }
+
+      .battlecard-table thead {
+        display: none;
+      }
+
+      .battlecard-table tbody tr {
+        margin-block-end: 1rem;
+        border: 1.5px solid #CBD5E1;
+        border-radius: 1rem;
+        overflow: hidden;
+        background-color: #FFFFFF;
+        box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+      }
+
+      .battlecard-table tbody th {
+        position: sticky;
+        inset-block-start: 0;
+        z-index: 2;
+        background-color: #0F172A;
+        color: #FFFFFF;
+        padding: 0.85rem 1rem;
+        border-block-end: 1px solid #334155;
+      }
+
+      .battlecard-table td {
+        padding: 0.85rem 1rem;
+        border-block-end: 1px solid #E2E8F0;
+      }
+
+      .battlecard-table td.battlecard-winner-cell {
+        border-inline: 0;
+        border-inline-start: 5px solid #059669;
+        border-block-end: 0;
+      }
+
+      .battlecard-table td:nth-child(2)::before {
+        content: var(--label-diy) ": ";
+        display: block;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #64748B;
+        margin-block-end: 0.2rem;
+      }
+
+      .battlecard-table td:nth-child(3)::before {
+        content: var(--label-w2) ": ";
+        display: block;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #BE123C;
+        margin-block-end: 0.2rem;
+      }
+
+      .battlecard-table td:nth-child(4)::before {
+        content: var(--label-agency) ": ";
+        display: block;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #B45309;
+        margin-block-end: 0.2rem;
+      }
+
+      .battlecard-table td:nth-child(5)::before {
+        content: var(--label-tiberius) ": ";
+        display: block;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #047857;
+        margin-block-end: 0.2rem;
+      }
+    }
+
+    /* Animated 1-Year Cost Bar Fill */
+    .cost-bar-fill {
+      transform-origin: left center;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .cost-bar-fill {
+        transition: width 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+    }
+
     /* High contrast & Forced Colors Mode support */
     @media (prefers-contrast: more) {
       .motion-card,
       .motion-surface-card,
-      .job-tile {
+      .job-tile,
+      .old-way-container {
         border-color: #475569;
       }
     }
 
     @media (forced-colors: active) {
       .job-tile[aria-selected="true"],
-      .motion-step-item[aria-selected="true"] {
+      .motion-step-item[aria-selected="true"],
+      .mode-switch-tab[aria-selected="true"],
+      .battlecard-filter-tab[aria-selected="true"] {
         outline: 2px solid Highlight;
       }
+    }
+
+    /* Native Modal Dialog Scroll Containment & Top-Layer Entry/Exit Animations */
+    dialog:modal {
+      overscroll-behavior: contain;
+    }
+
+    dialog::backdrop {
+      overflow: hidden;
+      overscroll-behavior: contain;
+    }
+
+    dialog#trialQuizDialog {
+      opacity: 0;
+      padding: 0;
+      border: 1px solid #E2E8F0;
+      border-radius: 1.25rem;
+      max-width: 34rem;
+      width: calc(100% - 2rem);
+      background-color: #FFFFFF;
+      color: #0F172A;
+      box-shadow: 0 24px 64px rgba(15, 23, 42, 0.22);
+      transition-property: opacity, transform, display, overlay;
+      transition-duration: 0.25s;
+      transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+      transition-behavior: allow-discrete;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      dialog#trialQuizDialog {
+        transform: scale(0.95) translateY(6px);
+      }
+    }
+
+    dialog#trialQuizDialog::backdrop {
+      background-color: rgba(15, 23, 42, 0);
+      backdrop-filter: blur(0px);
+      transition-property: background-color, backdrop-filter, display, overlay;
+      transition-duration: 0.25s;
+      transition-timing-function: ease-out;
+      transition-behavior: allow-discrete;
+    }
+
+    :is(dialog#trialQuizDialog[open]):where(:not([data-closing])) {
+      opacity: 1;
+
+      @starting-style {
+        opacity: 0;
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        transform: scale(1) translateY(0);
+
+        @starting-style {
+          transform: scale(0.95) translateY(6px);
+        }
+      }
+
+      &::backdrop {
+        background-color: rgba(15, 23, 42, 0.52);
+        backdrop-filter: blur(6px);
+
+        @starting-style {
+          background-color: rgba(15, 23, 42, 0);
+          backdrop-filter: blur(0px);
+        }
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      dialog#trialQuizDialog,
+      dialog#trialQuizDialog::backdrop {
+        transition-duration: 0.1s;
+      }
+    }
+
+    .quiz-option-row {
+      background-color: #FFFFFF;
+      border: 1.5px solid #E2E8F0;
+      color: #0F172A;
+      transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .quiz-option-row:hover {
+      background-color: #F8FAFC;
+      border-color: #94A3B8;
+    }
+
+    .quiz-option-row:has(input:checked) {
+      background-color: #F1FAFF;
+      border-color: #3E63DD;
+      box-shadow: 0 2px 12px rgba(62, 99, 221, 0.1);
+    }
+
+    :is(.form-input:user-invalid, .form-input.user-invalid-fallback) {
+      border-color: var(--danger-red);
+      background-color: #FEF2F2;
     }
   </style>
 </head>
@@ -442,14 +917,14 @@
   <!-- ========================================================================
        HEADER:
        - Mobile (<768px): Full-width colorful Tiberius logo only (no links / no CTA)
-       - Desktop (>=768px): Sticky white bar — Colorful logo left + Basic menu center + CTA right
+       - Desktop (>=768px): Sticky white bar • Colorful logo left + Basic menu center + CTA right
        ======================================================================== -->
   <header class="relative md:sticky md:top-0 z-50 bg-white/95 backdrop-blur-md border-b border-borderSubtle">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 md:py-0 md:h-24 flex items-center justify-center md:justify-between gap-6">
       <a href="/" class="w-full md:w-auto flex items-center justify-center md:justify-start shrink-0" aria-label="Tiberius AI Home">
         <img
           src="images/logo4-color.png"
-          alt="Tiberius AI — The Bad Boys of AI"
+          alt="Tiberius AI • The Bad Boys of AI"
           width="1500"
           height="684"
           fetchpriority="high"
@@ -468,12 +943,13 @@
       </nav>
 
       <!-- Desktop-Only Right CTA Button -->
-      <a
-        href="#claim-build"
+      <button
+        type="button"
+        data-open-trial-modal="truck-assistant"
         class="hidden md:inline-flex items-center justify-center tap-target px-5 py-2.5 rounded-xl bg-cobalt hover:bg-cobaltHover text-white font-bold text-sm shadow-sm transition whitespace-nowrap shrink-0"
       >
-        Hire My AI Employee →
-      </a>
+        Try Tiberius AI for Free →
+      </button>
     </div>
   </header>
 
@@ -488,39 +964,45 @@
         <div class="max-w-4xl mx-auto text-center space-y-5 mb-10 sm:mb-12">
           <div class="inline-flex flex-wrap items-center justify-center gap-2 px-3.5 py-1.5 rounded-full bg-surface border border-borderSubtle text-bodySlate text-xs font-mono font-semibold">
             <span class="w-2 h-2 rounded-full bg-cobalt" aria-hidden="true"></span>
-            <span>DONE-FOR-YOU AI OFFICE MANAGER • ZERO TECH HEADACHES • ASKS FOR YOUR OK FIRST</span>
+            <span>AI OFFICE MANAGER FOR THE TRADES • $0 DUE TODAY • ASKS FOR YOUR OK FIRST</span>
           </div>
 
           <h1 id="main-heading" tabindex="-1" class="hero-headline font-extrabold">
-            Hire an AI Office Manager That Works Inside Your Books, Your Schedule, and Your Email — <span class="text-cobalt">So You Stay on the Tools.</span>
+            Hire an AI Office Manager That Works Inside Your Books, Your Schedule, and Your Email. <span class="text-cobalt">So You Stay on the Tools.</span>
           </h1>
 
           <p class="text-lg sm:text-xl text-bodySlate font-medium max-w-3xl mx-auto">
-            You stay on the tools — your AI employee handles the office work, QuickBooks, and your schedule from its own computer in the cloud.
+            You stay on the tools. Your AI employee handles the office work, QuickBooks, and your schedule without another complicated dashboard to learn.
           </p>
 
           <p class="text-sm sm:text-base text-bodySlate max-w-3xl mx-auto">
-            We build your AI employee with <strong class="text-ink">its own private computer in the cloud</strong>. It works inside the programs you already run — your books (QuickBooks), your schedule (Jobber, Housecall Pro, ServiceTitan), and your email. You talk or text from the drive between jobs, just like texting an office manager in your contacts — and it <strong class="text-ink">asks for your OK before anything goes out.</strong>
+            Start in 3 minutes on your phone for <strong class="text-ink">$0 today</strong>, then upgrade anytime to <strong class="text-ink">its own private computer in the cloud</strong> for ServiceTitan, Jobber, Housecall Pro, and 6-second missed-call text-back. You talk or text from the drive between jobs, and it <strong class="text-ink">asks for your OK before anything goes out.</strong>
           </p>
 
-          <!-- Primary CTA Buttons -->
-          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3.5 pt-2">
-            <a
-              href="#pricing"
-              class="inline-flex items-center justify-center tap-target px-7 py-4 rounded-xl bg-cobalt hover:bg-cobaltHover text-white font-extrabold text-base shadow-sm transition"
-            >
-              See Turnkey Pricing ($1,497 One-Time) →
-            </a>
-            <a
-              href="#workflows"
-              class="inline-flex items-center justify-center tap-target px-6 py-4 rounded-xl bg-surface hover:bg-surfaceMuted text-ink border border-borderSubtle font-bold text-sm transition"
-            >
-              See How It Works Step-by-Step
-            </a>
+          <!-- Primary CTA Buttons (Mirrors Motion Screenshot 1 Zero-Friction Entry) -->
+          <div class="pt-2 space-y-2.5">
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3.5">
+              <button
+                type="button"
+                data-open-trial-modal="truck-assistant"
+                class="inline-flex items-center justify-center tap-target px-8 py-4 rounded-xl bg-cobalt hover:bg-cobaltHover text-white font-extrabold text-base shadow-sm transition"
+              >
+                Try Tiberius AI for Free
+              </button>
+              <a
+                href="#pricing"
+                class="inline-flex items-center justify-center tap-target px-6 py-4 rounded-xl bg-surface hover:bg-surfaceMuted text-ink border border-borderSubtle font-bold text-sm transition"
+              >
+                See Plans (From $49/mo) →
+              </a>
+            </div>
+            <p class="text-xs sm:text-sm text-bodySlate font-medium">
+              Start your 7-day free trial. $0 due today. Cancel in 1 click.
+            </p>
           </div>
 
           <!-- 3 Core Contractor Promises -->
-          <div class="pt-2 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs sm:text-sm font-semibold text-bodySlate">
+          <div class="pt-1 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs sm:text-sm font-semibold text-bodySlate">
             <span class="inline-flex items-center gap-1.5">
               <span class="text-cobalt font-bold" aria-hidden="true">✓</span>
               <span>Asks for your OK before anything goes out</span>
@@ -531,7 +1013,7 @@
             </span>
             <span class="inline-flex items-center gap-1.5">
               <span class="text-cobalt font-bold" aria-hidden="true">✓</span>
-              <span>15-minute live handoff call</span>
+              <span>Day-5 text reminder before any charge</span>
             </span>
           </div>
         </div>
@@ -802,7 +1284,7 @@
                           <span id="heroDraftStatusBadge" class="font-mono text-[11px] text-cobalt font-semibold">✓ Ready for your OK</span>
                         </div>
                         <p id="heroDraftCopy" class="text-bodySlate italic">
-                          "Morning Tom — hope the new roof is holding up great. Just a quick note from Mike's office that Invoice #1084 ($4,200) is past 30 days. Here’s the direct QuickBooks pay link whenever you have a minute."
+                          "Morning Tom, hope the new roof is holding up great. Just a quick note from Mike's office that Invoice #1084 ($4,200) is past 30 days. Here’s the direct QuickBooks pay link whenever you have a minute."
                         </p>
                       </div>
                     </div>
@@ -837,7 +1319,7 @@
                       </div>
 
                       <div id="heroPhoneApprovedReply" class="hidden p-3 rounded-2xl rounded-tr-none bg-cobalt text-white font-semibold text-xs sm:text-sm ml-6 stage-animate">
-                        ✓ Approved — Send all 3 reminders.
+                        ✓ Approved: Send all 3 reminders.
                       </div>
 
                       <div id="heroPhoneApprovedConfirm" class="hidden p-3 rounded-2xl rounded-tl-none bg-statusBg border border-statusText/20 text-statusText text-xs sm:text-sm font-medium stage-animate">
@@ -853,7 +1335,7 @@
                       id="heroApproveActionBtn"
                       class="w-full tap-target py-2.5 px-4 rounded-xl bg-cobalt hover:bg-cobaltHover text-white font-bold text-xs sm:text-sm transition shadow-sm"
                     >
-                      [Tap to Approve] — Send All 3 Reminders ($8,400)
+                      [Tap to Approve] • Send All 3 Reminders ($8,400)
                     </button>
                     <div class="flex items-center justify-between text-[11px] text-mutedSlate font-mono">
                       <span>Nothing goes out until you tap OK.</span>
@@ -880,116 +1362,505 @@
     </section>
 
     <!-- ======================================================================
-         SECTION 2: MOTION-STYLE 2-COLUMN GREY-VS-WHITE COMPARISON SECTION
-         Left Card (#F8FAFC muted grey container with ✕ badges) vs.
-         Right Card (#FFFFFF elevated crisp white card with cobalt ✓ badges)
+         SECTION 2: M6 HIGH-CONTRAST ANIMATED OLD WAY VS. NEW WAY SECTION (#comparison)
+         Soft sky-blue top gradient wash + interactive '8:45 PM Kitchen Table vs.
+         7:30 AM Work Truck' switcher bar + warm rose warning frame vs. vibrant
+         multi-stop gradient outer shell + 5 paired 1-to-1 transformation rows
          ====================================================================== -->
-    <section id="comparison" class="py-16 sm:py-24 border-b border-borderSubtle bg-canvas">
+    <section id="comparison" class="comparison-wash py-16 sm:py-24 border-b border-borderSubtle">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <div class="max-w-3xl mx-auto text-center mb-12">
-          <span class="inline-block font-mono text-xs font-bold uppercase tracking-widest text-cobalt mb-2">
-            STOP WORKING A SECOND SHIFT AT YOUR KITCHEN TABLE
+        <!-- Section Header -->
+        <div class="max-w-3xl mx-auto text-center mb-8 sm:mb-10">
+          <span class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white border border-cobalt/30 font-mono text-xs font-bold uppercase tracking-wider text-cobalt shadow-sm mb-3">
+            <span class="w-2 h-2 rounded-full bg-cobalt pulse-indicator-dot" aria-hidden="true"></span>
+            <span>STOP WORKING A SECOND SHIFT AT YOUR KITCHEN TABLE</span>
           </span>
           <h2 class="section-headline font-extrabold mb-3">
             Doing It Yourself After Dark vs. Your Done-For-You AI Office Manager
           </h2>
           <p class="text-bodySlate text-base sm:text-lg">
-            You didn't start a contracting business to sit at a laptop at 8:30 PM chasing QuickBooks invoices or watching software training videos.
+            You didn't start a contracting business to sit at a laptop at 8:45 PM chasing QuickBooks invoices or watching software training videos. Tap any row or switch modes below to inspect the difference.
           </p>
         </div>
 
-        <!-- Motion 2-Column Grey-vs-White Card Pattern -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-stretch">
+        <!-- Interactive '8:45 PM Kitchen Table vs. 7:30 AM Work Truck' Toggle/Switcher Bar + Animated Live Metric Pills -->
+        <div class="motion-card rounded-2xl p-4 sm:p-5 mb-8 border border-cobalt/20 bg-white/95">
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
 
-          <!-- Left Card: #F8FAFC Muted Grey Container with ✕ Badges -->
-          <div class="motion-surface-card rounded-2xl p-6 sm:p-8 flex flex-col justify-between">
-            <div>
-              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-borderSubtle text-mutedSlate font-mono text-xs font-bold mb-4">
-                <span>THE OLD WAY • AFTER-DARK OFFICE GRIND</span>
-              </div>
-              <h3 class="font-display font-extrabold text-xl sm:text-2xl text-ink mb-2">
-                Doing It Yourself After Dark (Or Paying $45,000/yr)
-              </h3>
-              <p class="text-sm sm:text-base text-bodySlate mb-6">
-                What happens when you stay on the tools all day and get stuck doing the office work yourself at night:
-              </p>
-
-              <ul class="space-y-4 text-sm sm:text-base text-bodySlate">
-                <li class="flex items-start gap-3.5">
-                  <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 font-mono text-xs font-bold flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">✕</span>
-                  <span><strong class="text-ink">Chasing invoices on Sunday night:</strong> Opening QuickBooks at 8:30 PM after a 50-hour week to figure out who still owes you $8,400 from last month.</span>
-                </li>
-                <li class="flex items-start gap-3.5">
-                  <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 font-mono text-xs font-bold flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">✕</span>
-                  <span><strong class="text-ink">Missed calls going to voicemail on a roof or crawlspace:</strong> When you're on a loud job site, homeowners hang up and call the next contractor on Google.</span>
-                </li>
-                <li class="flex items-start gap-3.5">
-                  <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 font-mono text-xs font-bold flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">✕</span>
-                  <span><strong class="text-ink">Quotes sitting unsigned for weeks:</strong> You spend 2 hours driving out, measuring, and pricing a $14,800 job — then get busy and never follow up before they go cold.</span>
-                </li>
-                <li class="flex items-start gap-3.5">
-                  <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 font-mono text-xs font-bold flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">✕</span>
-                  <span><strong class="text-ink">Learning complicated software:</strong> Paying $400–$1,000/mo for bloated dashboards with 50 buttons nobody on your crew has time to touch.</span>
-                </li>
-                <li class="flex items-start gap-3.5">
-                  <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 font-mono text-xs font-bold flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">✕</span>
-                  <span><strong class="text-ink">$45,000/yr payroll or $15,000/yr agency retainers:</strong> Paying W-2 payroll taxes for an office hire or getting locked into a $1,250/mo staffing agency contract.</span>
-                </li>
-              </ul>
+            <!-- Mode Switcher Control (ARIA Tablist with underline shape indicator) -->
+            <div class="flex flex-wrap items-center gap-2" role="tablist" aria-label="8:45 PM Kitchen Table vs. 7:30 AM Work Truck comparison view">
+              <button
+                type="button"
+                role="tab"
+                id="compModeBoth"
+                aria-selected="true"
+                tabindex="0"
+                data-comp-mode="both"
+                class="mode-switch-tab tap-target px-4 py-2.5 rounded-xl bg-cobalt text-white font-display font-bold text-xs sm:text-sm shadow-sm"
+              >
+                ⚡ Side-by-Side Transformation
+              </button>
+              <button
+                type="button"
+                role="tab"
+                id="compModeOld"
+                aria-selected="false"
+                tabindex="-1"
+                data-comp-mode="old"
+                class="mode-switch-tab tap-target px-4 py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-900 border border-rose-200 font-display font-bold text-xs sm:text-sm"
+              >
+                🕣 8:45 PM Kitchen Table (The Old Way)
+              </button>
+              <button
+                type="button"
+                role="tab"
+                id="compModeNew"
+                aria-selected="false"
+                tabindex="-1"
+                data-comp-mode="new"
+                class="mode-switch-tab tap-target px-4 py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 font-display font-bold text-xs sm:text-sm"
+              >
+                📱 7:30 AM Work Truck (The Tiberius Way)
+              </button>
             </div>
 
-            <!-- Visual Muted Night-Shift Strip -->
-            <div class="mt-6 pt-4 border-t border-borderSubtle">
-              <div class="p-3.5 rounded-xl bg-surfaceMuted border border-borderSubtle flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-mutedSlate">
-                <span>🕣 8:45 PM Kitchen Table Laptop</span>
-                <span class="font-bold text-bodySlate">10–15 hrs/wk unpaid evening work</span>
+            <!-- Animated Live Metric Pills + Auto-Cycle Pause/Play Button (WCAG 2.2.2) -->
+            <div class="flex flex-wrap items-center gap-2">
+              <span
+                id="compMetricPillHours"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-iceActive border border-cobalt/30 text-cobalt font-mono text-xs font-extrabold transition"
+              >
+                <span class="w-2 h-2 rounded-full bg-cobalt pulse-indicator-dot" aria-hidden="true"></span>
+                <span>12+ hrs/wk saved</span>
+              </span>
+              <span
+                id="compMetricPillCash"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-statusBg border border-statusText/30 text-statusText font-mono text-xs font-extrabold transition"
+              >
+                <span>✓ $8,400 collected faster</span>
+              </span>
+              <span
+                id="compMetricPillCall"
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-800 font-mono text-xs font-extrabold transition"
+              >
+                <span>⚡ 6-sec missed-call text</span>
+              </span>
+              <button
+                type="button"
+                id="compCycleToggleBtn"
+                class="tap-target px-3 py-1.5 rounded-xl bg-surface hover:bg-surfaceMuted border border-borderSubtle font-mono text-xs font-bold text-ink transition"
+              >
+                ⏸ Pause Row Highlight
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Active Transformation Status Readout Bar -->
+          <div id="compLiveBanner" class="mt-4 pt-3.5 border-t border-borderSubtle flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm">
+            <div class="flex items-center gap-2">
+              <span id="compBannerStepBadge" class="px-2.5 py-0.5 rounded-md bg-cobalt text-white font-mono text-xs font-bold">
+                TRANSFORMATION 1 OF 5
+              </span>
+              <span id="compBannerText" class="font-semibold text-ink">
+                Chasing invoices on Sunday night → Opens your books at 7:30 AM with pay link ready for 1-tap OK
+              </span>
+            </div>
+            <span class="font-mono text-xs text-mutedSlate">Tap any of the 5 rows below to inspect</span>
+          </div>
+        </div>
+
+        <!-- 2-Column High-Contrast Comparison Container -->
+        <div id="comparisonColumnsGrid" class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 items-stretch">
+
+          <!-- LEFT COLUMN: The Old Way: Doing It Yourself After Dark (Warm Rose/Slate Warning Container #FFF1F2, #FECDD3 border) -->
+          <div id="oldWayColumnCard" class="old-way-container rounded-2xl p-5 sm:p-7 flex flex-col justify-between">
+            <div>
+              <!-- Top Warning Pill + Pulsing 8:45 PM Kitchen Table Laptop Pill -->
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-rose-300 text-rose-800 font-mono text-xs font-extrabold">
+                  <span class="w-2 h-2 rounded-full bg-rose-600 pulse-indicator-dot" aria-hidden="true"></span>
+                  <span>THE OLD WAY • AFTER-DARK GRIND</span>
+                </span>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-900 text-white font-mono text-xs font-bold shadow-sm">
+                  <span class="w-2 h-2 rounded-full bg-amber-300 pulse-indicator-dot" aria-hidden="true"></span>
+                  <span>🕣 8:45 PM Kitchen Table Laptop</span>
+                </span>
+              </div>
+
+              <h3 class="font-display font-extrabold text-xl sm:text-2xl text-ink mb-1.5">
+                The Old Way: Doing It Yourself After Dark
+              </h3>
+              <p class="text-sm sm:text-base text-bodySlate mb-5">
+                What happens when you stay on the tools all day and get stuck working a second unpaid shift at night (or paying $45,000/yr):
+              </p>
+
+              <!-- 5 Paired Old Way Pain Rows -->
+              <div class="space-y-3" role="list" aria-label="The Old Way: 5 After-Dark Contractor Pain Points">
+
+                <!-- Row 1 -->
+                <div
+                  role="listitem"
+                  tabindex="0"
+                  data-transform-row="0"
+                  data-row-active="true"
+                  class="old-pain-row rounded-xl p-3.5 sm:p-4 cursor-pointer"
+                >
+                  <div class="flex items-start justify-between gap-3">
+                    <div class="flex items-start gap-3">
+                      <span class="w-6 h-6 rounded-full bg-rose-100 border border-rose-300 text-rose-800 font-mono text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">✕</span>
+                      <div>
+                        <span class="block font-display font-bold text-sm sm:text-base text-ink">
+                          1. Chasing invoices on Sunday night
+                        </span>
+                        <span class="block text-xs sm:text-sm text-bodySlate mt-0.5">
+                          Opening QuickBooks at 8:45 PM after a 50-hour week to figure out who still owes you $8,400 from last month.
+                        </span>
+                      </div>
+                    </div>
+                    <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 border border-rose-200 font-mono text-[11px] font-bold shrink-0">
+                      Late Cash
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Row 2 -->
+                <div
+                  role="listitem"
+                  tabindex="0"
+                  data-transform-row="1"
+                  data-row-active="false"
+                  class="old-pain-row rounded-xl p-3.5 sm:p-4 cursor-pointer"
+                >
+                  <div class="flex items-start justify-between gap-3">
+                    <div class="flex items-start gap-3">
+                      <span class="w-6 h-6 rounded-full bg-rose-100 border border-rose-300 text-rose-800 font-mono text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">✕</span>
+                      <div>
+                        <span class="block font-display font-bold text-sm sm:text-base text-ink">
+                          2. Missed calls going to voicemail on a loud roof
+                        </span>
+                        <span class="block text-xs sm:text-sm text-bodySlate mt-0.5">
+                          When you're on a loud job site or crawlspace, homeowners hang up and call the next contractor on Google.
+                        </span>
+                      </div>
+                    </div>
+                    <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300 font-mono text-[11px] font-bold shrink-0">
+                      Lost Lead
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Row 3 -->
+                <div
+                  role="listitem"
+                  tabindex="0"
+                  data-transform-row="2"
+                  data-row-active="false"
+                  class="old-pain-row rounded-xl p-3.5 sm:p-4 cursor-pointer"
+                >
+                  <div class="flex items-start justify-between gap-3">
+                    <div class="flex items-start gap-3">
+                      <span class="w-6 h-6 rounded-full bg-rose-100 border border-rose-300 text-rose-800 font-mono text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">✕</span>
+                      <div>
+                        <span class="block font-display font-bold text-sm sm:text-base text-ink">
+                          3. $14,800 quotes sitting unsigned
+                        </span>
+                        <span class="block text-xs sm:text-sm text-bodySlate mt-0.5">
+                          You spend 2 hours driving out, measuring, and pricing a $14,800 job, then get busy and never follow up before they go cold.
+                        </span>
+                      </div>
+                    </div>
+                    <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 border border-rose-200 font-mono text-[11px] font-bold shrink-0">
+                      Cold Bid
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Row 4 -->
+                <div
+                  role="listitem"
+                  tabindex="0"
+                  data-transform-row="3"
+                  data-row-active="false"
+                  class="old-pain-row rounded-xl p-3.5 sm:p-4 cursor-pointer"
+                >
+                  <div class="flex items-start justify-between gap-3">
+                    <div class="flex items-start gap-3">
+                      <span class="w-6 h-6 rounded-full bg-rose-100 border border-rose-300 text-rose-800 font-mono text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">✕</span>
+                      <div>
+                        <span class="block font-display font-bold text-sm sm:text-base text-ink">
+                          4. Learning complicated $500/mo dashboards
+                        </span>
+                        <span class="block text-xs sm:text-sm text-bodySlate mt-0.5">
+                          Paying $400 to $1,000/mo for bloated software portals with 50 buttons nobody on your crew has time to touch.
+                        </span>
+                      </div>
+                    </div>
+                    <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300 font-mono text-[11px] font-bold shrink-0">
+                      Shelfware
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Row 5 -->
+                <div
+                  role="listitem"
+                  tabindex="0"
+                  data-transform-row="4"
+                  data-row-active="false"
+                  class="old-pain-row rounded-xl p-3.5 sm:p-4 cursor-pointer"
+                >
+                  <div class="flex items-start justify-between gap-3">
+                    <div class="flex items-start gap-3">
+                      <span class="w-6 h-6 rounded-full bg-rose-100 border border-rose-300 text-rose-800 font-mono text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">✕</span>
+                      <div>
+                        <span class="block font-display font-bold text-sm sm:text-base text-ink">
+                          5. $45,000/yr payroll or $15,000/yr agency retainers
+                        </span>
+                        <span class="block text-xs sm:text-sm text-bodySlate mt-0.5">
+                          Paying W-2 payroll taxes for an office hire or getting locked into a $1,250/mo agency contract you never own.
+                        </span>
+                      </div>
+                    </div>
+                    <span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 border border-rose-200 font-mono text-[11px] font-bold shrink-0">
+                      High Overhead
+                    </span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Bottom Warning Summary Strip -->
+            <div class="mt-6 pt-4 border-t border-rose-200">
+              <div class="p-3.5 rounded-xl bg-white/90 border border-rose-300 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+                <span class="font-bold text-rose-900">🕣 8:45 PM Kitchen Table Laptop</span>
+                <span class="px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 font-bold">10 to 15 hrs/wk unpaid second shift</span>
               </div>
             </div>
           </div>
 
-          <!-- Right Card: Crisp #FFFFFF Elevated Motion Card with Cobalt ✓ Badges -->
-          <div class="motion-card rounded-2xl p-6 sm:p-8 border-t-4 border-t-cobalt flex flex-col justify-between">
-            <div>
-              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-iceActive border border-cobalt/30 text-cobalt font-mono text-xs font-bold mb-4">
-                <span>THE TIBERIUS WAY • STAY ON THE TOOLS</span>
+          <!-- RIGHT COLUMN: The Tiberius Way: Your Done-For-You AI Office Manager (Vibrant Multi-Stop Gradient Outer Wrapper + Crisp White Inner Cards) -->
+          <div id="tiberiusWayColumnCard" class="tiberius-way-shell flex flex-col">
+            <div class="tiberius-way-inner p-5 sm:p-7 flex-1 flex flex-col justify-between">
+              <div>
+                <!-- Top Glowing Status Pill + 7:30 AM Work Truck • 1-Tap OK Pill -->
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                  <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-iceActive border border-cobalt/30 text-cobalt font-mono text-xs font-extrabold">
+                    <span class="w-2 h-2 rounded-full bg-emerald-600 pulse-indicator-dot" aria-hidden="true"></span>
+                    <span>THE TIBERIUS WAY • STAY ON THE TOOLS</span>
+                  </span>
+                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-700 text-white font-mono text-xs font-bold shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-emerald-200 pulse-indicator-dot" aria-hidden="true"></span>
+                    <span>📱 7:30 AM Work Truck • 1-Tap OK</span>
+                  </span>
+                </div>
+
+                <h3 class="font-display font-extrabold text-xl sm:text-2xl text-ink mb-1.5">
+                  The Tiberius Way: Your Done-For-You AI Office Manager
+                </h3>
+                <p class="text-sm sm:text-base text-bodySlate mb-5">
+                  We build your AI employee with its own private computer in the cloud so it handles the office legwork inside your existing programs:
+                </p>
+
+                <!-- 5 Paired Tiberius Way Fix Rows (Crisp #FFFFFF Inner Cards with Animated Directional Connector Badges) -->
+                <div class="space-y-3" role="list" aria-label="The Tiberius Way: 5 Done-For-You AI Office Manager Solutions">
+
+                  <!-- Row 1 Fix -->
+                  <div
+                    role="listitem"
+                    tabindex="0"
+                    data-transform-row="0"
+                    data-row-active="true"
+                    class="new-fix-row rounded-xl p-3.5 sm:p-4 cursor-pointer"
+                  >
+                    <div class="flex items-start justify-between gap-3">
+                      <div class="flex items-start gap-3">
+                        <span class="w-6 h-6 rounded-full bg-statusBg border border-statusText/30 text-statusText font-mono text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">✓</span>
+                        <div>
+                          <div class="flex flex-wrap items-center gap-2">
+                            <span
+                              data-transform-connector="0"
+                              data-row-active="true"
+                              class="transform-connector-pill inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-iceActive border border-cobalt/30 text-cobalt font-mono text-[11px] font-bold"
+                            >
+                              <span>Old Way #1</span>
+                              <span class="connector-arrow" aria-hidden="true">→</span>
+                              <span>7:30 AM Fix</span>
+                            </span>
+                            <span class="font-display font-bold text-sm sm:text-base text-ink">
+                              Opens your books at 7:30 AM with pay link ready for 1-tap OK
+                            </span>
+                          </div>
+                          <span class="block text-xs sm:text-sm text-bodySlate mt-1">
+                            Checks QuickBooks for every invoice past 30 days, copies the pay link, writes the reminder, and texts your phone for a 1-tap OK.
+                          </span>
+                        </div>
+                      </div>
+                      <span class="px-2 py-0.5 rounded bg-statusBg text-statusText border border-statusText/20 font-mono text-[11px] font-bold shrink-0">
+                        $8,400 Ready
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Row 2 Fix -->
+                  <div
+                    role="listitem"
+                    tabindex="0"
+                    data-transform-row="1"
+                    data-row-active="false"
+                    class="new-fix-row rounded-xl p-3.5 sm:p-4 cursor-pointer"
+                  >
+                    <div class="flex items-start justify-between gap-3">
+                      <div class="flex items-start gap-3">
+                        <span class="w-6 h-6 rounded-full bg-statusBg border border-statusText/30 text-statusText font-mono text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">✓</span>
+                        <div>
+                          <div class="flex flex-wrap items-center gap-2">
+                            <span
+                              data-transform-connector="1"
+                              data-row-active="false"
+                              class="transform-connector-pill inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-iceActive border border-cobalt/30 text-cobalt font-mono text-[11px] font-bold"
+                            >
+                              <span>Old Way #2</span>
+                              <span class="connector-arrow" aria-hidden="true">→</span>
+                              <span>6-Sec Text</span>
+                            </span>
+                            <span class="font-display font-bold text-sm sm:text-base text-ink">
+                              Texts back missed calls in 6 seconds and books the estimate
+                            </span>
+                          </div>
+                          <span class="block text-xs sm:text-sm text-bodySlate mt-1">
+                            Greets the homeowner while you're on a job, gets their address and issue, and books the estimate onto your schedule.
+                          </span>
+                        </div>
+                      </div>
+                      <span class="px-2 py-0.5 rounded bg-iceActive text-cobalt border border-cobalt/20 font-mono text-[11px] font-bold shrink-0">
+                        6-Sec Reply
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Row 3 Fix -->
+                  <div
+                    role="listitem"
+                    tabindex="0"
+                    data-transform-row="2"
+                    data-row-active="false"
+                    class="new-fix-row rounded-xl p-3.5 sm:p-4 cursor-pointer"
+                  >
+                    <div class="flex items-start justify-between gap-3">
+                      <div class="flex items-start gap-3">
+                        <span class="w-6 h-6 rounded-full bg-statusBg border border-statusText/30 text-statusText font-mono text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">✓</span>
+                        <div>
+                          <div class="flex flex-wrap items-center gap-2">
+                            <span
+                              data-transform-connector="2"
+                              data-row-active="false"
+                              class="transform-connector-pill inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-iceActive border border-cobalt/30 text-cobalt font-mono text-[11px] font-bold"
+                            >
+                              <span>Old Way #3</span>
+                              <span class="connector-arrow" aria-hidden="true">→</span>
+                              <span>Booked Job</span>
+                            </span>
+                            <span class="font-display font-bold text-sm sm:text-base text-ink">
+                              Follows up open quotes until they book on your schedule
+                            </span>
+                          </div>
+                          <span class="block text-xs sm:text-sm text-bodySlate mt-1">
+                            Checks last week's open estimates and sends friendly check-ins so $14,800 jobs don't slip to another bidder.
+                          </span>
+                        </div>
+                      </div>
+                      <span class="px-2 py-0.5 rounded bg-statusBg text-statusText border border-statusText/20 font-mono text-[11px] font-bold shrink-0">
+                        +$14,800 Saved
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Row 4 Fix -->
+                  <div
+                    role="listitem"
+                    tabindex="0"
+                    data-transform-row="3"
+                    data-row-active="false"
+                    class="new-fix-row rounded-xl p-3.5 sm:p-4 cursor-pointer"
+                  >
+                    <div class="flex items-start justify-between gap-3">
+                      <div class="flex items-start gap-3">
+                        <span class="w-6 h-6 rounded-full bg-statusBg border border-statusText/30 text-statusText font-mono text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">✓</span>
+                        <div>
+                          <div class="flex flex-wrap items-center gap-2">
+                            <span
+                              data-transform-connector="3"
+                              data-row-active="false"
+                              class="transform-connector-pill inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-iceActive border border-cobalt/30 text-cobalt font-mono text-[11px] font-bold"
+                            >
+                              <span>Old Way #4</span>
+                              <span class="connector-arrow" aria-hidden="true">→</span>
+                              <span>0 Dashboards</span>
+                            </span>
+                            <span class="font-display font-bold text-sm sm:text-base text-ink">
+                              Works inside QuickBooks, Jobber, Housecall Pro &amp; ServiceTitan with zero dashboards to learn
+                            </span>
+                          </div>
+                          <span class="block text-xs sm:text-sm text-bodySlate mt-1">
+                            Logs straight into the programs you already run from its own cloud computer. Just text or voice-note from your truck.
+                          </span>
+                        </div>
+                      </div>
+                      <span class="px-2 py-0.5 rounded bg-iceActive text-cobalt border border-cobalt/20 font-mono text-[11px] font-bold shrink-0">
+                        Zero New Apps
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Row 5 Fix -->
+                  <div
+                    role="listitem"
+                    tabindex="0"
+                    data-transform-row="4"
+                    data-row-active="false"
+                    class="new-fix-row rounded-xl p-3.5 sm:p-4 cursor-pointer"
+                  >
+                    <div class="flex items-start justify-between gap-3">
+                      <div class="flex items-start gap-3">
+                        <span class="w-6 h-6 rounded-full bg-statusBg border border-statusText/30 text-statusText font-mono text-xs font-extrabold flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">✓</span>
+                        <div>
+                          <div class="flex flex-wrap items-center gap-2">
+                            <span
+                              data-transform-connector="4"
+                              data-row-active="false"
+                              class="transform-connector-pill inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-iceActive border border-cobalt/30 text-cobalt font-mono text-[11px] font-bold"
+                            >
+                              <span>Old Way #5</span>
+                              <span class="connector-arrow" aria-hidden="true">→</span>
+                              <span>100% Yours</span>
+                            </span>
+                            <span class="font-display font-bold text-sm sm:text-base text-ink">
+                              Start free for $0 today — own it later once you love it
+                            </span>
+                          </div>
+                          <span class="block text-xs sm:text-sm text-bodySlate mt-1">
+                            You approve everything in 1 tap from your work truck, start free for 7 days (plans from $49/mo), and unlock $1,497 Turnkey Ownership later once it proves its worth.
+                          </span>
+                        </div>
+                      </div>
+                      <span class="px-2 py-0.5 rounded bg-statusBg text-statusText border border-statusText/20 font-mono text-[11px] font-bold shrink-0">
+                        $0 Today
+                      </span>
+                    </div>
+                  </div>
+
+                </div>
               </div>
-              <h3 class="font-display font-extrabold text-xl sm:text-2xl text-ink mb-2">
-                Your Done-For-You AI Office Manager
-              </h3>
-              <p class="text-sm sm:text-base text-bodySlate mb-6">
-                We build your AI employee with its own private computer in the cloud so it handles the office legwork inside the programs you already run:
-              </p>
 
-              <ul class="space-y-4 text-sm sm:text-base text-bodySlate">
-                <li class="flex items-start gap-3.5">
-                  <span class="w-6 h-6 rounded-full bg-iceActive border border-cobalt/30 text-cobalt font-mono text-xs font-bold flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">✓</span>
-                  <span><strong class="text-ink">Opens your books at 7:30 AM for you:</strong> Checks QuickBooks for every invoice past 30 days, copies the pay link, writes the reminder, and texts your phone for a 1-tap OK.</span>
-                </li>
-                <li class="flex items-start gap-3.5">
-                  <span class="w-6 h-6 rounded-full bg-iceActive border border-cobalt/30 text-cobalt font-mono text-xs font-bold flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">✓</span>
-                  <span><strong class="text-ink">Texts back missed calls in under 10 seconds:</strong> Greets the homeowner while you're on a job, gets their address and issue, and books the estimate onto your schedule.</span>
-                </li>
-                <li class="flex items-start gap-3.5">
-                  <span class="w-6 h-6 rounded-full bg-iceActive border border-cobalt/30 text-cobalt font-mono text-xs font-bold flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">✓</span>
-                  <span><strong class="text-ink">Follows up unsigned quotes until they book:</strong> Checks last week's open estimates and sends friendly check-ins so $14,800 jobs don't slip to another bidder.</span>
-                </li>
-                <li class="flex items-start gap-3.5">
-                  <span class="w-6 h-6 rounded-full bg-iceActive border border-cobalt/30 text-cobalt font-mono text-xs font-bold flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">✓</span>
-                  <span><strong class="text-ink">Works inside the programs you already run:</strong> QuickBooks, Jobber, Housecall Pro, ServiceTitan, JobNimbus, and your email — zero new software to learn.</span>
-                </li>
-                <li class="flex items-start gap-3.5">
-                  <span class="w-6 h-6 rounded-full bg-iceActive border border-cobalt/30 text-cobalt font-mono text-xs font-bold flex items-center justify-center shrink-0 mt-0.5" aria-hidden="true">✓</span>
-                  <span><strong class="text-ink">Asks for your OK before anything goes out:</strong> You approve everything in 1 tap from your work truck — and own your setup outright for $1,497 one-time.</span>
-                </li>
-              </ul>
-            </div>
-
-            <!-- Visual Clean Morning Truck Phone Strip -->
-            <div class="mt-6 pt-4 border-t border-borderSubtle">
-              <div class="p-3.5 rounded-xl bg-iceActive border border-cobalt/30 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
-                <span class="text-cobalt font-bold">📱 7:30 AM Work Truck • 1-Tap OK</span>
-                <span class="px-2.5 py-0.5 rounded-full bg-statusBg text-statusText font-bold">✓ Ready in 24 Hours</span>
+              <!-- Bottom Glowing Morning Truck Strip -->
+              <div class="mt-6 pt-4 border-t border-borderSubtle">
+                <div class="p-3.5 rounded-xl bg-iceActive border border-cobalt/30 flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
+                  <span class="text-cobalt font-extrabold">📱 7:30 AM Work Truck • 1-Tap OK</span>
+                  <span class="px-2.5 py-0.5 rounded-full bg-statusBg text-statusText font-bold">✓ Start Free in 3 Minutes • $0 Today</span>
+                </div>
               </div>
             </div>
           </div>
@@ -1115,7 +1986,7 @@
                   3. Texts your phone in the truck &amp; waits for your 1-tap OK
                 </span>
                 <p class="step-body-copy text-sm text-bodySlate mt-2">
-                  Nothing ever goes out behind your back. You glance at your phone between jobs and tap "OK, send all 3" — or tell it to skip a specific customer.
+                  Nothing ever goes out behind your back. You glance at your phone between jobs and tap "OK, send all 3," or tell it to skip a specific customer.
                 </p>
                 <div class="step-progress-track mt-3">
                   <div class="step-progress-fill" data-wf-progress="2"></div>
@@ -1233,7 +2104,7 @@
                   2. Opens Jobber / Housecall Pro &amp; spots 4 unsigned quotes ($28,500)
                 </span>
                 <p class="step-body-copy text-sm text-bodySlate mt-2">
-                  It checks every estimate over $3,000 from last week that hasn't signed yet — including Sarah Jenkins' $14,800 roof replacement quote.
+                  It checks every estimate over $3,000 from last week that hasn't signed yet, including Sarah Jenkins' $14,800 roof replacement quote.
                 </p>
                 <div class="step-progress-track mt-3">
                   <div class="step-progress-fill" data-wf-progress="1"></div>
@@ -1258,7 +2129,7 @@
                   3. Drafts helpful homeowner check-ins &amp; asks for your OK first
                 </span>
                 <p class="step-body-copy text-sm text-bodySlate mt-2">
-                  It shows you the exact follow-up text on your phone ("Hi Sarah — checking in on the roof estimate Mike sent over last Tuesday"). You tap OK from the truck.
+                  It shows you the exact follow-up text on your phone ("Hi Sarah, checking in on the roof estimate Mike sent over last Tuesday"). You tap OK from the truck.
                 </p>
                 <div class="step-progress-track mt-3">
                   <div class="step-progress-fill" data-wf-progress="2"></div>
@@ -1545,7 +2416,7 @@
                     id="approve730Btn"
                     class="tap-target px-4 py-2.5 rounded-xl bg-cobalt hover:bg-cobaltHover text-white font-bold text-xs sm:text-sm transition shadow-sm"
                   >
-                    ✓ Give Your OK — Send All 3 Reminders ($8,400)
+                    ✓ Give Your OK: Send All 3 Reminders ($8,400)
                   </button>
                   <button
                     type="button"
@@ -1605,7 +2476,7 @@
                 </button>
               </div>
               <div id="detail1140" class="hidden mt-3 pt-3 border-t border-borderSubtle text-xs text-bodySlate space-y-1">
-                <p><strong class="text-ink">Quote Saved:</strong> Sarah Jenkins — $14,800 Roof Replacement Estimate (Sent 8 days ago)</p>
+                <p><strong class="text-ink">Quote Saved:</strong> Sarah Jenkins • $14,800 Roof Replacement Estimate (Sent 8 days ago)</p>
                 <p><strong class="text-ink">Reply Received:</strong> "Thanks for checking in! My husband and I are ready to go with you guys. Can we get on the schedule for next week?"</p>
               </div>
             </div>
@@ -1651,137 +2522,757 @@
     </section>
 
     <!-- ======================================================================
-         SECTION 5: PRICING COMPARISON TABLE & TURNKEY VS MANAGED CARDS
+         SECTION 5: M6 INTERACTIVE CONTRACTOR TIME & QUOTE RECOVERY CALCULATOR +
+         4-WAY VISUAL BATTLECARD MATRIX + ANIMATED 1-YEAR COST BARS + PRICING
          ====================================================================== -->
     <section id="pricing" class="py-16 sm:py-24 border-b border-borderSubtle bg-surface">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <div class="max-w-3xl mb-12">
+        <div class="max-w-3xl mb-10">
           <span class="inline-block font-mono text-xs font-bold uppercase tracking-widest text-cobalt mb-2">
-            HONEST CONTRACTOR MATH • ZERO HOSTAGE CONTRACTS
+            START FOR $0 TODAY • ZERO SETUP RISK • OWN IT LATER ONCE YOU LOVE IT
           </span>
           <h2 class="section-headline font-extrabold mb-3">
-            Own Your AI Employee Outright for $1,497 — Or Let Us Manage It for $997 + $197/mo
+            A Plan for Every Crew — Start Free for 7 Days, From $49/mo
           </h2>
           <p class="text-bodySlate text-base sm:text-lg">
-            Compare what a $45,000/yr part-time office hire or a $15,000/yr AI staffing agency costs against owning your own private AI Office Manager.
+            See how many evenings and open quotes your AI employee saves you, start free for 7 days ($0 due today), and apply Month 1 toward Turnkey Ownership once it proves its worth.
           </p>
         </div>
 
-        <!-- 4-Way Market Comparison Table -->
-        <div class="overflow-x-auto rounded-2xl border border-borderSubtle bg-white shadow-motion mb-12">
-          <table class="w-full text-left border-collapse min-w-[740px]">
-            <caption class="visually-hidden">
-              Cost and ownership comparison between a part-time office hire, AI staffing agencies, and Tiberius AI Employee Option 1 ($1,497 Turnkey) and Option 2 ($997 + $197/mo Managed).
-            </caption>
-            <thead>
-              <tr class="border-b border-borderSubtle bg-surface text-xs font-mono uppercase text-bodySlate">
-                <th scope="col" class="p-4 font-bold text-ink">What You're Comparing</th>
-                <th scope="col" class="p-4">Part-Time Office Hire</th>
-                <th scope="col" class="p-4">AI Staffing Agencies (Nexaris)</th>
-                <th scope="col" class="p-4 bg-iceActive text-cobalt border-x border-cobalt/20 font-bold">
-                  Option 1: Turnkey Ownership ($1,497)
-                </th>
-                <th scope="col" class="p-4 bg-surface text-ink font-bold">
-                  Option 2: Managed Care ($997 + $197/mo)
-                </th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-borderSubtle text-sm text-bodySlate">
-              <tr>
-                <th scope="row" class="p-4 font-bold text-ink">Year 1 Total Cost</th>
-                <td class="p-4">$45,000+/yr + payroll tax</td>
-                <td class="p-4">$15,000/yr ($1,250/mo)</td>
-                <td class="p-4 font-bold text-cobalt bg-iceActive/50 border-x border-cobalt/20">
-                  $1,497 One-Time (+ ~$20/mo cloud computer)
-                </td>
-                <td class="p-4 font-bold text-ink">
-                  $997 Setup + $197/mo
-                </td>
-              </tr>
-              <tr>
-                <th scope="row" class="p-4 font-bold text-ink">Works Inside QuickBooks &amp; Schedule?</th>
-                <td class="p-4">Yes (after weeks of training)</td>
-                <td class="p-4">Charges extra per program</td>
-                <td class="p-4 font-semibold text-ink bg-iceActive/50 border-x border-cobalt/20">
-                  Yes — From its own cloud computer
-                </td>
-                <td class="p-4 font-semibold text-ink">
-                  Yes — Plus we maintain all logins
-                </td>
-              </tr>
-              <tr>
-                <th scope="row" class="p-4 font-bold text-ink">Asks for Your OK Before Sending?</th>
-                <td class="p-4">Sometimes forgets</td>
-                <td class="p-4">Sends without asking</td>
-                <td class="p-4 font-semibold text-statusText bg-iceActive/50 border-x border-cobalt/20">
-                  ✓ Always asks for your OK first
-                </td>
-                <td class="p-4 font-semibold text-statusText">
-                  ✓ Always asks for your OK first
-                </td>
-              </tr>
-              <tr>
-                <th scope="row" class="p-4 font-bold text-ink">Who Owns the AI Employee?</th>
-                <td class="p-4">Can quit with 2 weeks notice</td>
-                <td class="p-4 text-red-700 font-medium">Agency hostage — cancel &amp; lose it</td>
-                <td class="p-4 font-bold text-ink bg-iceActive/50 border-x border-cobalt/20">
-                  You Own 100% Forever ($0/mo to us)
-                </td>
-                <td class="p-4 font-bold text-ink">
-                  Yours — We Host, Back Up &amp; Update It
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <!-- ==================================================================
+             M6 COMPONENT 2: INTERACTIVE CONTRACTOR TIME & QUOTE RECOVERY CALCULATOR
+             ================================================================== -->
+        <div id="roi-calculator" class="tiberius-way-shell mb-14">
+          <div class="tiberius-way-inner p-6 sm:p-8 lg:p-10">
+            <div class="flex flex-wrap items-center justify-between gap-3 pb-5 mb-6 border-b border-borderSubtle">
+              <div>
+                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-iceActive border border-cobalt/30 text-cobalt font-mono text-xs font-extrabold uppercase mb-2">
+                  <span>🧮 INTERACTIVE CONTRACTOR ROI CALCULATOR</span>
+                </span>
+                <h3 class="font-display font-extrabold text-2xl sm:text-3xl text-ink">
+                  See How Many Evenings &amp; Unsold Quotes Your AI Employee Saves You
+                </h3>
+              </div>
+              <span class="px-3.5 py-1.5 rounded-full bg-statusBg border border-statusText/30 text-statusText font-mono text-xs font-extrabold">
+                Pays for itself on 1 saved quote
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+
+              <!-- Left (7 cols): Two Native Range Sliders (modern-web-guidance: slider) -->
+              <div class="lg:col-span-7 space-y-6 bg-surface rounded-2xl border border-borderSubtle p-5 sm:p-6 flex flex-col justify-between">
+                <div class="space-y-6">
+
+                  <!-- Slider 1: Hours per week stuck doing evening paperwork -->
+                  <div class="space-y-2">
+                    <div class="flex items-baseline justify-between gap-3">
+                      <label for="sliderPaperworkHours" class="font-display font-bold text-sm sm:text-base text-ink">
+                        1. Hours per week stuck doing evening paperwork:
+                      </label>
+                      <output
+                        id="sliderPaperworkHoursOutput"
+                        for="sliderPaperworkHours"
+                        class="px-3 py-1 rounded-lg bg-iceActive border border-cobalt/30 text-cobalt font-mono font-extrabold text-base sm:text-lg shrink-0"
+                      >
+                        10 hrs/wk
+                      </output>
+                    </div>
+                    <p class="text-xs text-bodySlate">
+                      Chasing QuickBooks invoices, returning missed calls, updating Jobber/Housecall Pro, and checking emails after dark.
+                    </p>
+                    <input
+                      type="range"
+                      id="sliderPaperworkHours"
+                      class="roi-slider"
+                      min="2"
+                      max="25"
+                      step="1"
+                      value="10"
+                      aria-valuetext="10 hours per week"
+                    />
+                    <div class="flex justify-between text-[11px] font-mono text-mutedSlate">
+                      <span>2 hrs/wk</span>
+                      <span>10 hrs/wk (Typical)</span>
+                      <span>25 hrs/wk</span>
+                    </div>
+                  </div>
+
+                  <!-- Slider 2: Open estimates per month that slip through the cracks -->
+                  <div class="space-y-2 pt-4 border-t border-borderSubtle">
+                    <div class="flex items-baseline justify-between gap-3">
+                      <label for="sliderOpenQuotes" class="font-display font-bold text-sm sm:text-base text-ink">
+                        2. Open estimates per month that slip through the cracks without follow-up:
+                      </label>
+                      <output
+                        id="sliderOpenQuotesOutput"
+                        for="sliderOpenQuotes"
+                        class="px-3 py-1 rounded-lg bg-statusBg border border-statusText/30 text-statusText font-mono font-extrabold text-base sm:text-lg shrink-0"
+                      >
+                        4 quotes/mo
+                      </output>
+                    </div>
+                    <p class="text-xs text-bodySlate">
+                      Bids you drove out and priced, but got too busy on the tools to follow up 3 to 4 times before the homeowner hired someone else.
+                    </p>
+                    <input
+                      type="range"
+                      id="sliderOpenQuotes"
+                      class="roi-slider"
+                      min="1"
+                      max="15"
+                      step="1"
+                      value="4"
+                      aria-valuetext="4 open estimates per month"
+                    />
+                    <div class="flex justify-between text-[11px] font-mono text-mutedSlate">
+                      <span>1 quote/mo</span>
+                      <span>4 quotes/mo (Typical)</span>
+                      <span>15 quotes/mo</span>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- Quick Preset Buttons -->
+                <div class="pt-4 border-t border-borderSubtle flex flex-wrap items-center justify-between gap-2">
+                  <span class="font-mono text-xs text-mutedSlate font-semibold">QUICK CREW PRESETS:</span>
+                  <div class="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      data-calc-preset-hours="6"
+                      data-calc-preset-quotes="2"
+                      class="calc-preset-btn px-3 py-1.5 rounded-lg bg-white hover:bg-iceActive border border-borderSubtle text-xs font-mono font-bold text-ink transition"
+                    >
+                      Solo Truck (6 hrs • 2 quotes)
+                    </button>
+                    <button
+                      type="button"
+                      data-calc-preset-hours="10"
+                      data-calc-preset-quotes="4"
+                      class="calc-preset-btn px-3 py-1.5 rounded-lg bg-iceActive border border-cobalt text-xs font-mono font-bold text-cobalt transition"
+                    >
+                      1 to 2 Crews (10 hrs • 4 quotes)
+                    </button>
+                    <button
+                      type="button"
+                      data-calc-preset-hours="16"
+                      data-calc-preset-quotes="8"
+                      class="calc-preset-btn px-3 py-1.5 rounded-lg bg-white hover:bg-iceActive border border-borderSubtle text-xs font-mono font-bold text-ink transition"
+                    >
+                      Multi-Crew (16 hrs • 8 quotes)
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right (5 cols): Dynamic Animated ROI Readout Cards -->
+              <div class="lg:col-span-5 flex flex-col justify-between gap-4">
+
+                <div class="grid grid-cols-2 gap-3.5">
+                  <!-- Output 1: Yearly Hours Saved -->
+                  <div class="rounded-2xl bg-iceActive border border-cobalt/30 p-4 sm:p-5">
+                    <span class="block font-mono text-[11px] font-bold uppercase text-cobalt">
+                      YEARLY HOURS SAVED
+                    </span>
+                    <span id="calcYearlyHoursSaved" class="block font-display font-extrabold text-3xl sm:text-4xl text-ink mt-1">
+                      520 hrs
+                    </span>
+                    <span class="block text-xs text-bodySlate mt-1">
+                      Off your Sunday &amp; weeknight plate
+                    </span>
+                  </div>
+
+                  <!-- Output 2: Evenings Reclaimed -->
+                  <div class="rounded-2xl bg-indigo-50 border border-indigo-200 p-4 sm:p-5">
+                    <span class="block font-mono text-[11px] font-bold uppercase text-indigo-800">
+                      EVENINGS RECLAIMED
+                    </span>
+                    <span id="calcEveningsReclaimed" class="block font-display font-extrabold text-3xl sm:text-4xl text-ink mt-1">
+                      208 nights
+                    </span>
+                    <span class="block text-xs text-bodySlate mt-1">
+                      2.5-hr kitchen-table shifts saved/yr
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Output 3: Estimated Recovered Job Revenue -->
+                <div class="rounded-2xl bg-statusBg border-2 border-emerald-500/40 p-5 sm:p-6 flex-1 flex flex-col justify-between">
+                  <div>
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="font-mono text-xs font-extrabold uppercase text-statusText">
+                        ESTIMATED RECOVERED JOB REVENUE
+                      </span>
+                      <span id="calcSavedJobsPerYearBadge" class="px-2.5 py-0.5 rounded-full bg-white text-statusText font-mono text-xs font-bold border border-statusText/20">
+                        ~12 extra booked jobs/yr
+                      </span>
+                    </div>
+                    <span id="calcRecoveredRevenue" class="block font-display font-extrabold text-4xl sm:text-5xl text-ink mt-2">
+                      $88,800/yr
+                    </span>
+                    <p id="calcRevenueFormulaNote" class="text-xs text-bodySlate mt-2">
+                      Conservative contractor math: if polite 7:30 AM follow-ups save just <strong>1 in 4 slipped quotes</strong> (12 jobs/yr) at a $7,400 average ticket.
+                    </p>
+                  </div>
+
+                  <div class="mt-4 pt-3 border-t border-emerald-600/20 flex flex-wrap items-center justify-between gap-2">
+                    <span class="font-mono text-xs font-bold text-statusText">
+                      Start Today: $0.00 (Plans from $49/mo)
+                    </span>
+                    <button
+                      type="button"
+                      data-open-trial-modal="truck-assistant"
+                      class="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-cobalt hover:bg-cobaltHover text-white font-bold text-xs shadow-sm transition"
+                    >
+                      Try Free for 7 Days →
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
         </div>
 
-        <!-- Two Side-by-Side Pricing Cards -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+        <!-- ==================================================================
+             M6 COMPONENT 3A: 4-WAY VISUAL BATTLECARD MATRIX
+             ("What Others Offer vs. What Tiberius Offers")
+             ================================================================== -->
+        <div class="mb-12">
+          <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-6">
+            <div>
+              <span class="inline-block font-mono text-xs font-bold uppercase tracking-widest text-cobalt mb-1.5">
+                WHAT OTHERS OFFER VS. WHAT TIBERIUS OFFERS
+              </span>
+              <h3 id="battlecardTableCaption" class="font-display font-extrabold text-2xl sm:text-3xl text-ink">
+                4-Way Contractor Office Battlecard: Us vs. Them
+              </h3>
+              <p class="text-sm sm:text-base text-bodySlate mt-1">
+                See why contractors ditch $45,000/yr payroll and $1,250/mo agency chatbots for a private AI Office Manager they actually own.
+              </p>
+            </div>
 
-          <!-- Option 1: $1,497 Turnkey Ownership -->
+            <!-- Interactive Column Filter Buttons (Zero horizontal overflow on 390px screens) -->
+            <div class="flex flex-wrap items-center gap-1.5" role="tablist" aria-label="Filter competitor comparison columns">
+              <button
+                type="button"
+                role="tab"
+                aria-selected="true"
+                tabindex="0"
+                data-battle-filter="all"
+                class="battlecard-filter-tab tap-target px-3.5 py-2 rounded-xl bg-cobalt text-white font-mono text-xs font-bold transition"
+              >
+                All 4 Options
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected="false"
+                tabindex="-1"
+                data-battle-filter="diy"
+                class="battlecard-filter-tab tap-target px-3.5 py-2 rounded-xl bg-white hover:bg-iceActive text-bodySlate border border-borderSubtle font-mono text-xs font-bold transition"
+              >
+                vs. DIY at Night
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected="false"
+                tabindex="-1"
+                data-battle-filter="w2"
+                class="battlecard-filter-tab tap-target px-3.5 py-2 rounded-xl bg-white hover:bg-iceActive text-bodySlate border border-borderSubtle font-mono text-xs font-bold transition"
+              >
+                vs. $45k W-2 Hire
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected="false"
+                tabindex="-1"
+                data-battle-filter="agency"
+                class="battlecard-filter-tab tap-target px-3.5 py-2 rounded-xl bg-white hover:bg-iceActive text-bodySlate border border-borderSubtle font-mono text-xs font-bold transition"
+              >
+                vs. AI Agencies
+              </button>
+            </div>
+          </div>
+
+          <div
+            tabindex="0"
+            role="region"
+            aria-labelledby="battlecardTableCaption"
+            class="battlecard-table-wrapper rounded-2xl border border-borderSubtle bg-white shadow-motion"
+          >
+            <table class="battlecard-table text-left">
+              <caption class="visually-hidden">
+                4-way comparison between Doing It Yourself at Night, a Part-Time W-2 Office Hire, Other AI Answering or Marketing Agencies and SaaS Tools, and Tiberius AI Employee.
+              </caption>
+              <thead>
+                <tr class="border-b-2 border-borderSubtle text-xs">
+                  <th scope="col" class="p-4 bg-surface font-mono uppercase text-ink font-extrabold w-[20%]">
+                    What You're Comparing
+                  </th>
+                  <th scope="col" data-battle-col="diy" class="p-4 bg-slate-100/90 border-l border-borderSubtle w-[19%]">
+                    <span class="inline-block px-2 py-0.5 rounded bg-slate-200 text-slate-700 font-mono text-[10px] font-bold uppercase mb-1">
+                      OPTION A • UNPAID SHIFT
+                    </span>
+                    <span class="block font-display font-extrabold text-sm text-ink">
+                      Doing It Yourself at Night
+                    </span>
+                    <span class="block text-[11px] text-mutedSlate font-normal mt-0.5">
+                      10 to 15 hrs/wk unpaid second shift at the kitchen table
+                    </span>
+                  </th>
+                  <th scope="col" data-battle-col="w2" class="p-4 bg-rose-50/80 border-l border-rose-200 w-[19%]">
+                    <span class="inline-block px-2 py-0.5 rounded bg-rose-100 text-rose-800 font-mono text-[10px] font-bold uppercase mb-1">
+                      OPTION B • HIGH PAYROLL
+                    </span>
+                    <span class="block font-display font-extrabold text-sm text-ink">
+                      Part-Time W-2 Office Hire
+                    </span>
+                    <span class="block text-[11px] text-rose-900/80 font-normal mt-0.5">
+                      $45,000+/yr + payroll tax &amp; training
+                    </span>
+                  </th>
+                  <th scope="col" data-battle-col="agency" class="p-4 bg-amber-50/80 border-l border-amber-200 w-[20%]">
+                    <span class="inline-block px-2 py-0.5 rounded bg-amber-100 text-amber-900 font-mono text-[10px] font-bold uppercase mb-1">
+                      OPTION C • RENTED BOTS
+                    </span>
+                    <span class="block font-display font-extrabold text-sm text-ink">
+                      Other "AI Answering / Marketing" Agencies &amp; SaaS Tools
+                    </span>
+                    <span class="block text-[11px] text-amber-900/80 font-normal mt-0.5">
+                      $500 to $1,250/mo forever • Separate dashboard
+                    </span>
+                  </th>
+                  <th scope="col" data-battle-col="tiberius" class="p-4 battlecard-winner-header w-[22%]">
+                    <div class="flex items-center justify-between gap-1 mb-1">
+                      <span class="px-2 py-0.5 rounded bg-white text-cobalt font-mono text-[10px] font-extrabold uppercase">
+                        ★ WINNER • $0 TODAY
+                      </span>
+                      <span class="font-mono text-[10px] text-emerald-200 font-bold">7-Day Trial</span>
+                    </div>
+                    <span class="block font-display font-extrabold text-base text-white">
+                      Tiberius AI Employee™
+                    </span>
+                    <span class="block text-[11px] text-blue-100 font-medium mt-0.5">
+                      From $49/mo (or $197/mo Full Cloud PC + Buyout Option)
+                    </span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-borderSubtle text-xs sm:text-sm text-bodySlate">
+
+                <!-- Row 1: Year 1 Total Cost -->
+                <tr>
+                  <th scope="row" class="p-4 font-display font-bold text-ink">
+                    1. Cost to Start &amp; Year 1 Total
+                  </th>
+                  <td data-battle-col="diy" class="p-4 border-l border-borderSubtle">
+                    <span class="font-bold text-ink block">$0 cash upfront</span>
+                    <span class="text-xs text-rose-700 font-semibold">Costs 520+ hrs/yr of family time &amp; lost quotes</span>
+                  </td>
+                  <td data-battle-col="w2" class="p-4 bg-rose-50/30 border-l border-borderSubtle">
+                    <span class="font-mono font-extrabold text-rose-800 text-base block">$45,000+/yr</span>
+                    <span class="text-xs text-bodySlate">+ W-2 payroll taxes, desk &amp; workers' comp</span>
+                  </td>
+                  <td data-battle-col="agency" class="p-4 bg-amber-50/30 border-l border-borderSubtle">
+                    <span class="font-mono font-extrabold text-amber-900 text-base block">$6,000 to $15,000/yr</span>
+                    <span class="text-xs text-bodySlate">$500 to $1,250/mo forever with annual price hikes</span>
+                  </td>
+                  <td data-battle-col="tiberius" class="p-4 battlecard-winner-cell">
+                    <span class="font-mono font-extrabold text-cobalt text-base block">$0 Today • From $49/mo</span>
+                    <span class="text-xs text-ink font-semibold block">$588/yr Truck Assistant or $197/mo Full Cloud PC (+ $1,497 Buyout Option)</span>
+                  </td>
+                </tr>
+
+                <!-- Row 2: Opens YOUR QuickBooks/Jobber/Housecall Pro/ServiceTitan? -->
+                <tr>
+                  <th scope="row" class="p-4 font-display font-bold text-ink">
+                    2. Opens YOUR QuickBooks, Jobber, Housecall Pro, or ServiceTitan?
+                  </th>
+                  <td data-battle-col="diy" class="p-4 border-l border-borderSubtle">
+                    <span class="font-semibold text-bodySlate">Only when you sit down at 8:45 PM and click everything yourself</span>
+                  </td>
+                  <td data-battle-col="w2" class="p-4 bg-rose-50/30 border-l border-borderSubtle">
+                    <span class="font-semibold text-ink">Yes, after weeks of training</span>
+                    <span class="block text-xs text-mutedSlate">Requires handing over company passwords</span>
+                  </td>
+                  <td data-battle-col="agency" class="p-4 bg-amber-50/30 border-l border-borderSubtle">
+                    <span class="inline-flex items-center gap-1 font-bold text-rose-800">
+                      <span aria-hidden="true">✕</span> No. Cannot open your QuickBooks
+                    </span>
+                    <span class="block text-xs text-bodySlate mt-0.5">Trapped in their separate software portal</span>
+                  </td>
+                  <td data-battle-col="tiberius" class="p-4 battlecard-winner-cell">
+                    <span class="inline-flex items-center gap-1 font-extrabold text-statusText">
+                      <span aria-hidden="true">✓</span> Yes • From its own cloud computer
+                    </span>
+                    <span class="block text-xs text-ink mt-0.5">Works inside the programs you already run</span>
+                  </td>
+                </tr>
+
+                <!-- Row 3: Asks for Your 1-Tap OK Before Messaging Customers? -->
+                <tr>
+                  <th scope="row" class="p-4 font-display font-bold text-ink">
+                    3. Asks for Your 1-Tap OK Before Messaging Customers?
+                  </th>
+                  <td data-battle-col="diy" class="p-4 border-l border-borderSubtle">
+                    <span class="text-bodySlate">You type every single text and email by hand</span>
+                  </td>
+                  <td data-battle-col="w2" class="p-4 bg-rose-50/30 border-l border-borderSubtle">
+                    <span class="inline-flex items-center gap-1 font-bold text-amber-900">
+                      <span aria-hidden="true">✕</span> Sometimes forgets or wings it
+                    </span>
+                  </td>
+                  <td data-battle-col="agency" class="p-4 bg-amber-50/30 border-l border-borderSubtle">
+                    <span class="inline-flex items-center gap-1 font-bold text-rose-800">
+                      <span aria-hidden="true">✕</span> Sends bot texts without asking
+                    </span>
+                    <span class="block text-xs text-bodySlate mt-0.5">Risks awkward robotic replies to homeowners</span>
+                  </td>
+                  <td data-battle-col="tiberius" class="p-4 battlecard-winner-cell">
+                    <span class="inline-flex items-center gap-1 font-extrabold text-statusText">
+                      <span aria-hidden="true">✓</span> Always asks for your 1-tap OK first
+                    </span>
+                    <span class="block text-xs text-ink mt-0.5">Nothing goes out behind your back</span>
+                  </td>
+                </tr>
+
+                <!-- Row 4: New Dashboards or Tech to Learn? -->
+                <tr>
+                  <th scope="row" class="p-4 font-display font-bold text-ink">
+                    4. New Dashboards or Tech to Learn?
+                  </th>
+                  <td data-battle-col="diy" class="p-4 border-l border-borderSubtle">
+                    <span class="text-bodySlate">Juggling 5 open browser tabs every Sunday night</span>
+                  </td>
+                  <td data-battle-col="w2" class="p-4 bg-rose-50/30 border-l border-borderSubtle">
+                    <span class="text-bodySlate">You become an HR manager and software trainer</span>
+                  </td>
+                  <td data-battle-col="agency" class="p-4 bg-amber-50/30 border-l border-borderSubtle">
+                    <span class="inline-flex items-center gap-1 font-bold text-rose-800">
+                      <span aria-hidden="true">✕</span> Bloated $500/mo dashboard to learn
+                    </span>
+                    <span class="block text-xs text-bodySlate mt-0.5">50 buttons nobody on your crew has time to touch</span>
+                  </td>
+                  <td data-battle-col="tiberius" class="p-4 battlecard-winner-cell">
+                    <span class="inline-flex items-center gap-1 font-extrabold text-statusText">
+                      <span aria-hidden="true">✓</span> Zero dashboards to learn
+                    </span>
+                    <span class="block text-xs text-ink mt-0.5">Just text or voice-note from your work truck</span>
+                  </td>
+                </tr>
+
+                <!-- Row 5: Handles All 6 Daily Office Chores? -->
+                <tr>
+                  <th scope="row" class="p-4 font-display font-bold text-ink">
+                    5. Handles All 6 Daily Office Chores (Invoices, Quotes, Calls, Schedule, Briefing, Competitor Watch)?
+                  </th>
+                  <td data-battle-col="diy" class="p-4 border-l border-borderSubtle">
+                    <span class="inline-flex items-center gap-1 font-bold text-rose-800">
+                      <span aria-hidden="true">✕</span> Drops when jobs get busy
+                    </span>
+                  </td>
+                  <td data-battle-col="w2" class="p-4 bg-rose-50/30 border-l border-borderSubtle">
+                    <span class="text-bodySlate">Only during part-time desk hours (misses early/late calls)</span>
+                  </td>
+                  <td data-battle-col="agency" class="p-4 bg-amber-50/30 border-l border-borderSubtle">
+                    <span class="inline-flex items-center gap-1 font-bold text-rose-800">
+                      <span aria-hidden="true">✕</span> 1 trick only (chat widget or call bot)
+                    </span>
+                    <span class="block text-xs text-bodySlate mt-0.5">Charges extra for every add-on</span>
+                  </td>
+                  <td data-battle-col="tiberius" class="p-4 battlecard-winner-cell">
+                    <span class="inline-flex items-center gap-1 font-extrabold text-statusText">
+                      <span aria-hidden="true">✓</span> All 6 daily chores pre-loaded
+                    </span>
+                    <span class="block text-xs text-ink mt-0.5">Invoices, Quotes, Calls, Schedule, 7:30 AM Briefing &amp; Competitors</span>
+                  </td>
+                </tr>
+
+                <!-- Row 6: Who Owns It After Month 12? -->
+                <tr>
+                  <th scope="row" class="p-4 font-display font-bold text-ink">
+                    6. Who Owns It After Month 12?
+                  </th>
+                  <td data-battle-col="diy" class="p-4 border-l border-borderSubtle">
+                    <span class="text-bodySlate">You're still stuck working nights at the kitchen table</span>
+                  </td>
+                  <td data-battle-col="w2" class="p-4 bg-rose-50/30 border-l border-borderSubtle">
+                    <span class="inline-flex items-center gap-1 font-bold text-rose-800">
+                      <span aria-hidden="true">✕</span> Can quit with 2 weeks notice
+                    </span>
+                  </td>
+                  <td data-battle-col="agency" class="p-4 bg-amber-50/30 border-l border-borderSubtle">
+                    <span class="inline-flex items-center gap-1 font-bold text-rose-800">
+                      <span aria-hidden="true">✕</span> Agency hostage: cancel &amp; lose it all
+                    </span>
+                  </td>
+                  <td data-battle-col="tiberius" class="p-4 battlecard-winner-cell">
+                    <span class="inline-flex items-center gap-1 font-extrabold text-cobalt">
+                      <span aria-hidden="true">★</span> Prove It First, Then Own 100%
+                    </span>
+                    <span class="block text-xs text-ink font-semibold mt-0.5">Credit Month 1 toward $1,497 Turnkey Ownership anytime after Day 30</span>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ==================================================================
+             M6 COMPONENT 3B: ANIMATED 1-YEAR TOTAL COST COMPARISON BAR CHART
+             ================================================================== -->
+        <div id="costBarChartCard" class="motion-card rounded-2xl p-6 sm:p-8 mb-14">
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-4 mb-6 border-b border-borderSubtle">
+            <div>
+              <span class="font-mono text-xs font-bold uppercase text-cobalt block">
+                1-YEAR TOTAL COST SHOWDOWN
+              </span>
+              <h3 class="font-display font-extrabold text-xl sm:text-2xl text-ink">
+                Start for $0 Today and Keep Up to $44,400 Back in Your Pocket in Year 1
+              </h3>
+            </div>
+            <span class="px-3 py-1 rounded-full bg-statusBg border border-statusText/30 text-statusText font-mono text-xs font-extrabold">
+              ✓ Save 90% to 98% vs. Payroll &amp; Agencies
+            </span>
+          </div>
+
+          <div class="space-y-4" role="list" aria-label="1-Year Total Cost Comparison Bars">
+
+            <!-- Bar 1: $45,000 W-2 Hire -->
+            <div role="listitem" class="space-y-1.5">
+              <div class="flex flex-wrap items-baseline justify-between gap-2 text-xs sm:text-sm">
+                <span class="font-display font-bold text-ink">
+                  Part-Time W-2 Office Hire <span class="text-mutedSlate font-normal">(Payroll + Taxes + Desk)</span>
+                </span>
+                <span class="font-mono font-extrabold text-rose-800 text-sm sm:text-base">
+                  $45,000 / yr
+                </span>
+              </div>
+              <div class="h-4 w-full rounded-full bg-surfaceMuted border border-borderSubtle overflow-hidden">
+                <div
+                  class="cost-bar-fill h-full rounded-full bg-gradient-to-r from-rose-500 to-rose-700"
+                  data-target-width="100%"
+                  style="width: 100%;"
+                ></div>
+              </div>
+            </div>
+
+            <!-- Bar 2: $15,000 Monthly Agency -->
+            <div role="listitem" class="space-y-1.5">
+              <div class="flex flex-wrap items-baseline justify-between gap-2 text-xs sm:text-sm">
+                <span class="font-display font-bold text-ink">
+                  Monthly "AI Staffing / Marketing" Agency <span class="text-mutedSlate font-normal">($1,250/mo Forever • Zero Ownership)</span>
+                </span>
+                <span class="font-mono font-extrabold text-amber-900 text-sm sm:text-base">
+                  $15,000 / yr
+                </span>
+              </div>
+              <div class="h-4 w-full rounded-full bg-surfaceMuted border border-borderSubtle overflow-hidden">
+                <div
+                  class="cost-bar-fill h-full rounded-full bg-gradient-to-r from-amber-500 to-orange-600"
+                  data-target-width="33.3%"
+                  style="width: 33.3%;"
+                ></div>
+              </div>
+            </div>
+
+            <!-- Bar 3: $6,000 Software Stack -->
+            <div role="listitem" class="space-y-1.5">
+              <div class="flex flex-wrap items-baseline justify-between gap-2 text-xs sm:text-sm">
+                <span class="font-display font-bold text-ink">
+                  Bloated $500/mo Software Stack <span class="text-mutedSlate font-normal">(New Dashboards You Still Have to Run Yourself)</span>
+                </span>
+                <span class="font-mono font-extrabold text-bodySlate text-sm sm:text-base">
+                  $6,000 / yr
+                </span>
+              </div>
+              <div class="h-4 w-full rounded-full bg-surfaceMuted border border-borderSubtle overflow-hidden">
+                <div
+                  class="cost-bar-fill h-full rounded-full bg-slate-500"
+                  data-target-width="13.3%"
+                  style="width: 13.3%;"
+                ></div>
+              </div>
+            </div>
+
+            <!-- Bar 4: Tiberius AI Employee -->
+            <div role="listitem" class="p-3.5 rounded-xl bg-iceActive border-2 border-cobalt/40 space-y-2">
+              <div class="flex flex-wrap items-baseline justify-between gap-2 text-xs sm:text-sm">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="px-2 py-0.5 rounded bg-cobalt text-white font-mono text-[10px] font-extrabold uppercase">
+                    $0 TODAY
+                  </span>
+                  <span class="font-display font-extrabold text-ink text-sm sm:text-base">
+                    Tiberius AI Employee™ (7-Day Free Trial → Own It Later)
+                  </span>
+                </div>
+                <span class="font-mono font-extrabold text-statusText text-base sm:text-lg">
+                  From $49/mo <span class="text-xs font-normal text-bodySlate">($588/yr — or $1,497 Buyout Option)</span>
+                </span>
+              </div>
+              <div class="h-4 w-full rounded-full bg-white border border-cobalt/30 overflow-hidden">
+                <div
+                  class="cost-bar-fill h-full rounded-full bg-gradient-to-r from-cobalt to-emerald-600"
+                  data-target-width="4.5%"
+                  style="width: 4.5%;"
+                ></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Motion-Style Monthly / Annual Billing Toggle Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+          <div>
+            <h3 class="font-display font-extrabold text-2xl sm:text-3xl text-ink">
+              Choose Your 7-Day Free Trial Tier ($0.00 Due Today)
+            </h3>
+            <p class="text-sm text-bodySlate">
+              Day-5 text reminder before billing • Cancel in 1 click anytime.
+            </p>
+          </div>
+          <div
+            id="pricingBillingToggle"
+            role="group"
+            aria-label="Billing cycle"
+            class="inline-flex items-center p-1.5 rounded-2xl bg-white border border-borderSubtle shadow-sm self-start sm:self-auto shrink-0"
+          >
+            <button
+              type="button"
+              data-billing-toggle="monthly"
+              aria-pressed="false"
+              class="billing-cycle-btn tap-target px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-bodySlate hover:text-ink transition"
+            >
+              Pay monthly
+            </button>
+            <button
+              type="button"
+              data-billing-toggle="annual"
+              aria-pressed="true"
+              class="billing-cycle-btn tap-target px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-cobalt text-white shadow-sm transition"
+            >
+              Pay annually <span class="font-mono text-[11px] opacity-95">(Save 29%)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Two Side-by-Side Motion-Style Tier Cards -->
+        <div id="pricingCardsViewport" class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch mb-10">
+
+          <!-- Tier 1: AI Truck Assistant ($49/mo Annual | $69/mo Monthly • $0 Setup) -->
+          <div class="motion-card rounded-2xl p-6 sm:p-8 flex flex-col justify-between">
+            <div>
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+                <span class="px-3 py-1 rounded-full bg-surface border border-borderSubtle text-ink font-mono text-xs font-extrabold uppercase">
+                  STAGE 1 • START IN 3 MINUTES
+                </span>
+                <span class="font-mono text-xs text-statusText font-bold">$0 SETUP • 7-DAY FREE TRIAL</span>
+              </div>
+
+              <h3 class="font-display font-extrabold text-2xl sm:text-3xl text-ink">
+                AI Truck Assistant
+              </h3>
+              <p class="text-bodySlate text-sm sm:text-base mt-2">
+                For solo contractors and small crews who want an AI helper on their phone in 3 minutes — zero setup call, zero dashboards to learn.
+              </p>
+
+              <div class="my-6 p-5 rounded-xl bg-surface border border-borderSubtle flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+                <div>
+                  <span id="card1PriceNumber" class="font-display font-extrabold text-4xl sm:text-5xl text-ink">$49</span>
+                  <span class="text-bodySlate text-sm font-semibold ml-1">/month</span>
+                  <span id="card1BillingNote" class="block text-xs text-mutedSlate mt-1">Billed annually ($69/mo if billed monthly) • $0.00 due today</span>
+                </div>
+                <span class="text-xs font-mono text-statusText bg-statusBg px-2.5 py-1 rounded font-semibold shrink-0">
+                  $0 Setup Fee
+                </span>
+              </div>
+
+              <ul class="space-y-3 text-sm sm:text-base text-bodySlate mb-8">
+                <li class="flex items-start gap-3">
+                  <span class="text-cobalt font-bold mt-0.5" aria-hidden="true">✓</span>
+                  <span><strong class="text-ink">Truck Voice-Note &amp; Text Assistant:</strong> Dictate customer texts, estimate follow-ups, change-order notes, and reminders while driving.</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="text-cobalt font-bold mt-0.5" aria-hidden="true">✓</span>
+                  <span><strong class="text-ink">1-Click Inbox, Calendar &amp; QuickBooks Read:</strong> Connect Gmail/Outlook, Google Calendar, and QuickBooks OAuth on your phone in 30 seconds.</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="text-cobalt font-bold mt-0.5" aria-hidden="true">✓</span>
+                  <span><strong class="text-ink">7:30 AM Daily Morning Briefing:</strong> Wake up every weekday with unread leads, open calendar slots, and overdue invoice alerts.</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <span class="text-cobalt font-bold mt-0.5" aria-hidden="true">✓</span>
+                  <span><strong class="text-ink">Automated 3-Competitor Watch:</strong> Flags new promos launched by your top 3 local competitors every week + 10,000 AI Credits/mo.</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="space-y-2.5">
+              <button
+                type="button"
+                data-open-trial-modal="truck-assistant"
+                class="w-full tap-target py-4 px-6 rounded-xl bg-white hover:bg-iceActive text-cobalt border-2 border-cobalt font-extrabold text-base transition"
+              >
+                Try AI Truck Assistant Free ($0 Today) →
+              </button>
+              <p class="text-center text-xs text-mutedSlate">
+                7-day free trial • Day-5 text reminder • Cancel in 1 tap anytime.
+              </p>
+            </div>
+          </div>
+
+          <!-- Tier 2: Full AI Office Manager (Most Popular • $197/mo Annual | $249/mo Monthly) -->
           <div class="motion-card rounded-2xl p-6 sm:p-8 border-t-4 border-t-cobalt flex flex-col justify-between">
             <div>
               <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
                 <span class="px-3 py-1 rounded-full bg-cobalt text-white font-mono text-xs font-extrabold uppercase">
-                  OPTION 1 • 100% TURNKEY OWNERSHIP
+                  MOST POPULAR • FULL OFFICE MANAGER
                 </span>
-                <span class="font-mono text-xs text-cobalt font-bold">ZERO MONTHLY FEES TO US</span>
+                <span id="card2SetupBadge" class="font-mono text-xs text-cobalt font-bold">SETUP WAIVED ON ANNUAL</span>
               </div>
 
               <h3 class="font-display font-extrabold text-2xl sm:text-3xl text-ink">
-                Turnkey Ownership Install
+                Full AI Office Manager
               </h3>
               <p class="text-bodySlate text-sm sm:text-base mt-2">
-                We build your AI employee with its own private computer in the cloud, lock it to your phone, walk you through the 15-minute handoff call, and hand you the keys forever.
+                For busy contractors who want a Dedicated Private Cloud Computer working inside ServiceTitan, Jobber, Housecall Pro, and QuickBooks — plus 6-second missed-call text-back.
               </p>
 
-              <div class="my-6 p-5 rounded-xl bg-surface border border-borderSubtle flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+              <div class="my-6 p-5 rounded-xl bg-iceActive/60 border border-cobalt/25 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
                 <div>
-                  <span class="font-display font-extrabold text-4xl sm:text-5xl text-ink">$1,497</span>
-                  <span class="text-bodySlate text-sm font-semibold ml-1">One-Time Setup</span>
+                  <span id="card2PriceNumber" class="font-display font-extrabold text-4xl sm:text-5xl text-ink">$197</span>
+                  <span class="text-bodySlate text-sm font-semibold ml-1">/month</span>
+                  <span id="card2BillingNote" class="block text-xs text-bodySlate mt-1">Billed annually ($0 setup) • $249/mo if billed monthly • $0.00 due today</span>
                 </div>
-                <span class="text-xs font-mono text-statusText bg-statusBg px-2.5 py-1 rounded font-semibold">
-                  Runs on your own ~$20/mo cloud PC + Google account
+                <span class="text-xs font-mono text-cobalt bg-white border border-cobalt/30 px-2.5 py-1 rounded font-semibold shrink-0">
+                  Private Cloud PC Included
                 </span>
               </div>
 
               <ul class="space-y-3 text-sm sm:text-base text-bodySlate mb-8">
                 <li class="flex items-start gap-3">
                   <span class="text-cobalt font-bold mt-0.5" aria-hidden="true">✓</span>
-                  <span><strong class="text-ink">Its Own Private Cloud Computer:</strong> Ready in 24 hours with a private web browser that belongs strictly to your company.</span>
+                  <span><strong class="text-ink">Everything in AI Truck Assistant, plus:</strong></span>
                 </li>
                 <li class="flex items-start gap-3">
                   <span class="text-cobalt font-bold mt-0.5" aria-hidden="true">✓</span>
-                  <span><strong class="text-ink">Works Inside Your Existing Programs:</strong> QuickBooks, Jobber, Housecall Pro, ServiceTitan, JobNimbus, and your email.</span>
+                  <span><strong class="text-ink">Dedicated Private Cloud Browser:</strong> Works directly inside <strong>Jobber, Housecall Pro, ServiceTitan, JobNimbus, AccuLynx, Roofr &amp; QuickBooks</strong> pay links.</span>
                 </li>
                 <li class="flex items-start gap-3">
                   <span class="text-cobalt font-bold mt-0.5" aria-hidden="true">✓</span>
-                  <span><strong class="text-ink">All 6 Pre-Loaded Contractor Office Chores:</strong> Late QuickBooks invoice chase, unsigned quote follow-up, missed-call text-back, schedule updates, 7:30 AM morning briefing, and local competitor watch.</span>
+                  <span><strong class="text-ink">6-Second Missed-Call Text-Back Line:</strong> Answers missed homeowner calls while you're up on a ladder and books estimates onto your calendar.</span>
                 </li>
                 <li class="flex items-start gap-3">
                   <span class="text-cobalt font-bold mt-0.5" aria-hidden="true">✓</span>
-                  <span><strong class="text-ink">15-Minute Live Handoff Call:</strong> You sign in once with our 1-click cloud browser portal and send your first text from your phone.</span>
+                  <span><strong class="text-ink">15-Minute White-Glove Handoff + Login Care:</strong> We configure your stack, host nightly backups, maintain logins, and include 30,000 AI Credits/mo.</span>
                 </li>
               </ul>
             </div>
@@ -1789,86 +3280,46 @@
             <div class="space-y-2.5">
               <button
                 type="button"
-                data-select-plan="turnkey-1497"
-                class="plan-select-btn w-full tap-target py-4 px-6 rounded-xl bg-cobalt hover:bg-cobaltHover text-white font-extrabold text-base transition shadow-sm"
+                data-open-trial-modal="office-manager"
+                class="w-full tap-target py-4 px-6 rounded-xl bg-cobalt hover:bg-cobaltHover text-white font-extrabold text-base transition shadow-sm"
               >
-                Claim Option 1: $1,497 Turnkey Ownership →
+                Start 7-Day Free Trial ($0 Today) →
               </button>
               <p class="text-center text-xs text-mutedSlate">
-                Pay once. Own 100% forever. Zero monthly retainer to Tiberius.
+                Includes 100% Month-1 Equity Credit toward Turnkey Ownership anytime after Day 30.
               </p>
             </div>
           </div>
 
-          <!-- Option 2: $997 + $197/mo Managed Care Plan -->
-          <div class="motion-card rounded-2xl p-6 sm:p-8 flex flex-col justify-between">
-            <div>
-              <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
-                <span class="px-3 py-1 rounded-full bg-iceActive border border-cobalt/30 text-cobalt font-mono text-xs font-extrabold uppercase">
-                  OPTION 2 • HANDS-OFF MANAGED CARE
-                </span>
-                <span class="font-mono text-xs text-bodySlate font-bold">WE HOST &amp; MAINTAIN EVERYTHING</span>
-              </div>
+        </div>
 
-              <h3 class="font-display font-extrabold text-2xl sm:text-3xl text-ink">
-                Managed AI Care Plan
-              </h3>
-              <p class="text-bodySlate text-sm sm:text-base mt-2">
-                Want lower upfront cost and zero maintenance ever? We host your AI employee's private cloud computer, run nightly backups, and keep everything running smoothly for you.
-              </p>
-
-              <div class="my-6 p-5 rounded-xl bg-surface border border-borderSubtle flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
-                <div>
-                  <span class="font-display font-extrabold text-4xl sm:text-5xl text-ink">$997</span>
-                  <span class="text-bodySlate text-lg font-bold"> Setup + </span>
-                  <span class="font-display font-extrabold text-3xl sm:text-4xl text-cobalt">$197/mo</span>
-                </div>
-                <span class="text-xs font-mono text-bodySlate font-semibold">
-                  Cloud computer hosting + nightly backups included
-                </span>
-              </div>
-
-              <ul class="space-y-3 text-sm sm:text-base text-bodySlate mb-8">
-                <li class="flex items-start gap-3">
-                  <span class="text-cobalt font-bold mt-0.5" aria-hidden="true">✓</span>
-                  <span><strong class="text-ink">Everything in the Turnkey Install Included:</strong> Private cloud computer, phone lock, and all 6 contractor office chores.</span>
-                </li>
-                <li class="flex items-start gap-3">
-                  <span class="text-cobalt font-bold mt-0.5" aria-hidden="true">✓</span>
-                  <span><strong class="text-ink">Cloud Computer Hosting Included:</strong> We cover and maintain your dedicated private cloud computer and nightly backups.</span>
-                </li>
-                <li class="flex items-start gap-3">
-                  <span class="text-cobalt font-bold mt-0.5" aria-hidden="true">✓</span>
-                  <span><strong class="text-ink">Fast Login &amp; Program Fixes:</strong> Whenever QuickBooks or your scheduling software updates its screen, we adjust your AI employee for you.</span>
-                </li>
-                <li class="flex items-start gap-3">
-                  <span class="text-cobalt font-bold mt-0.5" aria-hidden="true">✓</span>
-                  <span><strong class="text-ink">Monthly New Office Skills:</strong> Every month we add our newest time-saving contractor office helpers straight into your AI employee.</span>
-                </li>
-              </ul>
-            </div>
-
-            <div class="space-y-2.5">
-              <button
-                type="button"
-                data-select-plan="managed-997-197"
-                class="plan-select-btn w-full tap-target py-4 px-6 rounded-xl bg-white hover:bg-iceActive text-cobalt border-2 border-cobalt font-extrabold text-base transition"
-              >
-                Claim Option 2: $997 Setup + $197/mo Managed →
-              </button>
-              <p class="text-center text-xs text-mutedSlate">
-                Month-to-month care plan. Cancel or switch to self-hosted anytime.
-              </p>
-            </div>
+        <!-- Stage 3 Back-End Ownership Equity Banner -->
+        <div class="motion-card rounded-2xl p-6 sm:p-7 border-l-4 border-l-cobalt flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+          <div class="space-y-1.5 max-w-3xl">
+            <span class="inline-block font-mono text-xs font-bold uppercase text-cobalt">
+              STAGE 3 • OPTIONAL DAY-30+ TURNKEY OWNERSHIP BUYOUT
+            </span>
+            <h3 class="font-display font-extrabold text-lg sm:text-xl text-ink">
+              Want to Own Your AI Employee Outright With Zero Software Subscription? Prove It Works First.
+            </h3>
+            <p class="text-sm text-bodySlate">
+              Nobody wants to drop $1,500 upfront before seeing their AI collect a single invoice. Start free for 7 days — once your AI has chased late QuickBooks bills and booked estimates for 30+ days, you can buy out <strong class="text-ink">100% Turnkey Ownership ($1,497)</strong> anytime and credit your entire first month toward it.
+            </p>
           </div>
-
+          <button
+            type="button"
+            data-open-trial-modal="truck-assistant"
+            class="tap-target px-5 py-3 rounded-xl bg-iceActive hover:bg-cobalt hover:text-white border border-cobalt/30 text-cobalt font-extrabold text-xs sm:text-sm transition shrink-0"
+          >
+            Test It Free First →
+          </button>
         </div>
 
       </div>
     </section>
 
     <!-- ======================================================================
-         SECTION 6: BLUNT NO-BS CONTRACTOR FAQ + RESERVE YOUR INSTALL FORM
+         SECTION 6: BLUNT NO-BS CONTRACTOR FAQ + QUICK-START TRIAL CARD
          ====================================================================== -->
     <section id="claim-build" class="py-16 sm:py-24 bg-canvas">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1881,17 +3332,26 @@
                 STRAIGHT ANSWERS • ZERO TECH TALK
               </span>
               <h2 id="faqHeading" class="section-headline font-extrabold">
-                Questions Contractors Ask Before Hiring Their AI Employee
+                Questions Contractors Ask Before Starting Their Free Trial
               </h2>
             </div>
 
             <div class="space-y-3" aria-labelledby="faqHeading">
               <details class="faq-item rounded-xl bg-surface border border-borderSubtle p-5" open>
                 <summary class="font-display font-bold text-base sm:text-lg text-ink">
+                  <span>How does the 7-day free trial work? Will I get hit with a surprise annual bill?</span>
+                </summary>
+                <p class="mt-3 text-sm sm:text-base text-bodySlate pl-6">
+                  Zero sneaky annual charges. You pay $0.00 today, our checkout defaults to simple month-to-month billing unless you choose annual, and your AI Employee texts your cell phone on Day 5 (48 hours before billing starts) so you can reply <code class="font-mono font-bold text-ink">CANCEL</code> in 1 tap if it isn't saving your evenings.
+                </p>
+              </details>
+
+              <details class="faq-item rounded-xl bg-surface border border-borderSubtle p-5">
+                <summary class="font-display font-bold text-base sm:text-lg text-ink">
                   <span>Will it ever send a text or invoice reminder without my OK?</span>
                 </summary>
                 <p class="mt-3 text-sm sm:text-base text-bodySlate pl-6">
-                  Never. By default, your AI employee opens QuickBooks or your schedule, finds what needs attention, writes the draft, and texts your phone first. Nothing goes out to a customer until you tap OK or reply "Send it."
+                  Never. By default, your AI employee checks your inbox, QuickBooks, or schedule, writes the draft, and texts your phone first. Nothing goes out to a customer until you tap OK or reply "Send it."
                 </p>
               </details>
 
@@ -1900,7 +3360,7 @@
                   <span>Do I have to give you my QuickBooks or bank passwords?</span>
                 </summary>
                 <p class="mt-3 text-sm sm:text-base text-bodySlate pl-6">
-                  No. During our 15-minute handoff call, we send you a 1-click link to your AI employee's private cloud computer. You type your own password directly into that browser and check "Remember this computer." We never see or store your passwords.
+                  No. On AI Truck Assistant, you connect with official 1-click Google or QuickBooks sign-in. And when you upgrade to Full AI Office Manager, you type your own login directly into your private <a href="handoff.html" class="text-cobalt underline font-semibold hover:text-cobaltHover">1-Click Cloud Browser</a> — we never see or store your passwords.
                 </p>
               </details>
 
@@ -1915,35 +3375,29 @@
 
               <details class="faq-item rounded-xl bg-surface border border-borderSubtle p-5">
                 <summary class="font-display font-bold text-base sm:text-lg text-ink">
-                  <span>Does this work with QuickBooks, Jobber, Housecall Pro, ServiceTitan, or JobNimbus?</span>
+                  <span>How does the $1,497 Turnkey Ownership buyout work later?</span>
                 </summary>
                 <p class="mt-3 text-sm sm:text-base text-bodySlate pl-6">
-                  Yes — because your AI employee has its own private computer in the cloud, it logs straight into the web browser for QuickBooks, Jobber, Housecall Pro, ServiceTitan, JobNimbus, AccuLynx, Roofr, and your email just like a human office manager sitting at a desk.
-                </p>
-              </details>
-
-              <details class="faq-item rounded-xl bg-surface border border-borderSubtle p-5">
-                <summary class="font-display font-bold text-base sm:text-lg text-ink">
-                  <span>How fast can my AI employee go live?</span>
-                </summary>
-                <p class="mt-3 text-sm sm:text-base text-bodySlate pl-6">
-                  We build your AI employee's private cloud computer within 24 hours. Then we hop on a 15-minute live handoff call using our <a href="handoff.html" class="text-cobalt underline font-semibold hover:text-cobaltHover">3-Step Handoff Portal</a> so you see it answer your phone live before we hang up.
+                  Start on the low monthly plan first so we prove our worth. Anytime after 30 days, you can buy out 100% Turnkey Ownership of your trained AI Employee for $1,497 (minus 100% credit for your first month's subscription) and either self-host or keep our $49/mo Hosting &amp; Login Care Pass.
                 </p>
               </details>
             </div>
           </div>
 
-          <!-- Right Column: Accessible Contractor Booking Form -->
+          <!-- Right Column: Quick-Start 7-Day Free Trial Form -->
           <div class="lg:col-span-6">
             <div class="motion-card rounded-2xl p-6 sm:p-8">
+              <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-statusBg text-statusText font-mono text-xs font-bold mb-3">
+                <span>$0.00 DUE TODAY • DAY-5 TEXT REMINDER</span>
+              </div>
               <h2 id="reserveFormHeading" class="font-display font-extrabold text-2xl text-ink mb-1">
-                Schedule Your 24-Hour Build &amp; 15-Minute Handoff
+                Start Your 7-Day Free Trial in 60 Seconds
               </h2>
               <p class="text-sm text-bodySlate mb-6">
-                Fill this out in 30 seconds. We'll build your AI employee's private cloud computer and text you your 15-minute handoff link.
+                Enter your info below (or click <button type="button" data-open-trial-modal="truck-assistant" class="text-cobalt font-bold underline hover:text-cobaltHover">1-Tap Quick Quiz</button>) to unlock tomorrow’s 7:30 AM Morning Briefing for $0 today.
               </p>
 
-              <form id="reserveBuildForm" action="handoff.html" method="POST" aria-labelledby="reserveFormHeading" novalidate>
+              <form id="reserveBuildForm" action="signup.html" method="POST" aria-labelledby="reserveFormHeading" novalidate>
                 <!-- Full Name -->
                 <div class="field-group">
                   <label for="ownerName">Your Name <span aria-hidden="true" class="text-cobalt">*</span></label>
@@ -1976,7 +3430,7 @@
 
                 <!-- Cell Phone -->
                 <div class="field-group">
-                  <label for="cellPhone">Best Cell Phone (For Your Private Text Line) <span aria-hidden="true" class="text-cobalt">*</span></label>
+                  <label for="cellPhone">Best Cell Phone (For Your 7:30 AM Text) <span aria-hidden="true" class="text-cobalt">*</span></label>
                   <span id="cellPhoneHint" class="text-xs text-mutedSlate">10-digit cell number so we lock your AI employee strictly to your phone.</span>
                   <input
                     type="tel"
@@ -1997,7 +3451,7 @@
                 <!-- Programs You Run -->
                 <div class="field-group">
                   <label for="programsUsed">Which Books or Schedule Program Do You Run? <span aria-hidden="true" class="text-cobalt">*</span></label>
-                  <span id="programsUsedHint" class="text-xs text-mutedSlate">Example: QuickBooks, Jobber, Housecall Pro, ServiceTitan, JobNimbus, or Gmail.</span>
+                  <span id="programsUsedHint" class="text-xs text-mutedSlate">Example: QuickBooks, Jobber, Housecall Pro, ServiceTitan, or Gmail.</span>
                   <input
                     type="text"
                     id="programsUsed"
@@ -2006,26 +3460,26 @@
                     enterkeyhint="done"
                     required
                     aria-describedby="programsUsedHint"
-                    value="QuickBooks + Jobber"
+                    value="QuickBooks + Gmail"
                   />
                 </div>
 
                 <!-- Plan Choice -->
                 <fieldset class="mb-6 p-4 rounded-xl bg-surface border border-borderSubtle">
                   <legend class="font-display font-bold text-sm text-ink px-1">
-                    Choose Your Setup Option <span aria-hidden="true" class="text-cobalt">*</span>
+                    Choose Which Tier to Trial Free ($0 Today) <span aria-hidden="true" class="text-cobalt">*</span>
                   </legend>
                   <div class="space-y-3 mt-2">
                     <div class="flex items-center gap-3">
-                      <input type="radio" id="planTurnkey" name="selected_plan" value="turnkey-1497" checked required />
-                      <label for="planTurnkey" class="text-sm sm:text-base font-semibold text-ink cursor-pointer">
-                        Option 1: $1,497 One-Time Turnkey Ownership ($0/mo to us)
+                      <input type="radio" id="planTruckStarter" name="selected_plan" value="truck-assistant" checked required />
+                      <label for="planTruckStarter" class="text-sm sm:text-base font-semibold text-ink cursor-pointer">
+                        Stage 1: AI Truck Assistant ($0 Today, then from $49/mo)
                       </label>
                     </div>
                     <div class="flex items-center gap-3">
-                      <input type="radio" id="planManaged" name="selected_plan" value="managed-997-197" />
-                      <label for="planManaged" class="text-sm sm:text-base font-semibold text-ink cursor-pointer">
-                        Option 2: $997 Setup + $197/mo Managed Care Plan
+                      <input type="radio" id="planOfficeManager" name="selected_plan" value="office-manager" />
+                      <label for="planOfficeManager" class="text-sm sm:text-base font-semibold text-ink cursor-pointer">
+                        Stage 2: Full AI Office Manager + Cloud PC ($0 Today, then from $197/mo)
                       </label>
                     </div>
                   </div>
@@ -2039,7 +3493,7 @@
                   id="submitBuildBtn"
                   class="w-full tap-target py-4 px-6 rounded-xl bg-cobalt hover:bg-cobaltHover text-white font-extrabold text-base shadow-sm transition"
                 >
-                  Lock In My AI Employee &amp; Open 15-Min Handoff Portal →
+                  Continue to Free Sign-Up ($0.00 Due Today) →
                 </button>
               </form>
             </div>
@@ -2061,7 +3515,7 @@
           <a href="/" class="inline-block" aria-label="Tiberius AI Home">
             <img
               src="images/logo4-color.png"
-              alt="Tiberius AI — The Bad Boys of AI"
+              alt="Tiberius AI • The Bad Boys of AI"
               width="1500"
               height="684"
               loading="lazy"
@@ -2069,7 +3523,7 @@
             />
           </a>
           <p class="text-xs sm:text-sm text-bodySlate max-w-sm">
-            You stay on the tools — your AI employee handles the office work, QuickBooks, and your schedule from its own computer in the cloud.
+            Start free for 7 days ($0 due today). Stay on the tools while your AI employee handles QuickBooks, quotes, and your 7:30 AM briefing.
           </p>
         </div>
 
@@ -2081,8 +3535,9 @@
               <li><a href="#ai-tools-module" class="inline-block py-1 hover:text-cobalt transition-colors">Office Job Selector</a></li>
               <li><a href="#workflows" class="inline-block py-1 hover:text-cobalt transition-colors">How It Works</a></li>
               <li><a href="#work-log" class="inline-block py-1 hover:text-cobalt transition-colors">7:30 AM Work Log</a></li>
-              <li><a href="#pricing" class="inline-block py-1 hover:text-cobalt transition-colors">Pricing ($1,497)</a></li>
-              <li><a href="handoff.html" class="inline-block py-1 text-cobalt font-semibold hover:underline transition-colors whitespace-nowrap">15-Min Handoff →</a></li>
+              <li><a href="#pricing" class="inline-block py-1 hover:text-cobalt transition-colors">Pricing (From $49/mo)</a></li>
+              <li><a href="signup.html" class="inline-block py-1 text-cobalt font-semibold hover:underline transition-colors whitespace-nowrap">Start 7-Day Free Trial →</a></li>
+              <li><a href="handoff.html" class="inline-block py-1 hover:text-cobalt transition-colors whitespace-nowrap">15-Min Cloud Handoff</a></li>
             </ul>
           </div>
 
@@ -2110,10 +3565,114 @@
 
       <div class="pt-6 border-t border-borderSubtle flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-mutedSlate">
         <p>© 2026 Tiberius AI • Built in Texas for Contractors &amp; Local Businesses</p>
-        <a href="#claim-build" class="font-semibold text-cobalt hover:underline">Hire My AI Employee →</a>
+        <button type="button" data-open-trial-modal="truck-assistant" class="font-semibold text-cobalt hover:underline">
+          Try Tiberius AI for Free →
+        </button>
       </div>
     </div>
   </footer>
+
+  <!-- ========================================================================
+       MOTION-STYLE 2-TAP MICRO-COMMITMENT MODAL (<dialog closedby="any">)
+       ======================================================================== -->
+  <dialog id="trialQuizDialog" closedby="any" aria-labelledby="trialQuizHeading">
+    <div class="p-6 sm:p-8 space-y-6">
+      <div class="flex items-start justify-between gap-4">
+        <div class="space-y-1">
+          <span id="trialQuizStepBadge" class="inline-block font-mono text-[11px] font-bold uppercase text-mutedSlate">
+            STEP 1 OF 2 • 15-SECOND SETUP
+          </span>
+          <h2 id="trialQuizHeading" tabindex="-1" class="font-display font-extrabold text-2xl sm:text-3xl text-cobalt tracking-tight">
+            Get started with Tiberius AI!
+          </h2>
+        </div>
+        <button
+          type="button"
+          id="closeTrialQuizBtn"
+          aria-label="Close get started dialog"
+          class="w-10 h-10 rounded-full bg-surface hover:bg-surfaceMuted border border-borderSubtle text-bodySlate hover:text-ink font-bold text-lg flex items-center justify-center shrink-0 transition"
+        >
+          ×
+        </button>
+      </div>
+
+      <form id="trialQuizForm" action="signup.html" method="GET" class="space-y-5">
+        <fieldset id="quizStep1Fieldset" class="space-y-2.5">
+          <legend class="font-display font-bold text-base sm:text-lg text-ink mb-3">
+            What office work do you most want off your plate over the next 6 months?
+          </legend>
+
+          <label class="quiz-option-row tap-target w-full px-4 py-3 rounded-xl cursor-pointer flex items-center gap-3 text-sm sm:text-base font-medium">
+            <input type="radio" name="chore" value="invoices" checked autofocus />
+            <span>Chasing late QuickBooks invoices &amp; pay links</span>
+          </label>
+
+          <label class="quiz-option-row tap-target w-full px-4 py-3 rounded-xl cursor-pointer flex items-center gap-3 text-sm sm:text-base font-medium">
+            <input type="radio" name="chore" value="quotes" />
+            <span>Following up unsigned quotes &amp; estimates</span>
+          </label>
+
+          <label class="quiz-option-row tap-target w-full px-4 py-3 rounded-xl cursor-pointer flex items-center gap-3 text-sm sm:text-base font-medium">
+            <input type="radio" name="chore" value="calls" />
+            <span>Answering missed homeowner calls while on a job</span>
+          </label>
+
+          <label class="quiz-option-row tap-target w-full px-4 py-3 rounded-xl cursor-pointer flex items-center gap-3 text-sm sm:text-base font-medium">
+            <input type="radio" name="chore" value="schedule" />
+            <span>Updating the crew schedule &amp; rain shifts</span>
+          </label>
+
+          <label class="quiz-option-row tap-target w-full px-4 py-3 rounded-xl cursor-pointer flex items-center gap-3 text-sm sm:text-base font-medium">
+            <input type="radio" name="chore" value="all" />
+            <span>All of the above (full evening paperwork relief)</span>
+          </label>
+        </fieldset>
+
+        <fieldset id="quizStep2Fieldset" class="space-y-2.5" hidden>
+          <legend class="font-display font-bold text-base sm:text-lg text-ink mb-3">
+            Which programs do you currently run in your business?
+          </legend>
+
+          <label class="quiz-option-row tap-target w-full px-4 py-3 rounded-xl cursor-pointer flex items-center gap-3 text-sm sm:text-base font-medium">
+            <input type="checkbox" name="quiz_prog" value="Gmail / Calendar" checked />
+            <span>Gmail, Outlook, or Google Calendar</span>
+          </label>
+
+          <label class="quiz-option-row tap-target w-full px-4 py-3 rounded-xl cursor-pointer flex items-center gap-3 text-sm sm:text-base font-medium">
+            <input type="checkbox" name="quiz_prog" value="QuickBooks" checked />
+            <span>QuickBooks Online (Invoices &amp; Books)</span>
+          </label>
+
+          <label class="quiz-option-row tap-target w-full px-4 py-3 rounded-xl cursor-pointer flex items-center gap-3 text-sm sm:text-base font-medium">
+            <input type="checkbox" name="quiz_prog" value="Trade CRM" data-suggests-office="true" />
+            <span>Jobber, Housecall Pro, ServiceTitan, or AccuLynx</span>
+          </label>
+
+          <label class="quiz-option-row tap-target w-full px-4 py-3 rounded-xl cursor-pointer flex items-center gap-3 text-sm sm:text-base font-medium">
+            <input type="checkbox" name="quiz_prog" value="Cell Phone Only" />
+            <span>Just my cell phone, texts &amp; paper estimates</span>
+          </label>
+        </fieldset>
+
+        <div class="pt-2 flex items-center justify-between gap-3">
+          <button
+            type="button"
+            id="quizBackBtn"
+            class="tap-target px-5 py-2.5 rounded-xl bg-iceActive hover:bg-surfaceMuted text-cobalt font-bold text-sm transition"
+          >
+            Close
+          </button>
+          <button
+            type="button"
+            id="quizNextBtn"
+            class="tap-target px-6 py-2.5 rounded-xl bg-cobalt hover:bg-cobaltHover text-white font-extrabold text-sm transition shadow-sm"
+          >
+            Continue
+          </button>
+        </div>
+      </form>
+    </div>
+  </dialog>
 
   <!-- ========================================================================
        CLIENT-SIDE INTERACTIVITY (SCOPED VIEW TRANSITIONS + CHOREOGRAPHED STAGE)
@@ -2209,11 +3768,11 @@
           `,
           approvedRowSub: '✓ Reminder & QuickBooks pay link sent',
           draftLabel: 'AI Drafted Customer Reminder:',
-          draftCopy: '"Morning Tom — hope the new roof is holding up great. Just a quick note from Mike\'s office that Invoice #1084 ($4,200) is past 30 days. Here’s the direct QuickBooks pay link whenever you have a minute."',
+          draftCopy: '"Morning Tom, hope the new roof is holding up great. Just a quick note from Mike\'s office that Invoice #1084 ($4,200) is past 30 days. Here’s the direct QuickBooks pay link whenever you have a minute."',
           phoneTime: 'AI Office Manager • 7:30 AM',
           phonePrompt: 'Found 3 invoices over 30 days late (<strong class="text-ink">$8,400 total</strong>) in QuickBooks and drafted polite reminders with pay links. Tap OK to send reminders.',
-          approveBtnLabel: '[Tap to Approve] — Send All 3 Reminders ($8,400)',
-          approvedReply: '✓ Approved — Send all 3 QuickBooks reminders.',
+          approveBtnLabel: '[Tap to Approve] • Send All 3 Reminders ($8,400)',
+          approvedReply: '✓ Approved: Send all 3 QuickBooks reminders.',
           approvedConfirm: '✓ Sent! All 3 QuickBooks reminders ($8,400) are out and logged in your books.'
         },
         quotes: {
@@ -2246,11 +3805,11 @@
           `,
           approvedRowSub: '✓ Check-in sent • Homeowner replied to book!',
           draftLabel: 'AI Drafted Estimate Check-In:',
-          draftCopy: '"Hi Sarah — checking in on the $14,800 roof estimate Mike sent over last week. We have a crew opening next Tuesday if you\'d like to get on the schedule, or let me know if you have any questions!"',
+          draftCopy: '"Hi Sarah, checking in on the $14,800 roof estimate Mike sent over last week. We have a crew opening next Tuesday if you\'d like to get on the schedule, or let me know if you have any questions!"',
           phoneTime: 'AI Office Manager • 11:32 AM',
           phonePrompt: 'Found 4 unsigned estimates from last week (<strong class="text-ink">$28,500 total</strong>), including Sarah Jenkins ($14,800). Tap OK to send friendly check-in texts.',
-          approveBtnLabel: '[Tap to Approve] — Follow Up All 4 Quotes ($28,500)',
-          approvedReply: '✓ Approved — Send the 4 quote check-ins.',
+          approveBtnLabel: '[Tap to Approve] • Follow Up All 4 Quotes ($28,500)',
+          approvedReply: '✓ Approved: Send the 4 quote check-ins.',
           approvedConfirm: '✓ Sent! Sarah Jenkins already replied asking to book her $14,800 job for next week.'
         },
         calls: {
@@ -2276,11 +3835,11 @@
           `,
           approvedRowSub: '✓ Confirmed on calendar for Thursday 9:00 AM',
           draftLabel: 'AI Drafted Homeowner Confirmation:',
-          draftCopy: '"Hi Dave — thanks for texting Mike\'s office! We have you down for a roof inspection at 412 Oak Hollow Dr this Thursday at 9:00 AM. Mike will text when he\'s 15 minutes out."',
+          draftCopy: '"Hi Dave, thanks for texting Mike\'s office! We have you down for a roof inspection at 412 Oak Hollow Dr this Thursday at 9:00 AM. Mike will text when he\'s 15 minutes out."',
           phoneTime: 'AI Office Manager • 8:12 AM',
           phonePrompt: 'Answered a missed call from <strong class="text-ink">Dave Kramer (412 Oak Hollow Dr)</strong> while you were on a job. Tap OK to lock him in for Thursday at 9:00 AM.',
-          approveBtnLabel: '[Tap to Approve] — Confirm Thursday 9:00 AM Estimate',
-          approvedReply: '✓ Approved — Book Dave for Thursday at 9 AM.',
+          approveBtnLabel: '[Tap to Approve] • Confirm Thursday 9:00 AM Estimate',
+          approvedReply: '✓ Approved: Book Dave for Thursday at 9 AM.',
           approvedConfirm: '✓ Booked! Dave Kramer is on your Thursday 9:00 AM calendar and confirmed by text.'
         },
         schedule: {
@@ -2306,11 +3865,11 @@
           `,
           approvedRowSub: '✓ Schedule moved to Wed 7:30 AM & homeowner notified',
           draftLabel: 'AI Drafted Homeowner Notice:',
-          draftCopy: '"Hi Tom — with rain in Tuesday\'s forecast, Mike\'s crew is moving your roof start to Wednesday at 7:30 AM so your house stays bone dry. Reply anytime if you need anything!"',
+          draftCopy: '"Hi Tom, with rain in Tuesday\'s forecast, Mike\'s crew is moving your roof start to Wednesday at 7:30 AM so your house stays bone dry. Reply anytime if you need anything!"',
           phoneTime: 'AI Office Manager • 1:15 PM',
           phonePrompt: 'Got your truck voice note! Moved the Miller job to Wednesday at 7:30 AM inside your schedule and drafted the homeowner heads-up. Tap OK to send.',
-          approveBtnLabel: '[Tap to Approve] — Update Schedule & Text Homeowner',
-          approvedReply: '✓ Approved — Lock the schedule & text Tom.',
+          approveBtnLabel: '[Tap to Approve] • Update Schedule & Text Homeowner',
+          approvedReply: '✓ Approved: Lock the schedule & text Tom.',
           approvedConfirm: '✓ Updated! Calendar shifted to Wednesday 7:30 AM and homeowner text sent.'
         },
         briefing: {
@@ -2346,8 +3905,8 @@
           draftCopy: '"All 3 late-invoice reminders ($8,400) and 4 unsigned estimate check-ins ($28,500) are ready on your cloud computer waiting for one tap on your phone."',
           phoneTime: 'AI Office Manager • 7:30 AM',
           phonePrompt: 'Morning Boss! Here is your 7:30 AM briefing: <strong class="text-ink">$8,400 in late invoices</strong> and <strong class="text-ink">$28,500 in open quotes</strong> queued. Tap OK to run today’s follow-ups.',
-          approveBtnLabel: '[Tap to Approve] — Run All Morning Follow-Ups',
-          approvedReply: '✓ Approved — Run the morning queue!',
+          approveBtnLabel: '[Tap to Approve] • Run All Morning Follow-Ups',
+          approvedReply: '✓ Approved: Run the morning queue!',
           approvedConfirm: '✓ Done! All morning invoice reminders and quote check-ins have been sent.'
         },
         competitors: {
@@ -2376,8 +3935,8 @@
           draftCopy: '"Added a 1-line note to your open estimate follow-ups highlighting your 10-year workmanship warranty so homeowners compare real quality, not cheap add-ons."',
           phoneTime: 'AI Office Manager • 4:15 PM',
           phonePrompt: '4:15 PM Local Watch: <strong class="text-ink">RidgeLine Exteriors</strong> launched a "Free Gutter Upgrade" promo in your zip code. Tap OK to include your warranty note in this week’s quote follow-ups.',
-          approveBtnLabel: '[Tap to Approve] — Add Note to Quote Follow-Ups',
-          approvedReply: '✓ Approved — Include the warranty note.',
+          approveBtnLabel: '[Tap to Approve] • Add Note to Quote Follow-Ups',
+          approvedReply: '✓ Approved: Include the warranty note.',
           approvedConfirm: '✓ Saved! Your quote follow-ups now highlight your 10-year workmanship warranty.'
         }
       };
@@ -2534,7 +4093,7 @@
           heroPhoneApprovedConfirm.classList.remove('hidden');
           heroPhoneBadge.textContent = '✓ Approved';
           heroPhoneBadge.className = 'px-2.5 py-0.5 rounded-full bg-statusBg text-statusText font-mono text-[11px] font-bold';
-          heroCloudStatusText.textContent = '✓ Approved by You — Sent & Logged on Cloud PC';
+          heroCloudStatusText.textContent = '✓ Approved by You • Sent & Logged on Cloud PC';
 
           heroApproveActionBtn.textContent = '✓ Approved & Sent From Cloud Computer';
           heroApproveActionBtn.disabled = true;
@@ -2591,7 +4150,7 @@
               </div>
             `,
             phoneTime: 'AI Office Manager • 7:30 AM',
-            phoneText: '"Morning Boss — opened QuickBooks and found 3 invoices past 30 days ($8,400 total). Copying their direct payment links now."',
+            phoneText: '"Morning Boss, opened QuickBooks and found 3 invoices past 30 days ($8,400 total). Copying their direct payment links now."',
             footerStatus: 'Status: Checking open QuickBooks invoices...',
             canApproveNext: false
           },
@@ -2606,7 +4165,7 @@
               </div>
               <div class="p-3 rounded-lg bg-iceActive border-l-4 border-cobalt text-xs space-y-1.5 row-highlight-animate">
                 <div class="font-bold text-ink">To: Tom Miller (Invoice #1084 • $4,200)</div>
-                <p class="text-bodySlate italic">"Morning Tom — hope the roof is holding up great. Just a quick note from Mike's office that Invoice #1084 ($4,200) is past 30 days. Here is the QuickBooks pay link whenever you have a minute: [Pay Link]"</p>
+                <p class="text-bodySlate italic">"Morning Tom, hope the roof is holding up great. Just a quick note from Mike's office that Invoice #1084 ($4,200) is past 30 days. Here is the QuickBooks pay link whenever you have a minute: [Pay Link]"</p>
               </div>
               <div class="p-2.5 rounded-lg bg-surface border border-borderSubtle flex justify-between text-xs text-bodySlate">
                 <span>+ 2 more polite reminders drafted (Oak Crest &amp; Greg Davis)</span>
@@ -2636,7 +4195,7 @@
             phoneText: '"Want me to send these 3 late-invoice reminders ($8,400 total)?"',
             footerStatus: '⏸ Waiting for your 1-tap OK',
             canApproveNext: true,
-            approveCta: '[Tap to Approve] — Send All 3 Reminders →'
+            approveCta: '[Tap to Approve] • Send All 3 Reminders →'
           },
           {
             header: 'QUICKBOOKS INVOICES PAID & LOGGED',
@@ -2648,10 +4207,10 @@
                 <span class="px-2 py-0.5 rounded bg-statusBg text-statusText font-mono font-bold">+$6,050 Paid Today</span>
               </div>
               <div class="p-2.5 rounded-lg bg-statusBg border border-statusText/20 text-statusText text-xs font-semibold row-highlight-animate">
-                ✓ Invoice #1084 (Tom Miller — $4,200) marked PAID in QuickBooks
+                ✓ Invoice #1084 (Tom Miller • $4,200) marked PAID in QuickBooks
               </div>
               <div class="p-2.5 rounded-lg bg-statusBg border border-statusText/20 text-statusText text-xs font-semibold">
-                ✓ Invoice #1091 (Greg Davis — $1,850) marked PAID in QuickBooks
+                ✓ Invoice #1091 (Greg Davis • $1,850) marked PAID in QuickBooks
               </div>
               <div class="p-2.5 rounded-lg bg-surface border border-borderSubtle text-bodySlate text-xs">
                 • Oak Crest ($2,350) scheduled payment for Friday morning
@@ -2694,11 +4253,11 @@
                 <span class="font-mono text-cobalt font-bold">$28,500 Open</span>
               </div>
               <div class="p-2.5 rounded-lg bg-iceActive border-l-4 border-cobalt flex justify-between text-xs row-highlight-animate">
-                <span class="font-bold text-ink">Sarah Jenkins — Roof Replacement</span>
+                <span class="font-bold text-ink">Sarah Jenkins • Roof Replacement</span>
                 <span class="font-mono font-bold text-ink">$14,800</span>
               </div>
               <div class="p-2.5 rounded-lg bg-surface border border-borderSubtle flex justify-between text-xs">
-                <span class="font-medium text-ink">Mark Reynolds — Storm Inspection &amp; Repair</span>
+                <span class="font-medium text-ink">Mark Reynolds • Storm Inspection &amp; Repair</span>
                 <span class="font-mono font-bold text-ink">$6,400</span>
               </div>
               <div class="p-2.5 rounded-lg bg-surface border border-borderSubtle flex justify-between text-xs">
@@ -2722,14 +4281,14 @@
               </div>
               <div class="p-3 rounded-lg bg-iceActive border-l-4 border-cobalt text-xs space-y-1 row-highlight-animate">
                 <div class="font-bold text-ink">To: Sarah Jenkins ($14,800 Quote)</div>
-                <p class="text-bodySlate italic">"Hi Sarah — checking in on the roof estimate Mike sent over last Tuesday. We have a crew opening next week if you'd like to get on the schedule!"</p>
+                <p class="text-bodySlate italic">"Hi Sarah, checking in on the roof estimate Mike sent over last Tuesday. We have a crew opening next week if you'd like to get on the schedule!"</p>
               </div>
             `,
             phoneTime: 'AI Office Manager • 11:35 AM',
             phoneText: '"OK to send these 4 estimate follow-ups ($28,500)?"',
             footerStatus: '⏸ Waiting for your 1-tap OK',
             canApproveNext: true,
-            approveCta: '[Tap to Approve] — Send 4 Quote Follow-Ups →'
+            approveCta: '[Tap to Approve] • Send 4 Quote Follow-Ups →'
           },
           {
             header: 'ESTIMATE ACCEPTED & SCHEDULED',
@@ -2768,7 +4327,7 @@
               </div>
             `,
             phoneTime: 'AI Office Manager • 7:30 AM',
-            phoneText: '"Morning Boss — here\'s your 30-second briefing for today. Reply 1 to send the 3 QuickBooks invoice reminders."',
+            phoneText: '"Morning Boss, here\'s your 30-second briefing for today. Reply 1 to send the 3 QuickBooks invoice reminders."',
             footerStatus: '✓ Delivered every weekday at 7:30 AM',
             canApproveNext: false
           },
@@ -2791,7 +4350,7 @@
             phoneText: '"Got your voice note! Moved the Miller job to Wednesday morning on the schedule. Tap OK to text Tom the update."',
             footerStatus: '⏸ Waiting for your 1-tap OK',
             canApproveNext: true,
-            approveCta: '[Tap to Approve] — Text Tom & Lock Schedule →'
+            approveCta: '[Tap to Approve] • Text Tom & Lock Schedule →'
           },
           {
             header: 'LOCAL COMPETITOR PROMO CHECK',
@@ -3026,7 +4585,7 @@
 
       if (approve730Btn) {
         approve730Btn.addEventListener('click', () => {
-          toggle730Btn.textContent = '[Sent — Approved by You]';
+          toggle730Btn.textContent = '[Sent • Approved by You]';
           toggle730Btn.className = 'worklog-toggle-btn tap-target px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-statusBg text-statusText border border-statusText/30 w-fit shrink-0';
           approve730Btn.textContent = '✓ All 3 QuickBooks Reminders Sent ($8,400 Chased)';
           approve730Btn.disabled = true;
@@ -3043,7 +4602,7 @@
         reset730Btn.addEventListener('click', () => {
           toggle730Btn.textContent = '[Waiting for your OK]';
           toggle730Btn.className = 'worklog-toggle-btn tap-target px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-white border border-cobalt/40 text-cobalt hover:bg-iceActive w-fit shrink-0';
-          approve730Btn.textContent = '✓ Give Your OK — Send All 3 Reminders ($8,400)';
+          approve730Btn.textContent = '✓ Give Your OK: Send All 3 Reminders ($8,400)';
           approve730Btn.disabled = false;
           approve730Btn.className = 'tap-target px-4 py-2.5 rounded-xl bg-cobalt hover:bg-cobaltHover text-white font-bold text-xs sm:text-sm transition shadow-sm';
           reset730Btn.classList.add('hidden');
@@ -3075,19 +4634,473 @@
       });
 
       // ======================================================================
-      // 4. PRICING PLAN SELECTOR & ACCESSIBLE FORM VALIDATION
+      // 4. M6 OLD WAY VS. TIBERIUS WAY INTERACTIVE SWITCHER & 5 PAIRED ROWS
       // ======================================================================
-      document.querySelectorAll('.plan-select-btn').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          const plan = btn.getAttribute('data-select-plan');
-          const radio = document.querySelector(`input[name="selected_plan"][value="${plan}"]`);
-          if (radio) radio.checked = true;
-          const formSection = document.getElementById('claim-build');
-          if (formSection) {
-            formSection.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+      const transformCaptions = [
+        'Chasing invoices on Sunday night → Opens your books at 7:30 AM with pay link ready for 1-tap OK',
+        'Missed calls going to voicemail on a loud roof → Texts back missed calls in 6 seconds and books the estimate',
+        '$14,800 quotes sitting unsigned → Follows up open quotes until they book on your schedule',
+        'Learning complicated $500/mo dashboards → Works inside QuickBooks, Jobber, Housecall Pro & ServiceTitan with zero dashboards to learn',
+        '$45,000/yr payroll or $15,000/yr agency retainers → Own your setup outright for $1,497 one-time'
+      ];
+
+      const compColumnsGrid = document.getElementById('comparisonColumnsGrid');
+      const compBannerStepBadge = document.getElementById('compBannerStepBadge');
+      const compBannerText = document.getElementById('compBannerText');
+      const compCycleToggleBtn = document.getElementById('compCycleToggleBtn');
+      const compMetricPillHours = document.getElementById('compMetricPillHours');
+      const compMetricPillCash = document.getElementById('compMetricPillCash');
+      const compMetricPillCall = document.getElementById('compMetricPillCall');
+      const compModeTabs = document.querySelectorAll('[data-comp-mode]');
+      const allTransformRowEls = document.querySelectorAll('[data-transform-row]');
+      const allTransformConnectors = document.querySelectorAll('[data-transform-connector]');
+
+      let activeTransformIdx = 0;
+      let compCycling = !prefersReducedMotion;
+
+      function setTransformRow(idx) {
+        activeTransformIdx = (idx + 5) % 5;
+        allTransformRowEls.forEach((el) => {
+          const rowIdx = parseInt(el.getAttribute('data-transform-row'), 10);
+          el.setAttribute('data-row-active', rowIdx === activeTransformIdx ? 'true' : 'false');
+        });
+        allTransformConnectors.forEach((pill) => {
+          const cIdx = parseInt(pill.getAttribute('data-transform-connector'), 10);
+          pill.setAttribute('data-row-active', cIdx === activeTransformIdx ? 'true' : 'false');
+        });
+        if (compBannerStepBadge) {
+          compBannerStepBadge.textContent = `TRANSFORMATION ${activeTransformIdx + 1} OF 5`;
+        }
+        if (compBannerText && transformCaptions[activeTransformIdx]) {
+          compBannerText.textContent = transformCaptions[activeTransformIdx];
+        }
+      }
+
+      setTransformRow(0);
+
+      setInterval(() => {
+        if (!compCycling) return;
+        setTransformRow(activeTransformIdx + 1);
+      }, 3600);
+
+      if (compCycleToggleBtn) {
+        compCycleToggleBtn.textContent = compCycling ? '⏸ Pause Row Highlight' : '▶ Auto-Cycle Rows';
+        compCycleToggleBtn.addEventListener('click', () => {
+          compCycling = !compCycling;
+          compCycleToggleBtn.textContent = compCycling ? '⏸ Pause Row Highlight' : '▶ Auto-Cycle Rows';
+        });
+      }
+
+      allTransformRowEls.forEach((rowEl) => {
+        const activateFromUser = () => {
+          compCycling = false;
+          if (compCycleToggleBtn) compCycleToggleBtn.textContent = '▶ Auto-Cycle Rows';
+          const rIdx = parseInt(rowEl.getAttribute('data-transform-row'), 10);
+          setTransformRow(rIdx);
+        };
+        rowEl.addEventListener('click', activateFromUser);
+        rowEl.addEventListener('mouseenter', () => {
+          const rIdx = parseInt(rowEl.getAttribute('data-transform-row'), 10);
+          setTransformRow(rIdx);
+        });
+        rowEl.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            activateFromUser();
           }
         });
       });
+
+      function setComparisonMode(mode) {
+        compModeTabs.forEach((tab) => {
+          const isSel = tab.getAttribute('data-comp-mode') === mode;
+          tab.setAttribute('aria-selected', isSel ? 'true' : 'false');
+          tab.setAttribute('tabindex', isSel ? '0' : '-1');
+          if (tab.getAttribute('data-comp-mode') === 'both') {
+            tab.className = isSel
+              ? 'mode-switch-tab tap-target px-4 py-2.5 rounded-xl bg-cobalt text-white font-display font-bold text-xs sm:text-sm shadow-sm'
+              : 'mode-switch-tab tap-target px-4 py-2.5 rounded-xl bg-surface hover:bg-surfaceMuted text-ink border border-borderSubtle font-display font-bold text-xs sm:text-sm';
+          } else if (tab.getAttribute('data-comp-mode') === 'old') {
+            tab.className = isSel
+              ? 'mode-switch-tab tap-target px-4 py-2.5 rounded-xl bg-rose-700 text-white font-display font-bold text-xs sm:text-sm shadow-sm'
+              : 'mode-switch-tab tap-target px-4 py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-900 border border-rose-200 font-display font-bold text-xs sm:text-sm';
+          } else {
+            tab.className = isSel
+              ? 'mode-switch-tab tap-target px-4 py-2.5 rounded-xl bg-emerald-700 text-white font-display font-bold text-xs sm:text-sm shadow-sm'
+              : 'mode-switch-tab tap-target px-4 py-2.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-200 font-display font-bold text-xs sm:text-sm';
+          }
+        });
+
+        if (!compColumnsGrid) return;
+        compColumnsGrid.classList.remove('comparison-spotlight-old', 'comparison-spotlight-new');
+
+        if (mode === 'old') {
+          compColumnsGrid.classList.add('comparison-spotlight-old');
+          if (compMetricPillHours) compMetricPillHours.innerHTML = '<span>✕ 12+ hrs/wk lost at night</span>';
+          if (compMetricPillCash) compMetricPillCash.innerHTML = '<span>✕ $8,400 sitting overdue</span>';
+          if (compMetricPillCall) compMetricPillCall.innerHTML = '<span>✕ Calls going to voicemail</span>';
+          announcePolite('Showing 8:45 PM Kitchen Table Old Way view.');
+        } else {
+          if (mode === 'new') {
+            compColumnsGrid.classList.add('comparison-spotlight-new');
+          }
+          if (compMetricPillHours) {
+            compMetricPillHours.innerHTML = '<span class="w-2 h-2 rounded-full bg-cobalt pulse-indicator-dot" aria-hidden="true"></span><span>12+ hrs/wk saved</span>';
+          }
+          if (compMetricPillCash) compMetricPillCash.innerHTML = '<span>✓ $8,400 collected faster</span>';
+          if (compMetricPillCall) compMetricPillCall.innerHTML = '<span>⚡ 6-sec missed-call text</span>';
+          announcePolite(mode === 'new' ? 'Showing 7:30 AM Work Truck Tiberius Way view.' : 'Showing Side-by-Side Transformation view.');
+        }
+      }
+
+      compModeTabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          setComparisonMode(tab.getAttribute('data-comp-mode'));
+        });
+      });
+
+      const compModeTablist = compModeTabs.length ? compModeTabs[0].parentElement : null;
+      wireTablistKeyboard(compModeTablist, (tabEl) => {
+        setComparisonMode(tabEl.getAttribute('data-comp-mode'));
+      });
+
+      // ======================================================================
+      // 5. M6 INTERACTIVE CONTRACTOR TIME & QUOTE RECOVERY CALCULATOR
+      //    (Syncs --attr-min, --attr-max, --control-value per slider guide)
+      // ======================================================================
+      const sliderHours = document.getElementById('sliderPaperworkHours');
+      const sliderQuotes = document.getElementById('sliderOpenQuotes');
+      const outputHours = document.getElementById('sliderPaperworkHoursOutput');
+      const outputQuotes = document.getElementById('sliderOpenQuotesOutput');
+      const calcYearlyHoursSaved = document.getElementById('calcYearlyHoursSaved');
+      const calcEveningsReclaimed = document.getElementById('calcEveningsReclaimed');
+      const calcRecoveredRevenue = document.getElementById('calcRecoveredRevenue');
+      const calcSavedJobsBadge = document.getElementById('calcSavedJobsPerYearBadge');
+      const calcFormulaNote = document.getElementById('calcRevenueFormulaNote');
+      const calcPresetBtns = document.querySelectorAll('.calc-preset-btn');
+
+      function syncSliderCustomProps(sliderEl) {
+        if (!sliderEl) return;
+        sliderEl.style.setProperty('--attr-min', sliderEl.min || 0);
+        sliderEl.style.setProperty('--attr-max', sliderEl.max || 100);
+        sliderEl.style.setProperty('--control-value', sliderEl.value);
+      }
+
+      function updateRoiCalculator() {
+        if (!sliderHours || !sliderQuotes) return;
+        syncSliderCustomProps(sliderHours);
+        syncSliderCustomProps(sliderQuotes);
+
+        const hrsPerWeek = parseInt(sliderHours.value, 10) || 10;
+        const quotesPerMonth = parseInt(sliderQuotes.value, 10) || 4;
+
+        sliderHours.setAttribute('aria-valuetext', `${hrsPerWeek} hours per week`);
+        sliderQuotes.setAttribute('aria-valuetext', `${quotesPerMonth} open estimates per month`);
+
+        if (outputHours) outputHours.textContent = `${hrsPerWeek} hrs/wk`;
+        if (outputQuotes) outputQuotes.textContent = `${quotesPerMonth} ${quotesPerMonth === 1 ? 'quote/mo' : 'quotes/mo'}`;
+
+        const yearlyHours = hrsPerWeek * 52;
+        const eveningsSaved = Math.round(yearlyHours / 2.5);
+        // Conservative 25% recovery rate on slipped open estimates (1 in 4) at $7,400 avg contractor ticket
+        const recoveredJobsPerYear = Math.max(3, Math.round(quotesPerMonth * 12 * 0.25));
+        const recoveredRevenue = recoveredJobsPerYear * 7400;
+
+        if (calcYearlyHoursSaved) {
+          calcYearlyHoursSaved.textContent = `${yearlyHours.toLocaleString('en-US')} hrs`;
+        }
+        if (calcEveningsReclaimed) {
+          calcEveningsReclaimed.textContent = `${eveningsSaved.toLocaleString('en-US')} nights`;
+        }
+        if (calcRecoveredRevenue) {
+          calcRecoveredRevenue.textContent = `$${recoveredRevenue.toLocaleString('en-US')}/yr`;
+        }
+        if (calcSavedJobsBadge) {
+          calcSavedJobsBadge.textContent = `~${recoveredJobsPerYear} extra booked jobs/yr`;
+        }
+        if (calcFormulaNote) {
+          calcFormulaNote.innerHTML = `Conservative contractor math: if polite 7:30 AM follow-ups save just <strong>1 in 4 slipped quotes</strong> (${recoveredJobsPerYear} jobs/yr) at a $7,400 average ticket.`;
+        }
+
+        calcPresetBtns.forEach((btn) => {
+          const pH = parseInt(btn.getAttribute('data-calc-preset-hours'), 10);
+          const pQ = parseInt(btn.getAttribute('data-calc-preset-quotes'), 10);
+          const isMatch = pH === hrsPerWeek && pQ === quotesPerMonth;
+          btn.className = isMatch
+            ? 'calc-preset-btn px-3 py-1.5 rounded-lg bg-iceActive border border-cobalt text-xs font-mono font-bold text-cobalt transition'
+            : 'calc-preset-btn px-3 py-1.5 rounded-lg bg-white hover:bg-iceActive border border-borderSubtle text-xs font-mono font-bold text-ink transition';
+        });
+      }
+
+      if (sliderHours && sliderQuotes) {
+        sliderHours.addEventListener('input', updateRoiCalculator);
+        sliderQuotes.addEventListener('input', updateRoiCalculator);
+        updateRoiCalculator();
+      }
+
+      calcPresetBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          if (!sliderHours || !sliderQuotes) return;
+          sliderHours.value = btn.getAttribute('data-calc-preset-hours');
+          sliderQuotes.value = btn.getAttribute('data-calc-preset-quotes');
+          updateRoiCalculator();
+          announcePolite(`Calculator updated: ${calcYearlyHoursSaved.textContent} saved and ${calcRecoveredRevenue.textContent} estimated recovered revenue.`);
+        });
+      });
+
+      // ======================================================================
+      // 6. M6 4-WAY BATTLECARD FILTER TABS & ANIMATED COST BAR REVEAL
+      // ======================================================================
+      const battleFilterTabs = document.querySelectorAll('[data-battle-filter]');
+      const battleColCells = document.querySelectorAll('[data-battle-col]');
+
+      function setBattlecardFilter(filterKey) {
+        battleFilterTabs.forEach((tab) => {
+          const isSel = tab.getAttribute('data-battle-filter') === filterKey;
+          tab.setAttribute('aria-selected', isSel ? 'true' : 'false');
+          tab.setAttribute('tabindex', isSel ? '0' : '-1');
+          tab.className = isSel
+            ? 'battlecard-filter-tab tap-target px-3.5 py-2 rounded-xl bg-cobalt text-white font-mono text-xs font-bold transition'
+            : 'battlecard-filter-tab tap-target px-3.5 py-2 rounded-xl bg-white hover:bg-iceActive text-bodySlate border border-borderSubtle font-mono text-xs font-bold transition';
+        });
+
+        battleColCells.forEach((cell) => {
+          const colKey = cell.getAttribute('data-battle-col');
+          if (filterKey === 'all' || colKey === 'tiberius' || colKey === filterKey) {
+            cell.hidden = false;
+          } else {
+            cell.hidden = true;
+          }
+        });
+      }
+
+      battleFilterTabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          setBattlecardFilter(tab.getAttribute('data-battle-filter'));
+        });
+      });
+
+      const battleTablist = battleFilterTabs.length ? battleFilterTabs[0].parentElement : null;
+      wireTablistKeyboard(battleTablist, (tabEl) => {
+        setBattlecardFilter(tabEl.getAttribute('data-battle-filter'));
+      });
+
+      const costBarCard = document.getElementById('costBarChartCard');
+      if (costBarCard && !prefersReducedMotion && 'IntersectionObserver' in window) {
+        const bars = costBarCard.querySelectorAll('.cost-bar-fill');
+        bars.forEach((b) => {
+          b.style.width = '2%';
+        });
+        const barObserver = new IntersectionObserver(
+          (entries, obs) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                bars.forEach((b) => {
+                  b.style.width = b.getAttribute('data-target-width') || '100%';
+                });
+                obs.disconnect();
+              }
+            });
+          },
+          { threshold: 0.2 }
+        );
+        barObserver.observe(costBarCard);
+      }
+
+      // ======================================================================
+      // 7. MOTION BILLING TOGGLE + NATIVE <dialog> MICRO-QUIZ + QUICK-START FORM
+      // ======================================================================
+      let activeBillingCycle = 'annual';
+      const pricingCardsViewport = document.getElementById('pricingCardsViewport');
+      const card1PriceNumber = document.getElementById('card1PriceNumber');
+      const card1BillingNote = document.getElementById('card1BillingNote');
+      const card2PriceNumber = document.getElementById('card2PriceNumber');
+      const card2BillingNote = document.getElementById('card2BillingNote');
+      const card2SetupBadge = document.getElementById('card2SetupBadge');
+      const billingBtns = document.querySelectorAll('[data-billing-toggle]');
+
+      billingBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const cycle = btn.getAttribute('data-billing-toggle');
+          if (!cycle || cycle === activeBillingCycle) return;
+          activeBillingCycle = cycle;
+
+          billingBtns.forEach((b) => {
+            const active = b.getAttribute('data-billing-toggle') === cycle;
+            b.setAttribute('aria-pressed', active ? 'true' : 'false');
+            b.className = active
+              ? 'billing-cycle-btn tap-target px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-cobalt text-white shadow-sm transition'
+              : 'billing-cycle-btn tap-target px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-bodySlate hover:text-ink transition';
+          });
+
+          runScopedUpdate(pricingCardsViewport, () => {
+            if (cycle === 'annual') {
+              card1PriceNumber.textContent = '$49';
+              card1BillingNote.textContent = 'Billed annually ($69/mo if billed monthly) • $0.00 due today';
+              card2PriceNumber.textContent = '$197';
+              card2BillingNote.textContent = 'Billed annually ($0 setup) • $249/mo if billed monthly • $0.00 due today';
+              card2SetupBadge.textContent = 'SETUP WAIVED ON ANNUAL';
+            } else {
+              card1PriceNumber.textContent = '$69';
+              card1BillingNote.textContent = 'Month-to-month ($49/mo if billed annually) • $0.00 due today';
+              card2PriceNumber.textContent = '$249';
+              card2BillingNote.textContent = 'Month-to-month ($197/mo + $0 setup on annual) • $0.00 due today';
+              card2SetupBadge.textContent = 'CANCEL IN 1 TAP ANYTIME';
+            }
+          });
+        });
+      });
+
+      let supportsDisplayTransition;
+      function canTransitionDisplay() {
+        if (supportsDisplayTransition !== undefined) return supportsDisplayTransition;
+        if (!window.CSS?.supports?.('transition-behavior', 'allow-discrete') || !document.body) {
+          return false;
+        }
+        const probe = document.createElement('div');
+        probe.style.cssText = 'transition: display 1s allow-discrete !important; display: block;';
+        document.body.appendChild(probe);
+        getComputedStyle(probe).display;
+        probe.style.display = 'none';
+        supportsDisplayTransition = getComputedStyle(probe).display === 'block';
+        probe.remove();
+        return supportsDisplayTransition;
+      }
+
+      function supportsTopLayerExit() {
+        return Boolean(window.CSS?.supports?.('overlay', 'auto')) && canTransitionDisplay();
+      }
+
+      async function closeTopLayer(dialogEl) {
+        if (!dialogEl || !dialogEl.open) return;
+        if (!supportsTopLayerExit()) {
+          dialogEl.setAttribute('data-closing', '');
+          const animations = dialogEl.getAnimations ? dialogEl.getAnimations({ subtree: true }) : [];
+          if (animations.length > 0) {
+            await Promise.race([
+              Promise.allSettled(animations.map((a) => a.finished)),
+              new Promise((r) => setTimeout(r, 350))
+            ]);
+          }
+          if (!dialogEl.hasAttribute('data-closing')) return;
+          dialogEl.removeAttribute('data-closing');
+        }
+        dialogEl.close();
+      }
+
+      const trialQuizDialog = document.getElementById('trialQuizDialog');
+      const quizStep1Fieldset = document.getElementById('quizStep1Fieldset');
+      const quizStep2Fieldset = document.getElementById('quizStep2Fieldset');
+      const trialQuizStepBadge = document.getElementById('trialQuizStepBadge');
+      const trialQuizHeading = document.getElementById('trialQuizHeading');
+      const quizBackBtn = document.getElementById('quizBackBtn');
+      const quizNextBtn = document.getElementById('quizNextBtn');
+      const closeTrialQuizBtn = document.getElementById('closeTrialQuizBtn');
+
+      let quizStep = 1;
+      let selectedModalPlan = 'truck-assistant';
+
+      function setQuizStep(step) {
+        quizStep = step;
+        if (step === 1) {
+          quizStep1Fieldset.hidden = false;
+          quizStep2Fieldset.hidden = true;
+          trialQuizStepBadge.textContent = 'STEP 1 OF 2 • 15-SECOND SETUP';
+          trialQuizHeading.textContent = 'Get started with Tiberius AI!';
+          quizBackBtn.textContent = 'Close';
+          quizNextBtn.textContent = 'Continue';
+        } else {
+          quizStep1Fieldset.hidden = true;
+          quizStep2Fieldset.hidden = false;
+          trialQuizStepBadge.textContent = 'STEP 2 OF 2 • ALMOST READY';
+          trialQuizHeading.textContent = 'Tailor your AI Office Manager';
+          quizBackBtn.textContent = 'Back';
+          quizNextBtn.textContent = 'Continue to Free Sign-Up →';
+          trialQuizHeading.focus();
+        }
+      }
+
+      document.querySelectorAll('[data-open-trial-modal]').forEach((trigger) => {
+        trigger.addEventListener('click', () => {
+          selectedModalPlan = trigger.getAttribute('data-open-trial-modal') || 'truck-assistant';
+          setQuizStep(1);
+          if (trialQuizDialog && !trialQuizDialog.open) {
+            trialQuizDialog.showModal();
+          }
+        });
+      });
+
+      if (trialQuizDialog) {
+        trialQuizDialog.addEventListener('cancel', (event) => {
+          event.preventDefault();
+          closeTopLayer(trialQuizDialog);
+        });
+
+        trialQuizDialog.addEventListener('close', () => {
+          trialQuizDialog.returnValue = '';
+        });
+
+        if (!('closedBy' in HTMLDialogElement.prototype)) {
+          const isOutsideDialog = (e, dlg) => {
+            const r = dlg.getBoundingClientRect();
+            return e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
+          };
+          let pressedOutside = false;
+          trialQuizDialog.addEventListener('pointerdown', (e) => {
+            pressedOutside = e.target === trialQuizDialog && isOutsideDialog(e, trialQuizDialog);
+          });
+          trialQuizDialog.addEventListener('pointerup', (e) => {
+            if (pressedOutside && e.target === trialQuizDialog && isOutsideDialog(e, trialQuizDialog)) {
+              closeTopLayer(trialQuizDialog);
+            }
+            pressedOutside = false;
+          });
+        }
+      }
+
+      if (closeTrialQuizBtn) {
+        closeTrialQuizBtn.addEventListener('click', () => {
+          closeTopLayer(trialQuizDialog);
+        });
+      }
+
+      if (quizBackBtn) {
+        quizBackBtn.addEventListener('click', () => {
+          if (quizStep === 2) {
+            setQuizStep(1);
+            trialQuizHeading.focus();
+          } else {
+            closeTopLayer(trialQuizDialog);
+          }
+        });
+      }
+
+      if (quizNextBtn) {
+        quizNextBtn.addEventListener('click', () => {
+          if (quizStep === 1) {
+            setQuizStep(2);
+            return;
+          }
+          const choreVal =
+            trialQuizDialog.querySelector('input[name="chore"]:checked')?.value || 'invoices';
+          const checkedProgs = Array.from(
+            trialQuizDialog.querySelectorAll('input[name="quiz_prog"]:checked')
+          ).map((el) => el.value);
+          const programsStr = checkedProgs.length > 0 ? checkedProgs.join(' + ') : 'QuickBooks + Gmail';
+
+          const needsCloudCrm = Boolean(
+            trialQuizDialog.querySelector('input[name="quiz_prog"][data-suggests-office="true"]:checked')
+          );
+          const resolvedPlan =
+            selectedModalPlan === 'office-manager' || choreVal === 'calls' || needsCloudCrm
+              ? 'office-manager'
+              : 'truck-assistant';
+
+          window.location.href = `signup.html?chore=${encodeURIComponent(
+            choreVal
+          )}&programs=${encodeURIComponent(programsStr)}&plan=${encodeURIComponent(resolvedPlan)}`;
+        });
+      }
 
       const form = document.getElementById('reserveBuildForm');
       const statusBox = document.getElementById('formStatusMessage');
@@ -3096,15 +5109,18 @@
 
       requiredInputs.forEach((input) => {
         let touched = false;
+        input.setAttribute('aria-invalid', 'false');
         input.addEventListener('input', () => {
           touched = true;
           input.setCustomValidity('');
-          input.removeAttribute('aria-invalid');
+          input.setAttribute('aria-invalid', 'false');
+          input.classList.remove('user-invalid-fallback');
         });
         input.addEventListener('blur', () => {
           if (!touched) return;
-          if (!input.checkValidity()) {
+          if (!input.validity.valid) {
             input.setAttribute('aria-invalid', 'true');
+            input.classList.add('user-invalid-fallback');
           }
         });
       });
@@ -3116,11 +5132,13 @@
         requiredInputs.forEach((input) => {
           input.setCustomValidity('');
           if (!input.value.trim()) {
-            input.setCustomValidity('Please fill out this field so we can prepare your handoff.');
+            input.setCustomValidity('Please fill out this field to start your free trial.');
             input.setAttribute('aria-invalid', 'true');
+            input.classList.add('user-invalid-fallback');
             if (!firstInvalid) firstInvalid = input;
           } else {
-            input.removeAttribute('aria-invalid');
+            input.setAttribute('aria-invalid', 'false');
+            input.classList.remove('user-invalid-fallback');
           }
         });
 
@@ -3138,34 +5156,31 @@
         const rawPrograms = document.getElementById('programsUsed').value.trim();
         const rawPlan = form.querySelector('input[name="selected_plan"]:checked').value;
 
-        const owner = encodeURIComponent(rawOwner);
-        const company = encodeURIComponent(rawCompany);
-        const programs = encodeURIComponent(rawPrograms);
-        const plan = encodeURIComponent(rawPlan);
-
         fetch('/api/lead', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           keepalive: true,
           body: JSON.stringify({
-            source: 'ai-employee-handoff',
+            source: 'ai-employee-quick-trial-form',
             name: rawOwner,
             businessName: rawCompany,
             phone: rawPhone,
             industry: rawPrograms,
             ownershipPreference:
-              rawPlan === 'managed-997-197'
-                ? 'Option 2: $997 Setup + $197/mo Managed Care'
-                : 'Option 1: $1,497 One-Time Turnkey Ownership'
+              rawPlan === 'office-manager'
+                ? '7-Day Free Trial -> Stage 2: Full AI Office Manager'
+                : '7-Day Free Trial -> Stage 1: AI Truck Assistant'
           })
         }).catch(() => {});
 
-        statusBox.textContent = '✓ Reserved! Opening your 15-Minute Client Handoff Portal...';
+        statusBox.textContent = '✓ Ready! Opening your 7-Day Free Trial Sign-Up...';
         statusBox.className = 'mb-4 p-3 rounded-xl bg-statusBg border border-statusText/30 text-statusText text-sm font-semibold';
 
         setTimeout(() => {
-          window.location.href = `handoff.html?owner=${owner}&company=${company}&programs=${programs}&plan=${plan}`;
-        }, 400);
+          window.location.href = `signup.html?programs=${encodeURIComponent(
+            rawPrograms
+          )}&plan=${encodeURIComponent(rawPlan)}`;
+        }, 300);
       });
     })();
   </script>

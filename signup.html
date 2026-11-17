@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Start Your 7-Day Free Trial ($0 Due Today) | Tiberius AI Employee™</title>
+  <meta name="description" content="Try your Tiberius AI Office Manager free for 7 days. Sign up in 1 click with Google or Microsoft, pay $0.00 today, get a 48-hour text reminder before billing, and cancel in 1 tap anytime." />
+  <meta name="theme-color" content="#FFFFFF" />
+  <link rel="canonical" href="https://www.tiberius.ai/signup" />
+  <link rel="icon" type="image/png" href="images/logo4.png" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            canvas: '#FFFFFF',
+            surface: '#F8FAFC',
+            surfaceMuted: '#F0F4F8',
+            borderSubtle: '#E2E8F0',
+            ink: '#0F172A',
+            bodySlate: '#475569',
+            mutedSlate: '#64748B',
+            cobalt: '#3E63DD',
+            cobaltHover: '#2563EB',
+            iceActive: '#F1FAFF',
+            statusBg: '#ECFDF5',
+            statusText: '#047857'
+          },
+          fontFamily: {
+            display: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          },
+          boxShadow: {
+            motion: '0 2px 32px rgba(15, 23, 42, 0.06), inset 0 0 0 1px #F1F2F4'
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    :root {
+      color-scheme: light;
+      --bg-canvas: #FFFFFF;
+      --bg-surface: #F8FAFC;
+      --bg-surface-muted: #F0F4F8;
+      --border-subtle: #E2E8F0;
+      --border-control: #64748B;
+      --text-ink: #0F172A;
+      --text-body: #475569;
+      --text-muted: #64748B;
+      --accent-cobalt: #3E63DD;
+      --accent-cobalt-hover: #2563EB;
+      --accent-ice: #F1FAFF;
+      --status-bg: #ECFDF5;
+      --status-text: #047857;
+      --danger-red: #DC2626;
+      --font-display: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+      --font-sans: 'Inter', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    body {
+      background-color: var(--bg-canvas);
+      color: var(--text-ink);
+      font-family: var(--font-sans);
+      accent-color: var(--accent-cobalt);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .visually-hidden:where(:not(:focus-within, :active)) {
+      position: absolute !important;
+      clip-path: inset(50%) !important;
+      overflow: hidden !important;
+      width: 1px !important;
+      height: 1px !important;
+      margin: -1px !important;
+      padding: 0 !important;
+      border: 0 !important;
+      white-space: nowrap !important;
+    }
+
+    .skip-link:focus-visible {
+      position: fixed;
+      top: 0.75rem;
+      left: 0.75rem;
+      z-index: 100;
+      padding: 0.75rem 1.25rem;
+      border-radius: 0.75rem;
+      background-color: #3E63DD;
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 0.875rem;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.16);
+    }
+
+    .tap-target {
+      min-height: 48px;
+      min-width: 48px;
+    }
+
+    @media (pointer: coarse) {
+      .tap-target,
+      .form-input {
+        min-height: 52px;
+      }
+    }
+
+    .motion-card {
+      background-color: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      box-shadow: 0 2px 32px rgba(15, 23, 42, 0.06), inset 0 0 0 1px #F1F2F4;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.25rem;
+      margin-block-end: 1.15rem;
+    }
+
+    .field-group label {
+      font-weight: 600;
+      color: #0F172A;
+      font-size: 0.9rem;
+    }
+
+    .field-hint {
+      display: block;
+      color: #64748B;
+      font-size: 0.78rem;
+      line-height: 1.4;
+      margin-block-end: 0.15rem;
+    }
+
+    .form-input {
+      font: inherit;
+      font-size: max(1rem, 1em);
+      padding: 0.75rem 0.95rem;
+      min-height: 48px;
+      width: 100%;
+      box-sizing: border-box;
+      border-radius: 0.75rem;
+      background-color: #FFFFFF;
+      border: 1.5px solid #64748B;
+      color: #0F172A;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .form-input:focus-visible,
+    button:focus-visible,
+    a:focus-visible,
+    input[type="radio"]:focus-visible,
+    input[type="checkbox"]:focus-visible,
+    h1[tabindex="-1"]:focus-visible,
+    h2[tabindex="-1"]:focus-visible {
+      outline: 3px solid #3E63DD;
+      outline-offset: 2px;
+    }
+
+    .error-msg {
+      display: none;
+      color: #DC2626;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      margin-block-start: 0.25rem;
+    }
+
+    :is(.form-input:user-invalid, .form-input.user-invalid-fallback) {
+      border-color: #DC2626;
+      background-color: #FEF2F2;
+    }
+
+    :is(.form-input:user-invalid, .form-input.user-invalid-fallback) + .error-msg {
+      display: block;
+    }
+
+    :is(.form-input:user-valid, .form-input.user-valid-fallback) {
+      border-color: #047857;
+    }
+
+    .oauth-btn {
+      background-color: #FFFFFF;
+      border: 1.5px solid #CBD5E1;
+      color: #0F172A;
+      transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .oauth-btn:hover {
+      background-color: #F8FAFC;
+      border-color: #64748B;
+      box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
+    }
+
+    .plan-choice-card {
+      background-color: #F8FAFC;
+      border: 1.5px solid #CBD5E1;
+      transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .plan-choice-card:has(input[type="radio"]:checked) {
+      background-color: #F1FAFF;
+      border-color: #3E63DD;
+      box-shadow: 0 4px 14px rgba(62, 99, 221, 0.1);
+    }
+
+    .showcase-panel {
+      background:
+        radial-gradient(circle at 20% 20%, rgba(62, 99, 221, 0.35), transparent 52%),
+        radial-gradient(circle at 85% 80%, rgba(37, 99, 235, 0.28), transparent 48%),
+        linear-gradient(155deg, #0F172A 0%, #1E293B 55%, #172554 100%);
+    }
+
+    @keyframes stageSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .stage-animate {
+        animation: stageSlideIn 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+    }
+  </style>
+</head>
+<body class="min-h-[100dvh] bg-canvas text-ink selection:bg-iceActive selection:text-cobalt">
+
+  <a href="#signupMainHeading" class="visually-hidden skip-link">Skip to sign-up</a>
+
+  <!-- Single polite live region for validation & step updates -->
+  <div id="signupLiveAnnouncer" class="visually-hidden" role="status" aria-live="polite"></div>
+
+  <div class="min-h-[100dvh] grid grid-cols-1 lg:grid-cols-12">
+
+    <!-- ======================================================================
+         LEFT COLUMN (7 COLS ON LG): MOTION-STYLE CLEAN SIGN-UP & $0 TRIAL GATE
+         ====================================================================== -->
+    <main class="lg:col-span-7 flex flex-col justify-between px-4 sm:px-8 lg:px-14 py-6 sm:py-10 bg-canvas">
+
+      <!-- Top Brand & Accessible Progress Nav -->
+      <div class="max-w-xl w-full mx-auto space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <a href="index.html" class="inline-flex items-center gap-2 shrink-0" aria-label="Return to Tiberius AI Employee Home">
+            <img
+              src="images/logo4-color.png"
+              alt="Tiberius AI"
+              width="1500"
+              height="684"
+              fetchpriority="high"
+              class="h-11 sm:h-12 w-auto object-contain block"
+            />
+          </a>
+          <a href="index.html#pricing" class="text-xs font-semibold text-bodySlate hover:text-cobalt transition">
+            ← Back to Plans
+          </a>
+        </div>
+
+        <!-- Multi-Step Progress Tracker -->
+        <nav aria-label="Free trial setup progress">
+          <ol class="grid grid-cols-3 gap-2 text-xs font-mono">
+            <li id="progressItem1" class="px-3 py-2 rounded-lg bg-iceActive border border-cobalt/40 text-cobalt font-bold truncate" aria-current="step">
+              1. Account &amp; Phone
+            </li>
+            <li id="progressItem2" class="px-3 py-2 rounded-lg bg-surface border border-borderSubtle text-mutedSlate font-semibold truncate">
+              2. $0 Free Trial
+            </li>
+            <li id="progressItem3" class="px-3 py-2 rounded-lg bg-surface border border-borderSubtle text-mutedSlate font-semibold truncate">
+              3. Phone Live
+            </li>
+          </ol>
+        </nav>
+      </div>
+
+      <!-- Center Active Step Container -->
+      <div id="signupStepViewport" class="max-w-xl w-full mx-auto my-8">
+
+        <!-- ==================================================================
+             STEP 1: MOTION-STYLE 1-CLICK OAUTH + WORK EMAIL & CELL PHONE
+             ================================================================== -->
+        <section id="stepAccountSection" class="space-y-6 stage-animate">
+          <div class="space-y-2">
+            <div id="quizPersonalizationPill" class="inline-flex flex-wrap items-center gap-1.5 px-3 py-1 rounded-full bg-iceActive border border-cobalt/30 text-cobalt font-mono text-xs font-bold">
+              <span>✓ Tailored for: Morning QuickBooks &amp; Quote Check</span>
+            </div>
+            <h1 id="signupMainHeading" tabindex="-1" class="font-display font-extrabold text-2xl sm:text-3xl text-ink tracking-tight">
+              👋 Try Tiberius AI for free!
+            </h1>
+            <p class="text-sm sm:text-base text-bodySlate">
+              Sign up in 1 click with Google or Microsoft (or your email below) so your AI Office Manager can prep tomorrow’s 7:30 AM Morning Briefing.
+            </p>
+          </div>
+
+          <!-- Optional Quick Phone Pre-Fill Above 1-Click OAuth -->
+          <div class="p-4 rounded-xl bg-surface border border-borderSubtle space-y-2">
+            <label for="quickCellInput" class="block text-xs font-mono uppercase font-bold text-ink">
+              📱 Your Cell Number (Where Your AI Texts You at 7:30 AM):
+            </label>
+            <span id="quickCellHint" class="field-hint">10-digit mobile number — locked strictly to you.</span>
+            <input
+              type="tel"
+              id="quickCellInput"
+              name="quick_cell_phone"
+              class="form-input bg-white"
+              autocomplete="tel"
+              inputmode="tel"
+              enterkeyhint="next"
+              placeholder="(830) 555-0192"
+              aria-describedby="quickCellHint"
+            />
+          </div>
+
+          <!-- 1-Click Federated Login Stack (Mirrors Motion Screenshot 3) -->
+          <div class="space-y-2.5" role="group" aria-label="One-click account sign-up options">
+            <button
+              type="button"
+              data-oauth-provider="Google"
+              class="oauth-trigger-btn oauth-btn tap-target w-full px-4 py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-3"
+            >
+              <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="#EA4335" d="M12 10.2v3.9h5.5c-.24 1.26-.96 2.33-2.04 3.05l3.3 2.56c1.92-1.77 3.04-4.38 3.04-7.48 0-.72-.06-1.41-.19-2.08H12z"/>
+                <path fill="#34A853" d="M12 22c2.75 0 5.06-.91 6.75-2.47l-3.3-2.56c-.91.61-2.08.98-3.45.98-2.65 0-4.9-1.79-5.7-4.2H2.89v2.64A10 10 0 0 0 12 22z"/>
+                <path fill="#4A90E2" d="M6.3 13.75A5.99 5.99 0 0 1 6 12c0-.61.11-1.2.3-1.75V7.61H2.89A10 10 0 0 0 2 12c0 1.61.39 3.14 1.08 4.49l3.22-2.74z"/>
+                <path fill="#FBBC05" d="M12 6.05c1.5 0 2.84.52 3.9 1.53l2.92-2.92C17.05 2.99 14.75 2 12 2A10 10 0 0 0 2.89 7.61l3.41 2.64c.8-2.41 3.05-4.2 5.7-4.2z"/>
+              </svg>
+              <span>Sign up with Google <span class="text-mutedSlate font-normal text-xs">(1-Tap Gmail &amp; Calendar)</span></span>
+            </button>
+
+            <button
+              type="button"
+              data-oauth-provider="Microsoft"
+              class="oauth-trigger-btn oauth-btn tap-target w-full px-4 py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-3"
+            >
+              <svg class="w-4 h-4 shrink-0" viewBox="0 0 21 21" aria-hidden="true">
+                <rect x="1" y="1" width="9" height="9" fill="#F25022"/>
+                <rect x="11" y="1" width="9" height="9" fill="#7FBA00"/>
+                <rect x="1" y="11" width="9" height="9" fill="#00A4EF"/>
+                <rect x="11" y="11" width="9" height="9" fill="#FFB900"/>
+              </svg>
+              <span>Sign up with Microsoft <span class="text-mutedSlate font-normal text-xs">(Outlook &amp; Office 365)</span></span>
+            </button>
+
+            <button
+              type="button"
+              data-oauth-provider="Apple"
+              class="oauth-trigger-btn oauth-btn tap-target w-full px-4 py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-3"
+            >
+              <svg class="w-4 h-4 shrink-0 fill-current" viewBox="0 0 20 20" aria-hidden="true">
+                <path d="M13.6 10.5c0-2.1 1.7-3.1 1.8-3.2-1-1.4-2.5-1.6-3-1.7-1.3-.1-2.5.8-3.1.8-.6 0-1.6-.8-2.7-.7-1.4 0-2.7.8-3.4 2.1-1.5 2.5-.4 6.2 1 8.2.7 1 1.5 2.1 2.6 2 1-.1 1.4-.7 2.7-.7 1.2 0 1.6.7 2.7.6 1.1 0 1.8-1 2.5-2 .8-1.1 1.1-2.2 1.1-2.3-.1 0-2.2-.8-2.2-3.1zM11.6 4.5c.6-.7 1-1.7.9-2.7-.9 0-1.9.6-2.5 1.3-.5.6-1 1.6-.9 2.6 1 .1 2-.5 2.5-1.2z"/>
+              </svg>
+              <span>Sign up with Apple</span>
+            </button>
+          </div>
+
+          <div class="relative flex items-center py-1" aria-hidden="true">
+            <div class="grow border-t border-borderSubtle"></div>
+            <span class="shrink mx-3 text-xs font-mono uppercase text-mutedSlate">Or use work email</span>
+            <div class="grow border-t border-borderSubtle"></div>
+          </div>
+
+          <!-- Accessible Work Email Sign-Up Form -->
+          <form id="emailSignupForm" action="#stepTrialSection" method="POST" aria-labelledby="signupMainHeading" novalidate>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div class="field-group mb-0">
+                <label for="signupName">Your Name <span aria-hidden="true" class="text-cobalt">*</span></label>
+                <span id="signupNameHint" class="field-hint">First &amp; last name (e.g., Mike Henderson)</span>
+                <input
+                  type="text"
+                  id="signupName"
+                  name="name"
+                  class="form-input"
+                  autocomplete="name"
+                  enterkeyhint="next"
+                  required
+                  aria-describedby="signupNameHint"
+                  data-error="signupNameError"
+                />
+                <div id="signupNameError" class="error-msg">
+                  <span role="img" aria-label="Error">❌</span> Please enter your name so your AI knows what to call you.
+                </div>
+              </div>
+
+              <div class="field-group mb-0">
+                <label for="signupCompany">Company Name <span aria-hidden="true" class="text-cobalt">*</span></label>
+                <span id="signupCompanyHint" class="field-hint">Your contracting or local business</span>
+                <input
+                  type="text"
+                  id="signupCompany"
+                  name="company"
+                  class="form-input"
+                  autocomplete="organization"
+                  enterkeyhint="next"
+                  required
+                  aria-describedby="signupCompanyHint"
+                  data-error="signupCompanyError"
+                />
+                <div id="signupCompanyError" class="error-msg">
+                  <span role="img" aria-label="Error">❌</span> Please enter your company name.
+                </div>
+              </div>
+            </div>
+
+            <div class="field-group mt-3.5">
+              <label for="signupEmail">Work Email <span aria-hidden="true" class="text-cobalt">*</span></label>
+              <span id="signupEmailHint" class="field-hint">Format: mike@yourcompany.com</span>
+              <input
+                type="email"
+                id="signupEmail"
+                name="email"
+                class="form-input"
+                autocomplete="username"
+                spellcheck="false"
+                enterkeyhint="done"
+                required
+                aria-describedby="signupEmailHint"
+                data-error="signupEmailError"
+              />
+              <div id="signupEmailError" class="error-msg">
+                <span role="img" aria-label="Error">❌</span> Enter a valid email address in the format mike@yourcompany.com.
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              id="continueToTrialBtn"
+              class="tap-target w-full py-3.5 px-5 rounded-xl bg-cobalt hover:bg-cobaltHover text-white font-extrabold text-sm sm:text-base shadow-sm transition"
+            >
+              Create Account &amp; Continue to Free Trial →
+            </button>
+
+            <p class="mt-3 text-xs text-mutedSlate text-center">
+              By signing up, you agree to our <a href="/terms" class="underline hover:text-cobalt">Terms</a> and <a href="/privacy" class="underline hover:text-cobalt">Privacy Policy</a>.
+            </p>
+          </form>
+        </section>
+
+        <!-- ==================================================================
+             STEP 2: HONEST "$0.00 DUE TODAY" 7-DAY FREE TRIAL GATE
+             ================================================================== -->
+        <section id="stepTrialSection" class="space-y-6 stage-animate" hidden>
+          <div class="space-y-1.5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span id="connectedAccountPill" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-statusBg text-statusText font-mono text-xs font-bold">
+                ✓ Account Ready
+              </span>
+              <button type="button" id="backToAccountBtn" class="text-xs font-semibold text-cobalt hover:underline">
+                ← Edit Account Info
+              </button>
+            </div>
+            <h2 id="trialGateHeading" tabindex="-1" class="font-display font-extrabold text-2xl sm:text-3xl text-ink tracking-tight">
+              Start your 7-day free trial — <span class="text-cobalt">$0.00 due today</span>
+            </h2>
+            <p class="text-sm text-bodySlate">
+              Test your AI Employee from your work truck all week for $0. Unlike sneaky software trials, <strong class="text-ink">we default to simple month-to-month</strong> and text your phone 48 hours before billing starts.
+            </p>
+          </div>
+
+          <form id="trialPaymentForm" action="#stepLiveSection" method="POST" aria-labelledby="trialGateHeading" novalidate class="space-y-5">
+
+            <!-- Billing Cycle Toggle (Defaulted Honestly to Monthly — Zero Annual Gotcha!) -->
+            <fieldset class="p-3.5 rounded-xl bg-surface border border-borderSubtle">
+              <legend class="font-mono text-xs font-bold uppercase text-ink px-1">
+                Billing Preference After 7-Day Free Trial:
+              </legend>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-2">
+                <label class="plan-choice-card rounded-xl p-3 cursor-pointer flex items-center gap-2.5">
+                  <input type="radio" name="billing_cycle" value="monthly" checked />
+                  <span class="text-xs sm:text-sm">
+                    <strong class="text-ink block">Pay Monthly (Default)</strong>
+                    <span class="text-mutedSlate text-xs">No annual lock-in • Cancel in 1 tap</span>
+                  </span>
+                </label>
+                <label class="plan-choice-card rounded-xl p-3 cursor-pointer flex items-center gap-2.5">
+                  <input type="radio" name="billing_cycle" value="annual" />
+                  <span class="text-xs sm:text-sm">
+                    <strong class="text-ink block">Pay Annually <span class="text-statusText font-mono">(Save 29%)</span></strong>
+                    <span class="text-mutedSlate text-xs">$49/mo rate + $0 setup on Tier 2</span>
+                  </span>
+                </label>
+              </div>
+            </fieldset>
+
+            <!-- Tier Choice Cards -->
+            <fieldset class="space-y-2.5">
+              <legend class="font-mono text-xs font-bold uppercase text-ink mb-1">
+                Choose Which AI Employee Tier to Trial Free for 7 Days:
+              </legend>
+
+              <label class="plan-choice-card rounded-xl p-4 cursor-pointer flex items-start justify-between gap-3">
+                <div class="flex items-start gap-3">
+                  <input type="radio" name="trial_plan" value="truck-assistant" class="mt-1" checked />
+                  <div>
+                    <span class="font-display font-bold text-sm sm:text-base text-ink block">
+                      Stage 1: AI Truck Assistant <span class="text-xs font-mono text-cobalt font-bold ml-1">• ZERO SETUP FEE</span>
+                    </span>
+                    <span class="text-xs text-bodySlate block mt-0.5">
+                      Truck voice notes, 1-click Gmail/Calendar &amp; QuickBooks read, 7:30 AM Morning Briefing &amp; 3-competitor watch.
+                    </span>
+                  </div>
+                </div>
+                <div class="text-right shrink-0">
+                  <span class="font-mono font-extrabold text-sm text-statusText block">$0 Today</span>
+                  <span id="tier1AfterPrice" class="font-mono text-xs text-mutedSlate block">then $69/mo</span>
+                </div>
+              </label>
+
+              <label class="plan-choice-card rounded-xl p-4 cursor-pointer flex items-start justify-between gap-3">
+                <div class="flex items-start gap-3">
+                  <input type="radio" name="trial_plan" value="office-manager" class="mt-1" />
+                  <div>
+                    <span class="font-display font-bold text-sm sm:text-base text-ink block">
+                      Stage 2: Full AI Office Manager <span class="text-xs font-mono text-cobalt font-bold ml-1">• CLOUD PC + MISSED CALLS</span>
+                    </span>
+                    <span class="text-xs text-bodySlate block mt-0.5">
+                      Adds Private Cloud Browser (Jobber/HCP/ServiceTitan/QuickBooks pay links), 6s Missed-Call Line &amp; 15-Min Live Handoff.
+                    </span>
+                  </div>
+                </div>
+                <div class="text-right shrink-0">
+                  <span class="font-mono font-extrabold text-sm text-statusText block">$0 Today</span>
+                  <span id="tier2AfterPrice" class="font-mono text-xs text-mutedSlate block">then $249/mo</span>
+                </div>
+              </label>
+            </fieldset>
+
+            <!-- 3-Step Visual Trial Timeline -->
+            <div class="rounded-xl bg-iceActive/70 border border-cobalt/25 p-4 space-y-2.5 text-xs sm:text-sm">
+              <div class="flex items-start gap-3">
+                <span class="w-5 h-5 rounded-full bg-cobalt text-white font-mono text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">1</span>
+                <div>
+                  <strong class="text-ink">Today — $0.00 Charged:</strong>
+                  <span class="text-bodySlate"> Instant welcome text on your cell + tomorrow’s 7:30 AM Morning Briefing unlocked.</span>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <span class="w-5 h-5 rounded-full bg-white border border-cobalt text-cobalt font-mono text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">5</span>
+                <div>
+                  <strong class="text-ink">Day 5 — 48-Hour Text Reminder:</strong>
+                  <span class="text-bodySlate"> Your AI texts your phone before your trial ends. Reply <code class="font-mono font-bold text-ink">CANCEL</code> in 1 tap to pay nothing.</span>
+                </div>
+              </div>
+              <div class="flex items-start gap-3">
+                <span class="w-5 h-5 rounded-full bg-white border border-borderSubtle text-bodySlate font-mono text-[11px] font-bold flex items-center justify-center shrink-0 mt-0.5">7</span>
+                <div>
+                  <strong class="text-ink">Day 7 — <span id="timelineDay7Label">Continues at $69/mo (Month-to-Month)</span>:</strong>
+                  <span class="text-bodySlate"> Love it after 30 days? Credit Month 1 toward $1,497 Turnkey Ownership anytime.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Accessible Card Verification Inputs (Follows modern-web-guidance autofill-payment-form) -->
+            <div class="motion-card rounded-xl p-4 sm:p-5 space-y-3.5">
+              <div class="flex items-center justify-between border-b border-borderSubtle pb-2.5">
+                <span class="font-display font-bold text-sm text-ink">🔒 $0.00 Trial Card Verification</span>
+                <span class="font-mono text-[11px] text-statusText bg-statusBg px-2 py-0.5 rounded font-bold">256-Bit Encrypted</span>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="field-group mb-0">
+                  <label for="trialPhoneConfirm">Confirm Cell for Day-5 Text <span aria-hidden="true" class="text-cobalt">*</span></label>
+                  <span id="trialPhoneHint" class="field-hint">10-digit cell number</span>
+                  <input
+                    type="tel"
+                    id="trialPhoneConfirm"
+                    name="phone"
+                    class="form-input"
+                    autocomplete="tel"
+                    inputmode="tel"
+                    enterkeyhint="next"
+                    required
+                    aria-describedby="trialPhoneHint"
+                    data-error="trialPhoneError"
+                  />
+                  <div id="trialPhoneError" class="error-msg">
+                    <span role="img" aria-label="Error">❌</span> Enter your 10-digit cell number so we can send your Day-5 reminder.
+                  </div>
+                </div>
+
+                <div class="field-group mb-0">
+                  <label for="ccName">Name on Card <span aria-hidden="true" class="text-cobalt">*</span></label>
+                  <span id="ccNameHint" class="field-hint">As shown on your card</span>
+                  <input
+                    type="text"
+                    id="ccName"
+                    name="cc-name"
+                    class="form-input"
+                    autocomplete="cc-name"
+                    maxlength="60"
+                    pattern="[\p{L} \-\.']+"
+                    enterkeyhint="next"
+                    required
+                    aria-describedby="ccNameHint"
+                    data-error="ccNameError"
+                  />
+                  <div id="ccNameError" class="error-msg">
+                    <span role="img" aria-label="Error">❌</span> Enter the cardholder name as printed on your card.
+                  </div>
+                </div>
+              </div>
+
+              <div class="field-group mb-0">
+                <label for="ccNumber">Card Number <span aria-hidden="true" class="text-cobalt">*</span></label>
+                <span id="ccNumberHint" class="field-hint">14–19 digits (spaces allowed • $0.00 charged today)</span>
+                <input
+                  type="text"
+                  id="ccNumber"
+                  name="cc-number"
+                  class="form-input font-mono"
+                  autocomplete="cc-number"
+                  inputmode="numeric"
+                  autocorrect="off"
+                  autocapitalize="none"
+                  spellcheck="false"
+                  maxlength="23"
+                  pattern="[\d ]{13,23}"
+                  enterkeyhint="next"
+                  required
+                  aria-describedby="ccNumberHint"
+                  data-error="ccNumberError"
+                />
+                <div id="ccNumberError" class="error-msg">
+                  <span role="img" aria-label="Error">❌</span> Enter a valid 14- to 19-digit card number.
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div class="field-group mb-0">
+                  <label for="ccExp">Expiration Date <span aria-hidden="true" class="text-cobalt">*</span></label>
+                  <span id="ccExpHint" class="field-hint">Format: MM/YY</span>
+                  <input
+                    type="text"
+                    id="ccExp"
+                    name="cc-exp"
+                    class="form-input font-mono"
+                    autocomplete="cc-exp"
+                    inputmode="numeric"
+                    autocorrect="off"
+                    spellcheck="false"
+                    maxlength="7"
+                    pattern="(0[1-9]|1[0-2])\s*\/\s*\d{2,4}"
+                    enterkeyhint="next"
+                    required
+                    aria-describedby="ccExpHint"
+                    data-error="ccExpError"
+                  />
+                  <div id="ccExpError" class="error-msg">
+                    <span role="img" aria-label="Error">❌</span> Enter expiry in MM/YY format (e.g., 08/29).
+                  </div>
+                </div>
+
+                <div class="field-group mb-0">
+                  <label for="ccCsc">Security Code <span aria-hidden="true" class="text-cobalt">*</span></label>
+                  <span id="ccCscHint" class="field-hint">3 or 4 digits on card</span>
+                  <input
+                    type="text"
+                    id="ccCsc"
+                    name="cc-csc"
+                    class="form-input font-mono"
+                    autocomplete="cc-csc"
+                    inputmode="numeric"
+                    autocorrect="off"
+                    spellcheck="false"
+                    maxlength="4"
+                    pattern="[0-9]{3,4}"
+                    enterkeyhint="done"
+                    required
+                    aria-describedby="ccCscHint"
+                    data-error="ccCscError"
+                  />
+                  <div id="ccCscError" class="error-msg">
+                    <span role="img" aria-label="Error">❌</span> Enter the 3- or 4-digit security code.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              id="activateFreeTrialBtn"
+              class="tap-target w-full py-4 px-6 rounded-xl bg-cobalt hover:bg-cobaltHover text-white font-extrabold text-base shadow-sm transition"
+            >
+              Start 7-Day Free Trial — Pay $0.00 Today →
+            </button>
+
+            <p class="text-xs text-center text-mutedSlate">
+              Due today: <strong class="text-ink">$0.00</strong>. Cancel in 1 click or reply <code class="font-mono">CANCEL</code> to your Day-5 reminder text.
+            </p>
+          </form>
+        </section>
+
+        <!-- ==================================================================
+             STEP 3: INSTANT 60-SECOND PHONE WAKE-UP & OPTIONAL CLOUD HANDOFF
+             ================================================================== -->
+        <section id="stepLiveSection" class="space-y-6 stage-animate" hidden>
+          <div class="p-6 rounded-2xl bg-statusBg border border-statusText/30 space-y-2">
+            <span class="inline-block font-mono text-xs font-bold uppercase text-statusText">
+              🎉 7-DAY FREE TRIAL ACTIVE • $0.00 CHARGED TODAY
+            </span>
+            <h2 id="liveSuccessHeading" tabindex="-1" class="font-display font-extrabold text-2xl sm:text-3xl text-ink">
+              You’re in, <span id="liveWelcomeFirstName" class="text-cobalt">Boss</span> — Check Your Cell Phone!
+            </h2>
+            <p class="text-sm text-bodySlate">
+              Your AI Truck Assistant just texted <strong id="liveConfirmedPhone" class="text-ink">your phone</strong> and scheduled your first <strong class="text-ink">7:30 AM Morning Briefing</strong> for tomorrow.
+            </p>
+          </div>
+
+          <!-- Instant Optional Connections (OAuth QuickBooks + Stage 2 Cloud Handoff Upgrade) -->
+          <div class="motion-card rounded-2xl p-5 sm:p-6 space-y-4">
+            <h3 class="font-display font-bold text-lg text-ink">
+              Want Tomorrow’s 7:30 AM Text to Check Your Overdue Invoices Too?
+            </h3>
+            <p class="text-xs sm:text-sm text-bodySlate">
+              Tap once below to link read-only QuickBooks OAuth in 20 seconds — or jump into the 15-minute Cloud Browser Portal if you also run ServiceTitan, Jobber, or Housecall Pro.
+            </p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button
+                type="button"
+                id="connectQboInstantBtn"
+                class="tap-target px-4 py-3.5 rounded-xl bg-cobalt hover:bg-cobaltHover text-white font-bold text-xs sm:text-sm transition shadow-sm"
+              >
+                ⚡ 1-Tap: Connect QuickBooks Read-Only
+              </button>
+              <a
+                id="launchCloudHandoffLink"
+                href="handoff.html"
+                class="tap-target inline-flex items-center justify-center px-4 py-3.5 rounded-xl bg-surface hover:bg-iceActive border border-borderSubtle text-ink font-bold text-xs sm:text-sm transition text-center"
+              >
+                🖥️ Open Cloud Browser Handoff →
+              </a>
+            </div>
+
+            <div id="qboConnectedNotice" class="hidden p-3 rounded-xl bg-iceActive border border-cobalt/30 text-xs font-semibold text-cobalt">
+              ✓ QuickBooks read-only check queued! Tomorrow at 7:30 AM, your AI will flag any invoice over 30 days past due and ask your OK before drafting reminders.
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Footer Support Line (Matches Motion Screenshot 3 Bottom Copy) -->
+      <footer class="max-w-xl w-full mx-auto pt-4 border-t border-borderSubtle text-xs text-mutedSlate flex flex-wrap items-center justify-between gap-2">
+        <span>Questions? Text or email our Texas team anytime at <a href="/contact" class="underline hover:text-cobalt">tiberius.ai/contact</a>.</span>
+        <span>Zero hostage contracts.</span>
+      </footer>
+    </main>
+
+    <!-- ======================================================================
+         RIGHT COLUMN (5 COLS ON LG): MOTION-STYLE SHOWCASE & SOCIAL PROOF PANEL
+         ====================================================================== -->
+    <aside aria-label="How your 7-day trial works" class="lg:col-span-5 showcase-panel text-white p-6 sm:p-10 lg:p-12 flex flex-col justify-between">
+      <div class="max-w-md mx-auto w-full space-y-6 my-auto">
+
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 font-mono text-xs text-blue-200 font-semibold">
+          <span>BUILT IN TEXAS FOR CONTRACTORS &amp; LOCAL TRADES</span>
+        </div>
+
+        <h2 class="font-display font-extrabold text-2xl sm:text-3xl leading-tight">
+          Stay on the tools — let your AI Office Manager work the evening shift for $0 this week.
+        </h2>
+
+        <!-- Live Preview of Tomorrow's 7:30 AM Text -->
+        <div class="rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 p-5 space-y-3">
+          <div class="flex items-center justify-between text-xs font-mono text-blue-200">
+            <span>📱 TOMORROW • 7:30 AM BRIEFING PREVIEW</span>
+            <span class="px-2 py-0.5 rounded bg-emerald-400/20 text-emerald-200 font-bold">Asks Your OK</span>
+          </div>
+          <p id="asidePreviewMessage" class="text-sm text-slate-100 leading-relaxed">
+            “Morning Boss — I checked your inbox, calendar, and QuickBooks: 3 invoices are past 30 days ($8,400) and 2 homeowner quote inquiries came in overnight. Reply 1 to review drafts from your truck.”
+          </p>
+        </div>
+
+        <!-- Value Ladder Explanation (Low-Cost Start -> Upgrade -> Ownership) -->
+        <ul class="space-y-3 text-sm text-slate-200">
+          <li class="flex items-start gap-2.5">
+            <span class="text-emerald-300 font-bold" aria-hidden="true">✓</span>
+            <span><strong class="text-white">Start simple in 3 minutes:</strong> No complicated dashboards or $1,500 upfront gamble.</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <span class="text-emerald-300 font-bold" aria-hidden="true">✓</span>
+            <span><strong class="text-white">Nothing ever goes out behind your back:</strong> Every customer reminder waits for your 1-tap OK.</span>
+          </li>
+          <li class="flex items-start gap-2.5">
+            <span class="text-emerald-300 font-bold" aria-hidden="true">✓</span>
+            <span><strong class="text-white">Own it later only after you love it:</strong> Upgrade to a Dedicated Cloud PC or apply Month 1 toward Turnkey Ownership once it proves its worth.</span>
+          </li>
+        </ul>
+
+        <!-- Trust Badges -->
+        <div class="pt-4 border-t border-white/15 flex flex-wrap items-center gap-2 text-xs font-mono text-slate-300">
+          <span class="px-2.5 py-1 rounded bg-white/10">QuickBooks</span>
+          <span class="px-2.5 py-1 rounded bg-white/10">Jobber &amp; HCP</span>
+          <span class="px-2.5 py-1 rounded bg-white/10">ServiceTitan</span>
+          <span class="px-2.5 py-1 rounded bg-white/10">Gmail &amp; Outlook</span>
+        </div>
+
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- ========================================================================
+       CLIENT-SIDE LOGIC (VALIDATION SYNC + OAUTH + STRIPE $0 TRIAL FLOW)
+       ======================================================================== -->
+  <script>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const choreParam = params.get('chore') || 'invoices';
+      const programsParam = params.get('programs') || 'QuickBooks + Gmail';
+      const initialPlanParam = params.get('plan') === 'office-manager' ? 'office-manager' : 'truck-assistant';
+      const initialBillingParam = params.get('billing') === 'annual' ? 'annual' : 'monthly';
+
+      const choreLabels = {
+        invoices: 'Chasing Late QuickBooks Invoices',
+        quotes: 'Following Up Unsigned Quotes',
+        calls: 'Answering Missed Calls on Jobs',
+        schedule: 'Crew Schedule & Rain Updates',
+        all: 'Full Evening Office Relief'
+      };
+
+      const pillEl = document.getElementById('quizPersonalizationPill');
+      if (pillEl) {
+        const label = choreLabels[choreParam] || choreLabels.invoices;
+        pillEl.textContent = `✓ Tailored for: ${label} (${programsParam})`;
+      }
+
+      // ----------------------------------------------------------------------
+      // Accessible Validation Sync (:user-invalid + WeakMap fallback + ARIA)
+      // ----------------------------------------------------------------------
+      const announcer = document.getElementById('signupLiveAnnouncer');
+      let announceTimer;
+      let announcedField;
+
+      function announcePolite(text, delay = 60) {
+        if (!announcer) return;
+        clearTimeout(announceTimer);
+        announcer.textContent = '';
+        announceTimer = setTimeout(() => {
+          announcer.textContent = text;
+        }, delay);
+      }
+
+      function linkError(el, shown) {
+        const errorId = el.dataset ? el.dataset.error : '';
+        if (!errorId) return;
+        const ids = (el.getAttribute('aria-describedby') || '')
+          .split(/\s+/)
+          .filter((id) => id && id !== errorId);
+        if (shown) ids.push(errorId);
+        if (ids.length) el.setAttribute('aria-describedby', ids.join(' '));
+        else el.removeAttribute('aria-describedby');
+      }
+
+      function spokenText(node) {
+        const copy = node.cloneNode(true);
+        copy.querySelectorAll('[aria-hidden="true"]').forEach((n) => n.remove());
+        copy.querySelectorAll('[role="img"][aria-label]').forEach((n) =>
+          n.replaceWith(`${n.getAttribute('aria-label')}: `)
+        );
+        return copy.textContent.replace(/\s+/g, ' ').trim();
+      }
+
+      const supportsUserInvalid = window.CSS && CSS.supports && CSS.supports('selector(:user-invalid)');
+      const dirtyState = new WeakMap();
+      const flagged = new WeakSet();
+      const announced = new WeakSet();
+
+      function syncFieldAria(el, shouldAnnounce = false) {
+        if (!el || !el.matches || !el.matches('input, select, textarea')) return;
+
+        let isInvalid = false;
+        if (supportsUserInvalid) {
+          isInvalid = el.matches(':user-invalid');
+        } else {
+          const st = dirtyState.get(el);
+          if (st && st.hasInteracted && st.hasBlurred) {
+            isInvalid = !el.validity.valid;
+            el.classList.toggle('user-invalid-fallback', isInvalid);
+            el.classList.toggle('user-valid-fallback', !isInvalid && Boolean(el.value));
+          }
+        }
+
+        if (isInvalid) {
+          if (shouldAnnounce && !announced.has(el) && el.dataset.error) {
+            const errEl = document.getElementById(el.dataset.error);
+            if (errEl) {
+              const lbl = el.labels && el.labels[0] ? `${spokenText(el.labels[0])}: ` : '';
+              announcedField = el;
+              announcePolite(lbl + spokenText(errEl), 450);
+            }
+            announced.add(el);
+          }
+          el.setAttribute('aria-invalid', 'true');
+          linkError(el, true);
+          flagged.add(el);
+        } else if (flagged.has(el) || el.getAttribute('aria-invalid') !== 'true') {
+          el.setAttribute('aria-invalid', 'false');
+          linkError(el, false);
+          flagged.delete(el);
+          announced.delete(el);
+          if (announcedField === el && announcer) {
+            clearTimeout(announceTimer);
+            announcer.textContent = '';
+          }
+        }
+      }
+
+      document.querySelectorAll('input, select, textarea').forEach((el) => {
+        el.setAttribute('aria-invalid', 'false');
+      });
+
+      document.addEventListener('blur', (e) => {
+        const el = e.target;
+        if (!el || !el.matches || !el.matches('input, select, textarea')) return;
+        const st = dirtyState.get(el) || { hasInteracted: false, hasBlurred: false };
+        st.hasBlurred = true;
+        dirtyState.set(el, st);
+        syncFieldAria(el, true);
+      }, true);
+
+      document.addEventListener('input', (e) => {
+        const el = e.target;
+        if (!el || !el.matches || !el.matches('input, select, textarea')) return;
+        el.setCustomValidity('');
+        const st = dirtyState.get(el) || { hasInteracted: false, hasBlurred: false };
+        st.hasInteracted = true;
+        dirtyState.set(el, st);
+        syncFieldAria(el, false);
+      });
+
+      document.addEventListener('invalid', (e) => {
+        const el = e.target;
+        dirtyState.set(el, { hasInteracted: true, hasBlurred: true });
+        announced.add(el);
+        syncFieldAria(el, false);
+      }, true);
+
+      // ----------------------------------------------------------------------
+      // Multi-Step State & Transitions
+      // ----------------------------------------------------------------------
+      const stepAccount = document.getElementById('stepAccountSection');
+      const stepTrial = document.getElementById('stepTrialSection');
+      const stepLive = document.getElementById('stepLiveSection');
+      const progressItems = [
+        document.getElementById('progressItem1'),
+        document.getElementById('progressItem2'),
+        document.getElementById('progressItem3')
+      ];
+
+      const userState = {
+        provider: 'Email',
+        name: '',
+        company: '',
+        email: '',
+        phone: '',
+        plan: initialPlanParam,
+        billing: initialBillingParam
+      };
+
+      function updateProgressUI(stepNumber) {
+        progressItems.forEach((item, idx) => {
+          const num = idx + 1;
+          if (num === stepNumber) {
+            item.setAttribute('aria-current', 'step');
+            item.className = 'px-3 py-2 rounded-lg bg-iceActive border border-cobalt/40 text-cobalt font-bold truncate';
+          } else if (num < stepNumber) {
+            item.removeAttribute('aria-current');
+            item.className = 'px-3 py-2 rounded-lg bg-statusBg border border-statusText/30 text-statusText font-bold truncate';
+          } else {
+            item.removeAttribute('aria-current');
+            item.className = 'px-3 py-2 rounded-lg bg-surface border border-borderSubtle text-mutedSlate font-semibold truncate';
+          }
+        });
+      }
+
+      function showStep(stepNumber) {
+        stepAccount.hidden = stepNumber !== 1;
+        stepTrial.hidden = stepNumber !== 2;
+        stepLive.hidden = stepNumber !== 3;
+        updateProgressUI(stepNumber);
+
+        if (stepNumber === 1) {
+          document.getElementById('signupMainHeading').focus();
+        } else if (stepNumber === 2) {
+          document.getElementById('trialGateHeading').focus();
+        } else if (stepNumber === 3) {
+          document.getElementById('liveSuccessHeading').focus();
+        }
+      }
+
+      // Pre-select plan from query param, while keeping Monthly billing default on checkout
+      // so contractors never get surprised by an annual upfront charge
+      const planRadio = document.querySelector(`input[name="trial_plan"][value="${userState.plan}"]`);
+      if (planRadio) planRadio.checked = true;
+      if (initialBillingParam === 'annual') {
+        const annualRadio = document.querySelector('input[name="billing_cycle"][value="annual"]');
+        if (annualRadio) annualRadio.checked = true;
+      }
+
+      function refreshTrialPricingLabels() {
+        const cycle = document.querySelector('input[name="billing_cycle"]:checked')?.value || 'monthly';
+        const selectedPlan = document.querySelector('input[name="trial_plan"]:checked')?.value || 'truck-assistant';
+        userState.billing = cycle;
+        userState.plan = selectedPlan;
+
+        const tier1PriceEl = document.getElementById('tier1AfterPrice');
+        const tier2PriceEl = document.getElementById('tier2AfterPrice');
+        const day7LabelEl = document.getElementById('timelineDay7Label');
+
+        if (cycle === 'annual') {
+          tier1PriceEl.textContent = 'then $49/mo (billed yearly)';
+          tier2PriceEl.textContent = 'then $197/mo ($0 setup)';
+          day7LabelEl.textContent =
+            selectedPlan === 'office-manager'
+              ? 'Continues at $197/mo billed annually ($0 setup)'
+              : 'Continues at $49/mo billed annually';
+        } else {
+          tier1PriceEl.textContent = 'then $69/mo (monthly)';
+          tier2PriceEl.textContent = 'then $249/mo (monthly)';
+          day7LabelEl.textContent =
+            selectedPlan === 'office-manager'
+              ? 'Continues at $249/mo (Month-to-Month)'
+              : 'Continues at $69/mo (Month-to-Month)';
+        }
+      }
+
+      document.querySelectorAll('input[name="billing_cycle"], input[name="trial_plan"]').forEach((r) => {
+        r.addEventListener('change', refreshTrialPricingLabels);
+      });
+      refreshTrialPricingLabels();
+
+      // Capture pre-paywall lead (just like Motion's Step 3 OAuth capture)
+      function fireLeadCapture(sourceTag, extra = {}) {
+        fetch('/api/lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          keepalive: true,
+          body: JSON.stringify({
+            source: sourceTag,
+            eventCategory: extra.eventCategory || 'LEAD',
+            name: userState.name,
+            businessName: userState.company,
+            email: userState.email,
+            phone: userState.phone,
+            industry: `${choreLabels[choreParam] || 'Contractor Office'} • ${programsParam}`,
+            ownershipPreference: extra.planLabel || `7-Day Free Trial (${userState.plan})`
+          })
+        }).catch(() => {});
+      }
+
+      function proceedToStep2(providerLabel) {
+        const quickCell = document.getElementById('quickCellInput').value.trim();
+        if (quickCell) userState.phone = quickCell;
+
+        const trialPhoneInput = document.getElementById('trialPhoneConfirm');
+        if (userState.phone && !trialPhoneInput.value) {
+          trialPhoneInput.value = userState.phone;
+        }
+        const ccNameInput = document.getElementById('ccName');
+        if (userState.name && !ccNameInput.value) {
+          ccNameInput.value = userState.name;
+        }
+
+        const pill = document.getElementById('connectedAccountPill');
+        pill.textContent =
+          providerLabel === 'Email'
+            ? `✓ Signed in as ${userState.email}`
+            : `✓ Connected via ${providerLabel}`;
+
+        fireLeadCapture('ai-employee-pre-trial-signup', { eventCategory: 'LEAD' });
+        showStep(2);
+      }
+
+      // 1-Click OAuth Triggers
+      document.querySelectorAll('.oauth-trigger-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const provider = btn.getAttribute('data-oauth-provider') || 'Google';
+          userState.provider = provider;
+          if (!userState.name) userState.name = 'Boss';
+          proceedToStep2(provider);
+        });
+      });
+
+      // Work Email Sign-Up Submit
+      const emailSignupForm = document.getElementById('emailSignupForm');
+      emailSignupForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (!emailSignupForm.checkValidity()) {
+          const firstInvalid = emailSignupForm.querySelector(':invalid');
+          if (firstInvalid) firstInvalid.focus();
+          return;
+        }
+        userState.provider = 'Email';
+        userState.name = document.getElementById('signupName').value.trim();
+        userState.company = document.getElementById('signupCompany').value.trim();
+        userState.email = document.getElementById('signupEmail').value.trim();
+        proceedToStep2('Email');
+      });
+
+      document.getElementById('backToAccountBtn').addEventListener('click', () => {
+        showStep(1);
+      });
+
+      // Auto-insert slash in MM/YY expiration field for truck-friendly typing
+      const ccExpInput = document.getElementById('ccExp');
+      ccExpInput.addEventListener('input', () => {
+        const digits = ccExpInput.value.replace(/[^\d]/g, '');
+        if (digits.length >= 3 && !ccExpInput.value.includes('/')) {
+          ccExpInput.value = `${digits.slice(0, 2)}/${digits.slice(2, 4)}`;
+        }
+      });
+
+      // Step 2: $0.00 Free Trial Submit
+      const trialPaymentForm = document.getElementById('trialPaymentForm');
+      const activateBtn = document.getElementById('activateFreeTrialBtn');
+
+      trialPaymentForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (!trialPaymentForm.checkValidity()) {
+          const firstInvalid = trialPaymentForm.querySelector(':invalid');
+          if (firstInvalid) firstInvalid.focus();
+          return;
+        }
+
+        activateBtn.disabled = true;
+        activateBtn.textContent = 'Activating Your 7-Day Free Trial ($0.00)...';
+
+        userState.phone = document.getElementById('trialPhoneConfirm').value.trim();
+        userState.name = userState.name || document.getElementById('ccName').value.trim();
+
+        const planSummary =
+          userState.plan === 'office-manager'
+            ? `7-Day Free Trial ($0 Today -> Full Office Manager ${userState.billing === 'annual' ? '$197/mo annual' : '$249/mo monthly'})`
+            : `7-Day Free Trial ($0 Today -> AI Truck Assistant ${userState.billing === 'annual' ? '$49/mo annual' : '$69/mo monthly'})`;
+
+        fireLeadCapture('ai-employee-trial-started', {
+          eventCategory: 'TRIAL',
+          planLabel: planSummary
+        });
+
+        const firstName = (userState.name || 'Boss').split(/\s+/)[0] || 'Boss';
+        document.getElementById('liveWelcomeFirstName').textContent = firstName;
+        document.getElementById('liveConfirmedPhone').textContent = userState.phone || 'your cell phone';
+
+        const handoffUrl = `handoff.html?owner=${encodeURIComponent(firstName)}&company=${encodeURIComponent(
+          userState.company || 'Your Company'
+        )}&programs=${encodeURIComponent(programsParam)}&plan=${encodeURIComponent(userState.plan)}`;
+        document.getElementById('launchCloudHandoffLink').setAttribute('href', handoffUrl);
+
+        setTimeout(() => {
+          showStep(3);
+          announcePolite('7-day free trial activated with zero dollars charged today.');
+        }, 320);
+      });
+
+      // Step 3: 1-Tap QuickBooks Read-Only Toggle
+      const connectQboBtn = document.getElementById('connectQboInstantBtn');
+      const qboNotice = document.getElementById('qboConnectedNotice');
+      connectQboBtn.addEventListener('click', () => {
+        connectQboBtn.textContent = '✓ QuickBooks Read-Only Queued';
+        connectQboBtn.className = 'tap-target px-4 py-3.5 rounded-xl bg-statusBg text-statusText border border-statusText/30 font-bold text-xs sm:text-sm transition';
+        qboNotice.classList.remove('hidden');
+        announcePolite('QuickBooks read-only connection queued for tomorrow at 7:30 AM.');
+      });
+    })();
+  </script>
+</body>
+</html>

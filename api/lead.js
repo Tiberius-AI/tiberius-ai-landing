@@ -52,6 +52,14 @@ function buildWelcomeSmsBody(lead) {
     )}"! Our team will also be making a custom Smart Site mock-up for ${bizLabel} for you to try soon. Reply here anytime with your business type + city or follow-up questions!`;
   }
 
+  if (lead.source === 'ai-employee-trial-started') {
+    return `🎉 Boss, I'm live! Your Tiberius AI Employee 7-day free trial ($0.00 charged today) for ${bizLabel} is active, and your first 7:30 AM Morning Briefing is scheduled for tomorrow. We'll text you here on Day 5 (48 hrs before billing)—reply anytime to test me right now!`;
+  }
+
+  if (lead.source === 'ai-employee-pre-trial-signup' || lead.source === 'ai-employee-quick-trial-form') {
+    return `👋 Hey ${firstName}! Your Tiberius AI Employee account for ${bizLabel} is almost ready—finish unlocking your $0.00 7-day free trial at https://www.tiberius.ai/signup or reply here anytime with questions!`;
+  }
+
   if (lead.source === 'ai-employee-handoff') {
     return `Hey ${firstName}! Your Tiberius AI Employee 24-hour build (${lead.ownershipPreference || '$1,497 Turnkey Ownership'}) for ${bizLabel} is reserved. Complete your 15-minute live handoff preview at https://www.tiberius.ai/handoff or reply here anytime with questions!`;
   }
