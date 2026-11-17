@@ -266,48 +266,40 @@
   <a href="#portal-main-heading" class="visually-hidden skip-link">Skip to main content</a>
 
   <!-- ========================================================================
-       STICKY HEADER (CLEAN WHITE MOTION PORTAL BAR)
+       HEADER:
+       - Mobile (<768px): Full-width colorful Tiberius logo only (no links / no CTA)
+       - Desktop (>=768px): Sticky white bar — Colorful logo left + Basic menu center + CTA right
        ======================================================================== -->
-  <header class="sticky top-0 z-50 backdrop-blur-md bg-white/95 border-b border-borderSubtle">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[76px] py-2.5 flex items-center justify-between gap-2.5">
-      <a href="/" class="flex items-center gap-3 tap-target py-1" aria-label="Back to Tiberius AI Homepage">
+  <header class="relative md:sticky md:top-0 z-50 bg-white/95 backdrop-blur-md border-b border-borderSubtle">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 md:py-0 md:h-24 flex items-center justify-center md:justify-between gap-6">
+      <a href="/" class="w-full md:w-auto flex items-center justify-center md:justify-start shrink-0" aria-label="Tiberius AI Home">
         <img
-          src="images/logo4.png"
-          alt=""
-          width="42"
-          height="42"
-          style="aspect-ratio: 1 / 1;"
-          class="w-10 h-10 rounded-xl object-contain bg-cobalt border border-cobalt p-1.5 shadow-sm shrink-0"
-          onerror="this.style.display='none';document.getElementById('fallbackLogoOnboard').classList.remove('hidden');"
+          src="images/logo4-color.png"
+          alt="Tiberius AI — The Bad Boys of AI"
+          width="1500"
+          height="684"
+          fetchpriority="high"
+          class="w-full md:w-auto md:h-[60px] lg:h-[72px] h-auto object-contain block"
         />
-        <span id="fallbackLogoOnboard" class="hidden w-10 h-10 rounded-xl bg-cobalt text-white font-display font-extrabold text-lg flex items-center justify-center shrink-0" aria-hidden="true">
-          T
-        </span>
-        <div>
-          <span class="block font-display font-extrabold text-sm sm:text-lg text-ink leading-tight">
-            Tiberius <span class="text-cobalt">15-Min Handoff</span>
-          </span>
-          <span class="hidden sm:block text-xs font-mono text-statusText font-semibold">
-            ● PRIVATE CLOUD COMPUTER READY FOR LOGIN
-          </span>
-        </div>
       </a>
 
-      <div class="flex items-center gap-2 shrink-0">
-        <button
-          type="button"
-          id="toggleAllStepsViewBtn"
-          class="tap-target px-3 sm:px-3.5 py-2 rounded-xl bg-surface hover:bg-surfaceMuted border border-borderSubtle text-[11px] sm:text-xs font-mono font-bold text-ink transition whitespace-nowrap"
-        >
-          All 3 Steps
-        </button>
-        <a
-          href="/"
-          class="tap-target inline-flex items-center justify-center px-3 sm:px-3.5 py-2 rounded-xl border border-borderSubtle bg-white hover:bg-surface text-xs font-bold text-bodySlate transition whitespace-nowrap"
-        >
-          ← Homepage
-        </a>
-      </div>
+      <!-- Desktop-Only Basic Menu -->
+      <nav aria-label="Primary" class="hidden md:flex items-center">
+        <ul role="list" class="flex items-center gap-5 lg:gap-8 text-sm font-semibold text-bodySlate whitespace-nowrap">
+          <li><a href="/#workflows" class="hover:text-cobalt transition-colors py-2">How It Works</a></li>
+          <li><a href="/#pricing" class="hover:text-cobalt transition-colors py-2">Pricing</a></li>
+          <li><a href="/smartsites" class="hover:text-cobalt transition-colors py-2">Smart Sites</a></li>
+          <li><a href="/contact" class="hover:text-cobalt transition-colors py-2">Contact</a></li>
+        </ul>
+      </nav>
+
+      <!-- Desktop-Only Right CTA Button -->
+      <a
+        href="/"
+        class="hidden md:inline-flex items-center justify-center tap-target px-5 py-2.5 rounded-xl bg-cobalt hover:bg-cobaltHover text-white font-bold text-sm shadow-sm transition whitespace-nowrap shrink-0"
+      >
+        ← AI Employee Home
+      </a>
     </div>
   </header>
 
@@ -357,10 +349,16 @@
            MOTION-STYLE 3-STEP VISUAL PROGRESS TRACKER
            ==================================================================== -->
       <nav aria-label="15-Minute Handoff Progress" class="space-y-3">
-        <!-- Overall Progress Bar -->
-        <div class="flex items-center justify-between text-xs font-mono text-bodySlate">
-          <span>HANDOFF PROGRESS</span>
-          <span id="overallProgressLabel" class="font-bold text-cobalt">Step 1 of 3 (Minutes 0–5)</span>
+        <!-- Overall Progress Bar + All-Steps View Toggle -->
+        <div class="flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-bodySlate">
+          <span>HANDOFF PROGRESS • <strong id="overallProgressLabel" class="text-cobalt">Step 1 of 3 (Minutes 0–5)</strong></span>
+          <button
+            type="button"
+            id="toggleAllStepsViewBtn"
+            class="px-3 py-1.5 rounded-lg bg-surface hover:bg-surfaceMuted border border-borderSubtle text-xs font-mono font-bold text-ink transition"
+          >
+            All 3 Steps
+          </button>
         </div>
         <div class="h-2 w-full rounded-full bg-surfaceMuted border border-borderSubtle overflow-hidden">
           <div id="overallProgressBar" class="h-full bg-cobalt progress-fill-bar" style="width: 33%;"></div>
@@ -806,12 +804,60 @@
     </div>
   </main>
 
-  <footer class="border-t border-borderSubtle bg-surface py-8 mt-12">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-mutedSlate">
-      <p>© 2026 Tiberius AI • 15-Minute Client Handoff Portal</p>
-      <div class="flex flex-wrap items-center gap-5">
-        <a href="/smartsites" class="hover:text-ink transition">Smart Sites ($297/mo)</a>
-        <a href="/" class="text-cobalt hover:underline font-semibold">← Return to Tiberius.ai Homepage</a>
+  <footer class="border-t border-borderSubtle bg-surface py-12 mt-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div class="lg:col-span-4 space-y-3">
+          <a href="/" class="inline-block" aria-label="Tiberius AI Home">
+            <img
+              src="images/logo4-color.png"
+              alt="Tiberius AI — The Bad Boys of AI"
+              width="1500"
+              height="684"
+              loading="lazy"
+              class="h-14 sm:h-16 w-auto object-contain block"
+            />
+          </a>
+          <p class="text-xs sm:text-sm text-bodySlate max-w-sm">
+            15-Minute Client Handoff Portal — sign in once on your private cloud computer and text from your work truck.
+          </p>
+        </div>
+
+        <nav aria-label="Footer" class="lg:col-span-8 grid grid-cols-2 sm:grid-cols-3 gap-8 text-sm">
+          <div>
+            <p class="font-display font-bold text-xs uppercase tracking-wider text-ink mb-3">AI Employee</p>
+            <ul role="list" class="space-y-2 text-bodySlate">
+              <li><a href="/" class="inline-block py-1 hover:text-cobalt transition-colors">AI Employee Home</a></li>
+              <li><a href="/#workflows" class="inline-block py-1 hover:text-cobalt transition-colors">How It Works</a></li>
+              <li><a href="/#pricing" class="inline-block py-1 hover:text-cobalt transition-colors">Pricing ($1,497)</a></li>
+              <li><a href="/handoff" aria-current="page" class="inline-block py-1 font-bold text-ink underline decoration-cobalt decoration-2 underline-offset-4">15-Min Handoff Portal</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <p class="font-display font-bold text-xs uppercase tracking-wider text-ink mb-3">Tiberius AI</p>
+            <ul role="list" class="space-y-2 text-bodySlate">
+              <li><a href="/smartsites" class="inline-block py-1 hover:text-cobalt transition-colors">Smart Sites ($297/mo)</a></li>
+              <li><a href="/recon" class="inline-block py-1 hover:text-cobalt transition-colors">Permit Radar</a></li>
+              <li><a href="/contact" class="inline-block py-1 hover:text-cobalt transition-colors">Contact</a></li>
+            </ul>
+          </div>
+
+          <div class="col-span-2 sm:col-span-1">
+            <p class="font-display font-bold text-xs uppercase tracking-wider text-ink mb-3">Legal</p>
+            <ul role="list" class="grid grid-cols-2 sm:grid-cols-1 gap-x-4 gap-y-2 text-bodySlate">
+              <li><a href="/privacy" class="inline-block py-1 hover:text-cobalt transition-colors">Privacy Policy</a></li>
+              <li><a href="/terms" class="inline-block py-1 hover:text-cobalt transition-colors">Terms of Service</a></li>
+              <li><a href="/sms-terms" class="inline-block py-1 hover:text-cobalt transition-colors">SMS Terms</a></li>
+              <li><a href="/sms-consent" class="inline-block py-1 hover:text-cobalt transition-colors">SMS Consent</a></li>
+            </ul>
+          </div>
+        </nav>
+      </div>
+
+      <div class="pt-6 border-t border-borderSubtle flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-mutedSlate">
+        <p>© 2026 Tiberius AI • 15-Minute Client Handoff Portal</p>
+        <a href="/" class="font-semibold text-cobalt hover:underline">← Return to Tiberius.ai Homepage</a>
       </div>
     </div>
   </footer>
