@@ -3894,6 +3894,9 @@ footer .brand-logo {
   color: var(--text-light);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 999px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
   padding: 7px 14px;
   font-size: 12px;
   font-weight: 700;
