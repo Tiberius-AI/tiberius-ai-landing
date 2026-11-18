@@ -239,9 +239,9 @@
     const bt1Label = document.getElementById('briefing-tier-1-checkout-label');
     const bt2Label = document.getElementById('briefing-tier-2-checkout-label');
     const bt3Label = document.getElementById('briefing-tier-3-checkout-label');
-    if (bt1Label) bt1Label.textContent = `Start $199/Mo Trial in ${cleanZipForStripe} →`;
-    if (bt2Label) bt2Label.textContent = `Lock Zip ${cleanZipForStripe} - 7-Day Free Trial →`;
-    if (bt3Label) bt3Label.textContent = `Exclusive Lock ${cleanZipForStripe} - Free Trial →`;
+    if (bt1Label) bt1Label.textContent = `Owner Radar ($199/Mo) • ${cleanZipForStripe} →`;
+    if (bt2Label) bt2Label.textContent = `Permit Radar ($399/Mo) • Lock ${cleanZipForStripe} →`;
+    if (bt3Label) bt3Label.textContent = `Exclusive Lock ($599/Mo) • ${cleanZipForStripe} →`;
 
     if (navTerritoryPill) {
       navTerritoryPill.textContent = isNewBraunfelsCorridor
@@ -249,7 +249,14 @@
         : `${b.territoryZip} (${b.metroCity || 'Local Area'}) • LIVE`;
     }
     if (briefingTierBadge) {
-      briefingTierBadge.textContent = 'LOCAL PERMIT RADAR • $199/MO';
+      const tierRaw = String(b.tierLevel || c.tierLevel || '');
+      if (/tier\s*1|scout|owner/i.test(tierRaw)) {
+        briefingTierBadge.textContent = 'COMMERCIAL OWNER RADAR • $199/MO';
+      } else if (/tier\s*3|exclusive|dominion/i.test(tierRaw)) {
+        briefingTierBadge.textContent = 'HOME + COMMERCIAL LOCK • $599/MO';
+      } else {
+        briefingTierBadge.textContent = 'LOCAL PERMIT RADAR • $399/MO';
+      }
     }
     if (briefingExclusivityBadge && state.availability) {
       briefingExclusivityBadge.textContent = state.availability.isAvailable

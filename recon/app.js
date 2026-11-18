@@ -329,7 +329,7 @@
           pill: 'NEW PROPERTY OWNER • 140-UNIT COMPLEX',
           headline: 'Oakridge Commons - Annual Property Upkeep',
           submeta: 'Address: 2410 Gruene Rd, New Braunfels, TX 78130',
-          why: 'Why it matters: $14,200,000 property sale. One annual contract covers $199/mo Recon for years.',
+          why: 'Why it matters: $14,200,000 property sale. One annual contract covers $199/mo Owner Radar for years.',
           contact: 'Dana Sterling • Property Director @ Crestview Management',
           draft:
             '"Hi Dana - congrats on buying the 140-unit Oakridge Commons property at 2410 Gruene Rd in New Braunfels. New managers usually review outside service contractors during the first month. Can I swing by Thursday to leave a simple monthly service quote?"',
@@ -642,9 +642,9 @@
     const t1Label = document.getElementById('tier-1-checkout-label');
     const t2Label = document.getElementById('tier-2-checkout-label');
     const t3Label = document.getElementById('tier-3-checkout-label');
-    if (t1Label) t1Label.textContent = `Start 7-Day Trial in ${safeZip} →`;
-    if (t2Label) t2Label.textContent = `Lock Zip ${safeZip} - Start 7-Day Trial →`;
-    if (t3Label) t3Label.textContent = `Lock Zip ${safeZip} - Start 7-Day Trial →`;
+    if (t1Label) t1Label.textContent = `Start $199/Mo Trial in ${safeZip} →`;
+    if (t2Label) t2Label.textContent = `Lock Zip ${safeZip} ($399/Mo Trial) →`;
+    if (t3Label) t3Label.textContent = `Lock Exclusive Zip ${safeZip} ($599/Mo) →`;
   }
 
   if (zipCheckerTrade) {
