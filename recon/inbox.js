@@ -1,5 +1,5 @@
 /**
- * TIBERIUS RECON™ — 3-PANE REPLY & FOLLOW-UP CONVERSATION ROOM (inbox.js)
+ * TIBERIUS RECON™ - 3-PANE REPLY & FOLLOW-UP CONVERSATION ROOM (inbox.js)
  *
  * Powers:
  * 1. Pane 1: Deal Thread Queue & Stage Filter Pills (All, 🔥 Replies, ⏳ Follow-Up, 📅 Booked)
@@ -415,7 +415,7 @@
     if (contractorTitleEl) {
       contractorTitleEl.textContent = `${c.companyName || 'Contractor'} (${
         b.territoryZip || c.baseZip || '78130'
-      }) — Conversation & Follow-Up Room`;
+      }) - Conversation & Follow-Up Room`;
     }
     if (kbBadgeEl && state.knowledgeBase) {
       kbBadgeEl.textContent = `🧠 SHOP DOSSIER ACTIVE: ${(
@@ -525,8 +525,8 @@
     }
     if (pretripCircuitPillEl) {
       pretripCircuitPillEl.textContent = holdDispatch
-        ? '🔴 LOCKED — 6:45 AM DISPATCH HELD'
-        : '🟢 OPEN — ARMED FOR 6:45 AM';
+        ? '🔴 LOCKED - 6:45 AM DISPATCH HELD'
+        : '🟢 OPEN - ARMED FOR 6:45 AM';
       pretripCircuitPillEl.className = holdDispatch
         ? 'font-mono-telemetry text-[10px] text-red-400 font-bold'
         : 'font-mono-telemetry text-[10px] text-emerald-400 font-bold';
@@ -711,7 +711,7 @@
       const body =
         (replyTextarea && replyTextarea.value.trim()) ||
         activeThread.nativeSimDraft ||
-        'Hey — just sent you an email regarding your permit filing. Open to a quick site walk Thursday at 9am?';
+        'Hey - just sent you an email regarding your permit filing. Open to a quick site walk Thursday at 9am?';
 
       try {
         const testCfg = getTestOverridesAndConfig();
@@ -770,19 +770,50 @@
     });
   }
 
+  const btnSendReply = document.getElementById('btn-send-reply');
+  function syncReplySendButtonLabel() {
+    if (!btnSendReply) return;
+    const ch = replyChannelSelect ? replyChannelSelect.value : 'CLIENT_EMAIL';
+    const isSmtpReady = Boolean(
+      roomState &&
+        roomState.contractor &&
+        roomState.contractor.clientEmailConfig &&
+        roomState.contractor.clientEmailConfig.isSmtpReady
+    );
+    if (ch === 'NATIVE_SIM_SMS') {
+      btnSendReply.innerHTML = '<span>📱 Text from My Phone</span>';
+    } else if (ch === 'GMAIL_WEB') {
+      btnSendReply.innerHTML = '<span>📨 Open in Gmail Web</span>';
+    } else if (ch === 'OUTLOOK_WEB') {
+      btnSendReply.innerHTML = '<span>📨 Open in Outlook Web</span>';
+    } else if (isSmtpReady) {
+      btnSendReply.innerHTML = '<span>⚡ 1-Tap Send (My Shop Email)</span>';
+    } else {
+      btnSendReply.innerHTML = '<span>✉️ Send from My Email</span>';
+    }
+  }
+  if (replyChannelSelect) {
+    replyChannelSelect.addEventListener('change', syncReplySendButtonLabel);
+  }
+
   if (replyForm) {
     replyForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const body = replyTextarea ? replyTextarea.value.trim() : '';
       if (!body || !selectedThreadId) return;
 
-      const channel = replyChannelSelect ? replyChannelSelect.value : 'RESEND_EMAIL';
+      const channel = replyChannelSelect ? replyChannelSelect.value : 'CLIENT_EMAIL';
+      syncReplySendButtonLabel();
 
       try {
         const testCfg = getTestOverridesAndConfig();
+        const headers = { 'Content-Type': 'application/json' };
+        const jwt = localStorage.getItem('tiberius_recon_session_jwt');
+        if (jwt) headers.Authorization = `Bearer ${jwt}`;
+
         const resp = await fetch('/api/recon/send', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers,
           body: JSON.stringify({
             token: activeToken,
             threadId: selectedThreadId,
@@ -797,11 +828,18 @@
         if (data && data.ok && data.roomState) {
           if (replyTextarea) replyTextarea.value = '';
           renderFullRoom(data.roomState);
+          syncReplySendButtonLabel();
           const pr = data.providerReceipt || {};
           if (replySendFeedback) {
             const replyTo = pr.replyToAddress || '';
             replySendFeedback.textContent =
-              pr.provider === 'RESEND_LIVE'
+              pr.provider === 'CLIENT_SMTP_LIVE'
+                ? `✅ SENT LIVE FROM YOUR SHOP EMAIL (${pr.from}) → ${pr.to}`
+                : pr.provider === 'CLIENT_NATIVE_EMAIL_HANDOFF'
+                ? `✓ OPENED IN YOUR EMAIL APP (${pr.to}) • LOGGED IN TIMELINE`
+                : pr.provider === 'NATIVE_SIM_PROTOCOL'
+                ? `✓ OPENED ON YOUR PHONE SMS (${pr.toPhone}) • LOGGED IN TIMELINE`
+                : pr.provider === 'RESEND_LIVE'
                 ? `✅ DELIVERED LIVE VIA RESEND TO ${pr.to} (ID: ${pr.providerMessageId})`
                 : pr.provider === 'TWILIO_MASTER_A2P_LIVE'
                 ? `✅ DELIVERED LIVE VIA TWILIO SMS TO ${pr.toPhone} (SID: ${pr.twilioSid})`
@@ -812,16 +850,23 @@
             setTimeout(() => replySendFeedback.classList.add('hidden'), 6000);
           }
 
-          // Optional native device handoff if contractor chose Native SIM SMS or Native Mail
-          const activeThread =
-            roomState.threads.find((t) => t.id === selectedThreadId) || {};
-          const targetEmail = testCfg.overrideEmail || activeThread.contactEmail;
+          // Launch client-owned phone SMS or email compose app when handoffRequired
           if (channel === 'NATIVE_SIM_SMS' && data.nativeSimUri) {
             window.location.href = data.nativeSimUri;
-          } else if (channel === 'NATIVE_EMAIL' && targetEmail) {
-            window.location.href = `mailto:${targetEmail}?subject=${encodeURIComponent(
-              'Re: ' + (activeThread.headline || 'Permit Bid')
-            )}&body=${encodeURIComponent(body)}`;
+          } else if (data.handoffRequired || pr.handoffRequired) {
+            const gmailUrl = data.gmailWebUri || pr.gmailWebUri;
+            const outlookUrl = data.outlookWebUri || pr.outlookWebUri;
+            const prefUrl = data.preferredComposeUri || pr.preferredComposeUri;
+            const mailtoUrl = data.mailtoUri || pr.mailtoUri;
+            if (channel === 'GMAIL_WEB' && gmailUrl) {
+              window.open(gmailUrl, '_blank', 'noopener');
+            } else if (channel === 'OUTLOOK_WEB' && outlookUrl) {
+              window.open(outlookUrl, '_blank', 'noopener');
+            } else if (prefUrl && prefUrl.startsWith('https://')) {
+              window.open(prefUrl, '_blank', 'noopener');
+            } else if (mailtoUrl) {
+              window.location.href = mailtoUrl;
+            }
           }
         }
       } catch (_err) {
@@ -850,23 +895,26 @@
         {};
       const messageBody =
         (replyTextarea && replyTextarea.value.trim()) ||
-        `Hi — this is a live Tiberius Recon™ test email for ${
+        `Hi - this is a live Tiberius Recon™ test email for ${
           activeThread.headline || 'your commercial permit'
         } (${
           activeThread.propertyAddress || '78130'
-        }). Reply directly to this email to test the Conversation Room inbound webhook! — ${
+        }). Reply directly to this email to test the Conversation Room inbound webhook! - ${
           roomState?.knowledgeBase?.signatureLine || 'Tiberius Recon'
         }`;
 
       btnSendLiveTestEmail.textContent = '📧 Sending Live Test Email...';
       try {
+        const headers = { 'Content-Type': 'application/json' };
+        const jwt = localStorage.getItem('tiberius_recon_session_jwt');
+        if (jwt) headers.Authorization = `Bearer ${jwt}`;
         const resp = await fetch('/api/recon/send', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers,
           body: JSON.stringify({
             token: activeToken,
             threadId: selectedThreadId || 'thread-deal-1',
-            channel: 'RESEND_EMAIL',
+            channel: 'ADMIN_RESEND_TEST',
             messageBody,
             overrideEmail: testCfg.overrideEmail,
             providerConfig: testCfg.providerConfig
