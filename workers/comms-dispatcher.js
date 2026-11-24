@@ -242,7 +242,7 @@ function getContractorTwilioA2PState(contractor = {}) {
 
   const stageLabel =
     subStage === 'STAGE_2_DEDICATED_SUBACCOUNT'
-      ? 'Dedicated Client Twilio Subaccount & 10DLC Campaign Active for 2-Way Smart Site SMS.'
+      ? 'Dedicated Client Twilio Subaccount & 10DLC Campaign Active for 2-Way Contractor SMS.'
       : 'Day-1 Instant Activation via Tiberius Bridge Pool while dedicated client A2P 10DLC clears carrier vetting in background.';
 
   const scoutToContractorAlerts = {
@@ -290,7 +290,7 @@ function getContractorTwilioA2PState(contractor = {}) {
       twoStageProvisioning,
       envStatus,
       summary:
-        'Morning 6:45 AM alerts run on Tiberius Master A2P. Cold permit texts use Native SIM. Warm Smart Site leads run on isolated Client Subaccount.'
+        'Morning 6:45 AM alerts run on Tiberius Master A2P. Cold permit texts use Native SIM. Inbound replies run on isolated Client Subaccount.'
     };
   }
 
@@ -307,7 +307,7 @@ function getContractorTwilioA2PState(contractor = {}) {
       twoStageProvisioning,
       envStatus,
       summary:
-        'Pre-verified Tiberius Bridge Number handles Day-1 Smart Site missed-call & web chat texts immediately while TrustHub A2P 10DLC clears.'
+        'Pre-verified Tiberius Bridge Number handles Day-1 inbound prospect texts immediately while TrustHub A2P 10DLC clears.'
     };
   }
 
@@ -318,7 +318,7 @@ function getContractorTwilioA2PState(contractor = {}) {
     clientSubaccountSid: null,
     activeInboundNumber: null,
     coldPermitSmsMode: 'NATIVE_SIM_HANDOFF (`sms:+1...` • Zero A2P Risk)',
-    smartSiteInboundSmsMode: 'NOT_ENABLED (Upgrade to Smart Site Bundle for 2-Way Bridge Number)',
+    smartSiteInboundSmsMode: 'NOT_ENABLED (Optional 2-Way Bridge Number)',
     scoutToContractorAlerts,
     twoStageProvisioning,
     envStatus,
@@ -446,7 +446,7 @@ async function dispatchScoutMorningAlertSms({
   const zip = briefing.territoryZip || contractor.baseZip || '78130';
   const trade = briefing.tradeName || contractor.primaryTrade || 'Commercial';
 
-  const bodyText = `☕ Good morning ${ownerFirst} — your Tiberius Digital Scout pulled ${unlockedCount} new ${trade} permits in ${zip} overnight ($240K–$410K). Tap here to review & 1-tap send: ${briefingUrl}`;
+  const bodyText = `☕ Good morning ${ownerFirst}: your Tiberius Digital Scout pulled ${unlockedCount} new ${trade} permits in ${zip} overnight ($240K–$410K). Tap here to review & 1-tap send: ${briefingUrl}`;
 
   const rawTargetPhone = overridePhone || contractor.mobilePhone || '';
   const isFictionalTarget = /^\+?1?\d{3}555\d{4}$/.test(String(rawTargetPhone).replace(/\D/g, ''));
@@ -500,7 +500,7 @@ async function dispatchContractorHotReplyAlertSms({
     thread.dealValuation || 'your permit bid'
   } (${thread.permitNumber || ''}): "${snippet}${
     snippet.length >= 95 ? '...' : ''
-  }" — Tap to reply in Conversation Room: ${inboxUrl}`;
+  }" • Tap to reply in Conversation Room: ${inboxUrl}`;
 
   const rawTargetPhone = overridePhone || contractor.mobilePhone || '';
   const isFictionalTarget = /^\+?1?\d{3}555\d{4}$/.test(String(rawTargetPhone).replace(/\D/g, ''));
