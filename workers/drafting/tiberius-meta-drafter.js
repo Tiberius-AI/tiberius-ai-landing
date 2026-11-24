@@ -107,11 +107,21 @@ function generateTiberiusMetaOutreachSequence({
   baitPermits = [],
   playbook = 'FULL_BUNDLE_OFFENSE_DEFENSE',
   previewBriefingUrl = 'https://www.tiberius.ai/recon/briefing?token=preview-demo',
+  googleDocUrl = '',
+  loomVideoUrl = 'https://www.tiberius.ai/recon/watch',
   openSlotsInZip = 1,
   maxSlotsInZip = 2,
   senderName = 'Billy',
   senderCompany = 'Tiberius AI'
 } = {}) {
+  const effectiveGoogleDocUrl =
+    googleDocUrl ||
+    prospect.googleDocUrl ||
+    'https://drive.google.com/drive/folders/1kvnCDZOBjQXkdbWXDE3mY_sYZJE4ulS-';
+  const effectiveLoomUrl =
+    loomVideoUrl ||
+    prospect.loomVideoUrl ||
+    'https://www.tiberius.ai/recon/watch';
   const ownerFirst = String(prospect.contactFirstName || prospect.contactName || 'there')
     .replace(/^(Mr\.|Ms\.|Mrs\.|Dr\.)\s+/i, '')
     .trim()
@@ -308,23 +318,38 @@ function generateTiberiusMetaOutreachSequence({
     }
   ];
 
-  const nativeSimText = `${greeting.replace(',', ' —')} ${senderName} at Tiberius AI here. Our overnight scout pulled 3 commercial ${trade.split('/')[0].trim().toLowerCase()} permits in ${zip} (${primaryPermit.valuationFormatted} at ${primaryPermit.address} by ${primaryPermit.gcCompany}) with the GC PM's direct cell. Want me to text you the link to ${prospect.companyName}'s live briefing?`;
+  const totalBaitValDollars = baitPermits.reduce(
+    (sum, bp) =>
+      sum +
+      (Number(bp.valuationDollars) ||
+        Number(String(bp.valuationFormatted || '').replace(/[^0-9]/g, '')) ||
+        0),
+    0
+  );
+  const totalBaitLabel =
+    totalBaitValDollars > 0
+      ? `$${totalBaitValDollars.toLocaleString()} total`
+      : `${primaryPermit.valuationFormatted}+`;
+
+  const nativeSimText = `${greeting} ${senderName} at Tiberius AI here. Our overnight scout pulled 3 commercial ${trade.split('/')[0].trim().toLowerCase()} permits in ${city} ${zip} (${totalBaitLabel}, led by ${primaryPermit.valuationFormatted} at ${primaryPermit.address} by ${primaryPermit.gcCompany}) with the GC PM's direct cell. Want me to text you the link to ${prospect.companyName}'s live briefing?`;
 
   const autoReplyDemoMessage = [
     `${greeting}`,
     ``,
-    `Here is ${prospect.companyName}'s live 7:00 AM Recon Briefing & 3-Leak Site Breakdown for ${city} (${zip}):`,
+    `Here is ${prospect.companyName}'s custom Google Doc Dossier, 90-second video walkthrough, and live 7:00 AM Recon Briefing for ${city} (${zip}):`,
     ``,
-    `👉 Live Permit Queue (${prospect.companyName} Sandbox): ${previewBriefingUrl}`,
+    `📄 Custom Google Doc Dossier (3 Pulled Permits + Site X-Ray): ${effectiveGoogleDocUrl}`,
+    `🎥 90-Second Personal Loom Walkthrough: ${effectiveLoomUrl}`,
+    `👉 Interactive Live Sandbox (${prospect.companyName} Queue): ${previewBriefingUrl}`,
     ``,
     `What's inside right now:`,
-    `1. Permit #${primaryPermit.permitNumber} (${primaryPermit.valuationFormatted}) at ${primaryPermit.address} — ${primaryPermit.gcContact} (${primaryPermit.gcCompany}) direct phone & email verified.`,
-    `2. Permit #${secondPermit.permitNumber} (${secondPermit.valuationFormatted}) at ${secondPermit.address} — ${secondPermit.gcContact} (${secondPermit.gcCompany}).`,
+    `1. Permit #${primaryPermit.permitNumber} (${primaryPermit.valuationFormatted}) at ${primaryPermit.address} in ${city} • ${primaryPermit.gcContact} (${primaryPermit.gcCompany}) direct phone & email verified.`,
+    `2. Permit #${secondPermit.permitNumber} (${secondPermit.valuationFormatted}) at ${secondPermit.address} in ${city} • ${secondPermit.gcContact} (${secondPermit.gcCompany}).`,
     `3. Website Teardown Summary: Fixing the ${leak1.title.toLowerCase()} and adding 3-second missed-call SMS rescue recovers an estimated ${math.estimatedMonthlyLeakFormatted} in ${city}.`,
     ``,
     `You can tap "[ ✓ Approve & Send ]" on any of those cards to test how the 90-second morning coffee workflow feels. Want to lock in the open ${trade} slot in ${zip} for a 7-day test drive?`,
     ``,
-    `— ${senderName} (${senderCompany})`
+    `${senderName} (${senderCompany})`
   ].join('\n');
 
   const copyGate = verifyAntiAiCopyGate({

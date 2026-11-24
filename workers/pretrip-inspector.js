@@ -27,11 +27,20 @@ const {
   savePreTripReport,
   extractSentence2FromDraft,
   rotateBriefingCardProofVariants,
+  normalizePermitAddress,
+  normalizeStreetKey: storeNormalizeStreetKey,
   extractCardPermitNumber,
   extractCardAddress,
+  extractCardStreetKey: storeExtractCardStreetKey,
+  extractCardParcelId: storeExtractCardParcelId,
+  deduplicateBriefingCards: storeDeduplicateBriefingCards,
   recordSeenPermit,
   resolveMetroProfile,
   getCentralDateString,
+  shiftDateString,
+  computeBriefingTotalValuationDollars,
+  ensurePastBriefingHistorySeeded,
+  getArchivedBriefingCardsForDate,
   buildBriefingCardsForContractor,
   buildRealClientBriefingCards,
   getBriefingByToken,
@@ -43,6 +52,153 @@ const {
   dispatchPreTripManifestEmail,
   dispatchPreTripAdminSms
 } = require('./comms-dispatcher');
+
+/**
+ * Canonicalizes municipal permit numbers across formatting variants
+ * (e.g. `Permit #2026-050098-BP` -> `2026-050098 BP`, `BP 2026 08412` -> `BP-2026-08412`),
+ * while rejecting empty values, positional UI IDs (`DEAL-1`), and bare year-only placeholders (`BP-2026`).
+ */
+function canonicalizePermitKey(rawPermit = '') {
+  let cleaned = String(rawPermit || '')
+    .trim()
+    .replace(/^(?:LIVE\s+)?PERMIT(?:\s*(?:NO\.?|NUMBER|ID|#))?[:\s#-]*/i, '')
+    .replace(/^#+/, '')
+    .replace(/[,.;:)]+$/, '')
+    .replace(/\s+/g, ' ')
+    .toUpperCase();
+  if (!cleaned) return '';
+  if (/^(?:DEAL|CARD)[-\s]*\d+$/i.test(cleaned)) return '';
+  if (/^(?:UNKNOWN|NONE|N\/A|NA|NULL|UNDEFINED|TBD|PENDING)$/i.test(cleaned)) return '';
+  if (/^[A-Z]{2,5}[-\s]*20\d{2}$/.test(cleaned)) return '';
+  if (/^CAD-[A-Z0-9]{3,6}-[0-9]{4,10}$/.test(cleaned)) return '';
+
+  // Normalize trailing BP suffix: "2026-050098-BP" / "2026-050098BP" -> "2026-050098 BP"
+  cleaned = cleaned.replace(/^(\d{4})[-\s]+(\d{4,7})[-\s]*BP$/, '$1-$2 BP');
+  // Normalize prefix-year-sequence: "BP 2026 08412" / "BP 2026-08412" -> "BP-2026-08412"
+  cleaned = cleaned.replace(/^([A-Z]{2,5})[-\s]+(20\d{2})[-\s]+([A-Z0-9]{3,8})$/, '$1-$2-$3');
+  return cleaned;
+}
+
+function canonicalizeStreetKeyFromAddress(rawAddr = '') {
+  if (typeof storeNormalizeStreetKey === 'function') {
+    const sk = storeNormalizeStreetKey(rawAddr);
+    if (sk) return sk;
+  }
+  const base = String(rawAddr || '')
+    .replace(/^(?:📍\s*)?(?:Permit\s+Address|Property\s+Address|Location):\s*/i, '')
+    .split('•')[0]
+    .replace(/\([^)]*\)/g, ' ')
+    .replace(/,\s*[a-z\s./-]+,\s*[a-z]{2}(?:\s+\d{5}(?:-\d{4})?)?\s*$/i, '')
+    .replace(/,\s*(?:tx|texas)(?:\s+\d{5}(?:-\d{4})?)?\s*$/i, '')
+    .replace(/\b\d{5}(?:-\d{4})?\s*$/, '')
+    .trim();
+  const norm = typeof normalizePermitAddress === 'function' ? normalizePermitAddress(base) : base.toLowerCase();
+  return norm && norm.length >= 5 ? norm : '';
+}
+
+function buildInspectorCardKeys(card = {}) {
+  if (!card || typeof card !== 'object') {
+    return { permitKey: '', addressKey: '', streetKey: '', parcelKey: '', fallbackKey: '', allKeys: [] };
+  }
+  const rawPermit = extractCardPermitNumber(card);
+  const permitKey = canonicalizePermitKey(rawPermit);
+  const addressKey = String(extractCardAddress(card) || '').trim();
+  const streetKey =
+    (typeof storeExtractCardStreetKey === 'function' && storeExtractCardStreetKey(card)) ||
+    canonicalizeStreetKeyFromAddress(
+      card.address || card.propertyAddress || card.permit_location || card.subMeta || card.headline || ''
+    );
+  const parcelKey =
+    typeof storeExtractCardParcelId === 'function' ? String(storeExtractCardParcelId(card) || '').trim() : '';
+
+  let fallbackKey = '';
+  if (!permitKey && !streetKey && !parcelKey) {
+    const headlineNorm = String(card.headline || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim();
+    const contactNorm = String(card.contactEmail || card.contactPhone || card.contactShort || card.contactName || '')
+      .toLowerCase()
+      .replace(/[^a-z0-9@]+/g, ' ')
+      .trim();
+    if (headlineNorm || contactNorm) {
+      fallbackKey = `${headlineNorm}|${contactNorm}`;
+    }
+  }
+
+  const allKeys = [];
+  if (permitKey) allKeys.push(`permit::${permitKey}`);
+  if (streetKey) allKeys.push(`street::${streetKey}`);
+  else if (addressKey) allKeys.push(`addr::${addressKey}`);
+  if (parcelKey) allKeys.push(`parcel::${parcelKey}`);
+  if (fallbackKey) allKeys.push(`fallback::${fallbackKey}`);
+
+  return { permitKey, addressKey, streetKey, parcelKey, fallbackKey, allKeys };
+}
+
+function dedupeInspectorCardList(cards = [], { reindex = true } = {}) {
+  if (!Array.isArray(cards) || cards.length === 0) return [];
+  const baseList =
+    typeof storeDeduplicateBriefingCards === 'function'
+      ? storeDeduplicateBriefingCards(cards, { demo: false, reindexIds: false })
+      : cards;
+
+  const unique = [];
+  const keyToIndex = new Map();
+  const statusRank = (s) => {
+    const v = String(s || '').toLowerCase();
+    if (v === 'sent' || v === 'approved') return 3;
+    if (v === 'dismissed') return 2;
+    return 1;
+  };
+
+  for (const card of baseList) {
+    if (!card || typeof card !== 'object') continue;
+    const { allKeys } = buildInspectorCardKeys(card);
+    let existingIdx = -1;
+    for (const k of allKeys) {
+      if (keyToIndex.has(k)) {
+        existingIdx = keyToIndex.get(k);
+        break;
+      }
+    }
+    if (existingIdx >= 0) {
+      const prev = unique[existingIdx];
+      if (statusRank(card.approvalStatus) > statusRank(prev.approvalStatus)) {
+        unique[existingIdx] = {
+          ...prev,
+          ...card,
+          isLockedOverflow: Boolean(prev.isLockedOverflow && card.isLockedOverflow)
+        };
+      } else if (!card.isLockedOverflow && prev.isLockedOverflow) {
+        unique[existingIdx] = { ...prev, isLockedOverflow: false };
+      }
+      for (const k of buildInspectorCardKeys(unique[existingIdx]).allKeys) {
+        keyToIndex.set(k, existingIdx);
+      }
+    } else {
+      const nextIdx = unique.length;
+      unique.push({ ...card });
+      for (const k of allKeys) {
+        keyToIndex.set(k, nextIdx);
+      }
+    }
+  }
+
+  if (!reindex) return unique;
+
+  return unique.map((c, idx) => {
+    const rank = idx + 1;
+    const pad = String(rank).padStart(2, '0');
+    const updatedCardNumber = String(c.cardNumber || '').replace(/^CARD\s+0?\d+/i, `CARD ${pad}`);
+    return {
+      ...c,
+      id: `deal-${rank}`,
+      cardRank: rank,
+      cardNumber: updatedCardNumber || `CARD ${pad}`
+    };
+  });
+}
 
 /**
  * Scans a single card or SQLite row for banned synthetic demo tokens or canary mirroring CAD parcel IDs.
@@ -117,81 +273,181 @@ function buildAntigravityRepairPrompt({ failures = [], heals = [], timestamp }) 
 }
 
 /**
- * Probes a single HTTP URL or falls back to local route verification when running in-process tests.
+ * Detects whether a hostname or URL points to a Vercel deployment-hash / preview URL
+ * (e.g. `tiberius-recon-7lhd3lout-tiberius-projects-d57bebb2.vercel.app`) that is gated
+ * behind Vercel Standard Deployment Protection (HTTP 401 SSO redirect).
+ */
+function isProtectedVercelDeploymentUrl(hostOrUrl = '') {
+  const cleanHost = String(hostOrUrl || '')
+    .trim()
+    .replace(/^https?:\/\//i, '')
+    .split('/')[0]
+    .split('?')[0]
+    .toLowerCase();
+  if (!cleanHost || !cleanHost.endsWith('.vercel.app')) return false;
+  if (cleanHost === 'tiberius-recon.vercel.app') return false;
+  return (
+    cleanHost.includes('-projects-') ||
+    /^tiberius-recon-[a-z0-9]+/i.test(cleanHost) ||
+    cleanHost.split('-').length >= 4
+  );
+}
+
+/**
+ * Normalizes a candidate fleet baseUrl so Vercel Cron invocations on protected deployment-hash
+ * URLs (`*-tiberius-projects-*.vercel.app`) automatically target the public production domain
+ * (`https://www.tiberius.ai` or `PUBLIC_BASE_URL`) instead of failing with HTTP 401.
+ */
+function normalizeFleetBaseUrl(rawBaseUrl = '') {
+  const candidate = String(rawBaseUrl || '').trim().replace(/\/$/, '');
+  if (candidate && /^https?:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/i.test(candidate)) {
+    return candidate;
+  }
+  if (candidate && !isProtectedVercelDeploymentUrl(candidate)) {
+    return candidate.startsWith('http') ? candidate : `https://${candidate}`;
+  }
+
+  const envPublic = String(process.env.PUBLIC_BASE_URL || '').trim().replace(/\/$/, '');
+  if (envPublic && !isProtectedVercelDeploymentUrl(envPublic)) {
+    return envPublic.startsWith('http') ? envPublic : `https://${envPublic}`;
+  }
+
+  const envProdHost = String(process.env.VERCEL_PROJECT_PRODUCTION_URL || '')
+    .trim()
+    .replace(/^https?:\/\//i, '')
+    .replace(/\/$/, '');
+  if (envProdHost && !isProtectedVercelDeploymentUrl(envProdHost)) {
+    return `https://${envProdHost}`;
+  }
+
+  const envVercelUrl = String(process.env.VERCEL_URL || '')
+    .trim()
+    .replace(/^https?:\/\//i, '')
+    .replace(/\/$/, '');
+  if (envVercelUrl && !isProtectedVercelDeploymentUrl(envVercelUrl)) {
+    return `https://${envVercelUrl}`;
+  }
+
+  if (candidate || process.env.VERCEL || process.env.VERCEL_URL) {
+    return 'https://www.tiberius.ai';
+  }
+
+  return `http://127.0.0.1:${process.env.PORT || 3000}`;
+}
+
+/**
+ * Probes a single HTTP URL or falls back to public production URLs / local route verification
+ * when running under Vercel Deployment Protection or in-process tests.
  */
 async function probeFleetEndpoint(endpointSpec, { baseUrl, timeoutMs = 10000 } = {}) {
   const { label, pathOrUrl, fallbackCheck } = endpointSpec;
   const isExternal = /^https?:\/\//i.test(pathOrUrl);
-  const defaultBaseUrl =
-    process.env.PUBLIC_BASE_URL ||
-    (process.env.VERCEL_PROJECT_PRODUCTION_URL
-      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-      : '') ||
-    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '') ||
-    (process.env.VERCEL ? 'https://www.tiberius.ai' : `http://127.0.0.1:${process.env.PORT || 3000}`);
-  const fullUrl = isExternal
-    ? pathOrUrl
-    : `${String(baseUrl || defaultBaseUrl).replace(/\/$/, '')}${pathOrUrl}`;
+  const resolvedBaseUrl = normalizeFleetBaseUrl(baseUrl);
+  const primaryUrl = isExternal ? pathOrUrl : `${resolvedBaseUrl}${pathOrUrl}`;
+  const isLocalTarget = /^https?:\/\/(127\.0\.0\.1|localhost)(:\d+)?(\/|$)/i.test(primaryUrl);
 
-  const started = Date.now();
-  try {
-    const resp = await fetch(fullUrl, {
-      method: 'GET',
-      headers: {
-        'User-Agent': 'Tiberius-PreTrip-Watchdog/1.0',
-        Accept: 'text/html,application/json,*/*'
-      },
-      signal: AbortSignal.timeout(timeoutMs)
-    });
-    const latencyMs = Date.now() - started;
-    if (resp.status >= 200 && resp.status < 400) {
-      return {
-        endpoint: label,
-        url: fullUrl,
-        ok: true,
-        status: resp.status,
-        latencyMs,
-        mode: 'HTTP_LIVE'
-      };
-    }
-    return {
-      endpoint: label,
-      url: fullUrl,
-      ok: false,
-      status: resp.status,
-      latencyMs,
-      error: `HTTP ${resp.status}`
-    };
-  } catch (err) {
-    const latencyMs = Date.now() - started;
-    // If running inside a CLI test runner where local server isn't bound or external DNS is sandboxed,
-    // verify the handler/asset directly if a fallbackCheck is provided.
-    if (typeof fallbackCheck === 'function') {
-      try {
-        const fallbackOk = await fallbackCheck();
-        if (fallbackOk) {
-          return {
-            endpoint: label,
-            url: fullUrl,
-            ok: true,
-            status: 200,
-            latencyMs,
-            mode: isExternal ? 'EXTERNAL_SANDBOX_FALLBACK' : 'IN_PROCESS_VERIFIED'
-          };
-        }
-      } catch (_fallbackErr) {
-        // Fall through to error
+  const candidateUrls = [primaryUrl];
+  if (!isExternal && !isLocalTarget) {
+    for (const prodBase of ['https://www.tiberius.ai', 'https://tiberius-recon.vercel.app']) {
+      const altUrl = `${prodBase}${pathOrUrl}`;
+      if (!candidateUrls.includes(altUrl)) {
+        candidateUrls.push(altUrl);
       }
     }
-    return {
+  }
+
+  const headers = {
+    'User-Agent': 'Tiberius-PreTrip-Watchdog/1.0',
+    Accept: 'text/html,application/json,*/*'
+  };
+  if (process.env.VERCEL_AUTOMATION_BYPASS_SECRET) {
+    headers['x-vercel-protection-bypass'] = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
+  }
+
+  let lastFailure = null;
+
+  for (const fullUrl of candidateUrls) {
+    const started = Date.now();
+    try {
+      const resp = await fetch(fullUrl, {
+        method: 'GET',
+        headers,
+        signal: AbortSignal.timeout(timeoutMs)
+      });
+      const latencyMs = Date.now() - started;
+      if (resp.status >= 200 && resp.status < 400) {
+        return {
+          endpoint: label,
+          url: fullUrl,
+          ok: true,
+          status: resp.status,
+          latencyMs,
+          mode: 'HTTP_LIVE'
+        };
+      }
+      lastFailure = {
+        endpoint: label,
+        url: fullUrl,
+        ok: false,
+        status: resp.status,
+        latencyMs,
+        error: `HTTP ${resp.status}`
+      };
+      // If a remote Vercel URL returned 401/403 (Deployment Protection), continue to next public production candidate
+      if (!isExternal && (resp.status === 401 || resp.status === 403)) {
+        continue;
+      }
+      break;
+    } catch (err) {
+      const latencyMs = Date.now() - started;
+      lastFailure = {
+        endpoint: label,
+        url: fullUrl,
+        ok: false,
+        status: 0,
+        latencyMs,
+        error: err.message || 'Endpoint unreachable'
+      };
+    }
+  }
+
+  // If running inside a CLI test runner where local server isn't bound, external DNS is sandboxed,
+  // or Vercel Deployment Protection blocked an internal self-probe with HTTP 401/403,
+  // verify the handler/asset directly if a fallbackCheck is provided.
+  if (
+    typeof fallbackCheck === 'function' &&
+    (!lastFailure ||
+      lastFailure.status === 0 ||
+      (!isExternal && (lastFailure.status === 401 || lastFailure.status === 403)))
+  ) {
+    const started = Date.now();
+    try {
+      const fallbackOk = await fallbackCheck();
+      if (fallbackOk) {
+        return {
+          endpoint: label,
+          url: primaryUrl,
+          ok: true,
+          status: 200,
+          latencyMs: (lastFailure && lastFailure.latencyMs) || Date.now() - started,
+          mode: isExternal ? 'EXTERNAL_SANDBOX_FALLBACK' : 'IN_PROCESS_VERIFIED'
+        };
+      }
+    } catch (_fallbackErr) {
+      // Fall through to error
+    }
+  }
+
+  return (
+    lastFailure || {
       endpoint: label,
-      url: fullUrl,
+      url: primaryUrl,
       ok: false,
       status: 0,
-      latencyMs,
-      error: err.message || 'Endpoint unreachable'
-    };
-  }
+      latencyMs: 0,
+      error: 'Endpoint unreachable'
+    }
+  );
 }
 
 /**
@@ -292,9 +548,10 @@ async function runPreTripInspection(options = {}) {
     for (const [bToken, briefing] of Object.entries(store.briefings || {})) {
       if (!Array.isArray(briefing.cards)) continue;
       const beforeLen = briefing.cards.length;
-      const cleanCards = briefing.cards.filter((c) => !inspectRecordForContamination(c));
+      const uncontaminatedCards = briefing.cards.filter((c) => !inspectRecordForContamination(c));
+      const cleanCards = dedupeInspectorCardList(uncontaminatedCards, { reindex: false });
       if (cleanCards.length !== beforeLen || cleanCards.length < 9) {
-        purgedCardsCount += beforeLen - cleanCards.length;
+        purgedCardsCount += Math.max(0, beforeLen - cleanCards.length);
         const contractor = store.contractors[briefing.contractorId] || {
           primaryTrade: briefing.tradeName || 'Commercial Concrete',
           baseZip: briefing.territoryZip || '78130'
@@ -308,40 +565,53 @@ async function runPreTripInspection(options = {}) {
                 enforceSeenPermits: true,
                 markAsSurfaced: true
               })
-            : buildBriefingCardsForContractor(contractor, undefined, {
+            : buildBriefingCardsForContractor(contractor, {
                 demo: false,
                 surfacedBriefingDate: activeBriefingDate,
                 enforceSeenPermits: true,
                 markAsSurfaced: true
               });
-          const existingPermits = new Set(cleanCards.map((c) => extractCardPermitNumber(c)));
+          const existingCardKeys = new Set();
+          for (const existingCard of cleanCards) {
+            for (const k of buildInspectorCardKeys(existingCard).allKeys) {
+              existingCardKeys.add(k);
+            }
+          }
           for (const fc of freshCards) {
             if (cleanCards.length >= 9) break;
-            const pNum = extractCardPermitNumber(fc);
-            if (!existingPermits.has(pNum) && !inspectRecordForContamination(fc)) {
-              existingPermits.add(pNum);
+            if (!fc || inspectRecordForContamination(fc)) continue;
+            const fcKeys = buildInspectorCardKeys(fc).allKeys;
+            if (fcKeys.length === 0) continue;
+            const collides = fcKeys.some((k) => existingCardKeys.has(k));
+            if (!collides) {
+              for (const k of fcKeys) {
+                existingCardKeys.add(k);
+              }
               cleanCards.push(fc);
             }
           }
         }
         const metro = resolveMetroProfile(contractor.baseZip || briefing.territoryZip || '78130');
-        briefing.cards = rotateBriefingCardProofVariants(
-          cleanCards.map((c, idx) => ({
-            ...c,
-            id: `deal-${idx + 1}`,
-            cardRank: idx + 1
-          })),
-          contractor,
-          metro
-        );
+        const dedupedCleanCards = dedupeInspectorCardList(cleanCards, { reindex: true });
+        briefing.cards = rotateBriefingCardProofVariants(dedupedCleanCards, contractor, metro);
         for (const c of briefing.cards) {
-          recordSeenPermit({
-            jurisdiction: metro.zip,
-            permitNumber: extractCardPermitNumber(c),
-            normalizedAddress: extractCardAddress(c),
-            surfacedBriefingDate: activeBriefingDate,
-            status: 'surfaced'
-          });
+          const { permitKey, addressKey, streetKey } = buildInspectorCardKeys(c);
+          const effectivePermitForLedger =
+            permitKey || (streetKey ? `ADDR:${streetKey.toUpperCase()}` : '');
+          if (effectivePermitForLedger) {
+            recordSeenPermit({
+              jurisdiction: metro.zip,
+              permitNumber: effectivePermitForLedger,
+              normalizedAddress: addressKey || streetKey,
+              surfacedBriefingDate: activeBriefingDate,
+              status:
+                c.approvalStatus === 'sent'
+                  ? 'approved'
+                  : c.approvalStatus === 'dismissed'
+                  ? 'dismissed'
+                  : 'surfaced'
+            });
+          }
         }
       }
     }
@@ -351,8 +621,9 @@ async function runPreTripInspection(options = {}) {
         const byDate = store.briefingHistory[tokenKey] || {};
         for (const dateKey of Object.keys(byDate)) {
           if (byDate[dateKey] && Array.isArray(byDate[dateKey].cards)) {
-            byDate[dateKey].cards = byDate[dateKey].cards.filter(
-              (c) => !inspectRecordForContamination(c)
+            byDate[dateKey].cards = dedupeInspectorCardList(
+              byDate[dateKey].cards.filter((c) => !inspectRecordForContamination(c)),
+              { reindex: true }
             );
           }
         }
@@ -410,118 +681,311 @@ async function runPreTripInspection(options = {}) {
   }
 
   // =========================================================================
-  // CHECK 2: Day-Over-Day Duplicate Queue Check
+  // CHECK 2: Trailing 7-Day & Intra-Queue Duplicate Check (Permits, Streets & Total Valuations)
   // =========================================================================
   const storeForCheck2 = loadStore();
   const briefingForCheck2 =
     storeForCheck2.briefings[targetToken] || storeForCheck2.briefings['demo-7am-briefing'];
   const duplicatePermitsFound = [];
+  const priorDayDupKeySet = new Set();
+  const trailing7ExcludedPermits = new Set();
   let payloadHashMatchedYesterday = false;
+  let matchedTotalValuationPriorDate = null;
+
+  const loadSeenLedgerMaps = (jurisdictionZip) => {
+    const seenPermitDates = new Map();
+    const seenStreetDates = new Map();
+    const db = getSqliteDb();
+    if (!db) return { seenPermitDates, seenStreetDates };
+    try {
+      const cleanZip = String(jurisdictionZip || '78130').trim().slice(0, 5);
+      const rows = db
+        .prepare(
+          `SELECT permit_number, normalized_address, street_key, surfaced_briefing_date
+           FROM seen_permits
+           WHERE LOWER(jurisdiction) = LOWER(?)`
+        )
+        .all(cleanZip);
+      for (const r of rows) {
+        const pCanonical = canonicalizePermitKey(r.permit_number);
+        const pRawUpper = String(r.permit_number || '').trim().toUpperCase();
+        if (pCanonical) seenPermitDates.set(pCanonical, r.surfaced_briefing_date);
+        if (pRawUpper) seenPermitDates.set(pRawUpper, r.surfaced_briefing_date);
+
+        const sk =
+          String(r.street_key || '').trim() ||
+          canonicalizeStreetKeyFromAddress(r.normalized_address || '');
+        if (sk) {
+          const existingDate = seenStreetDates.get(sk);
+          if (!existingDate) {
+            seenStreetDates.set(sk, r.surfaced_briefing_date);
+          }
+        }
+      }
+    } catch (_err) {
+      // Fallback if street_key column not present on legacy DB
+      try {
+        const cleanZip = String(jurisdictionZip || '78130').trim().slice(0, 5);
+        const rows = db
+          .prepare(
+            `SELECT permit_number, normalized_address, surfaced_briefing_date
+             FROM seen_permits
+             WHERE LOWER(jurisdiction) = LOWER(?)`
+          )
+          .all(cleanZip);
+        for (const r of rows) {
+          const pCanonical = canonicalizePermitKey(r.permit_number);
+          if (pCanonical) seenPermitDates.set(pCanonical, r.surfaced_briefing_date);
+          const sk = canonicalizeStreetKeyFromAddress(r.normalized_address || '');
+          if (sk && !seenStreetDates.has(sk)) seenStreetDates.set(sk, r.surfaced_briefing_date);
+        }
+      } catch (_err2) {
+        // Ignore SQLite read error
+      }
+    }
+    return { seenPermitDates, seenStreetDates };
+  };
+
+  const buildTrailing7DayMaps = (tokenKey, todayStr, storeObj, contractorObj, briefingObj) => {
+    ensurePastBriefingHistorySeeded(storeObj, briefingObj, contractorObj);
+    const trailingDates = [1, 2, 3, 4, 5, 6, 7].map((d) => shiftDateString(todayStr, -d));
+    const trailingPermitDates = new Map();
+    const trailingStreetDates = new Map();
+    const trailingValuationDates = new Map();
+    const trailingHashes = new Map();
+
+    for (const dStr of trailingDates) {
+      const snap = getArchivedBriefingCardsForDate(tokenKey, dStr, storeObj);
+      const snapCards = Array.isArray(snap)
+        ? snap
+        : snap && Array.isArray(snap.cards)
+        ? snap.cards
+        : [];
+      if (snapCards.length === 0) continue;
+
+      const dayTotalVal = computeBriefingTotalValuationDollars(snapCards);
+      if (dayTotalVal > 0 && !trailingValuationDates.has(dayTotalVal)) {
+        trailingValuationDates.set(dayTotalVal, dStr);
+      }
+      const dayHash = computeBriefingPayloadHash(snapCards);
+      if (dayHash && !trailingHashes.has(dayHash)) {
+        trailingHashes.set(dayHash, dStr);
+      }
+
+      for (const c of snapCards) {
+        const { permitKey, streetKey } = buildInspectorCardKeys(c);
+        if (permitKey) {
+          trailing7ExcludedPermits.add(permitKey);
+          if (!trailingPermitDates.has(permitKey)) {
+            trailingPermitDates.set(permitKey, dStr);
+          }
+        }
+        if (streetKey && !trailingStreetDates.has(streetKey)) {
+          trailingStreetDates.set(streetKey, dStr);
+        }
+      }
+    }
+
+    return {
+      trailingDates,
+      trailingPermitDates,
+      trailingStreetDates,
+      trailingValuationDates,
+      trailingHashes
+    };
+  };
 
   if (briefingForCheck2 && Array.isArray(briefingForCheck2.cards) && !demoModeActive) {
     const contractor = storeForCheck2.contractors[briefingForCheck2.contractorId] || {};
     const jurisdiction = contractor.baseZip || briefingForCheck2.territoryZip || '78130';
     const todayStr = briefingForCheck2.briefingDate || getCentralDateString();
 
+    const {
+      trailingPermitDates,
+      trailingStreetDates,
+      trailingValuationDates,
+      trailingHashes
+    } = buildTrailing7DayMaps(
+      briefingForCheck2.magicToken,
+      todayStr,
+      storeForCheck2,
+      contractor,
+      briefingForCheck2
+    );
+    saveStore(storeForCheck2);
+
     const todayHash = computeBriefingPayloadHash(briefingForCheck2.cards);
     const yesterdayHash = getYesterdayBriefingPayloadHash(briefingForCheck2.magicToken);
-    if (yesterdayHash && todayHash && todayHash === yesterdayHash) {
+    if (
+      (yesterdayHash && todayHash && todayHash === yesterdayHash) ||
+      (todayHash && trailingHashes.has(todayHash))
+    ) {
       payloadHashMatchedYesterday = true;
     }
 
-    const db = getSqliteDb();
-    const seenMap = new Map();
-    if (db) {
-      try {
-        const rows = db
-          .prepare(
-            `SELECT permit_number, surfaced_briefing_date FROM seen_permits WHERE jurisdiction = ?`
-          )
-          .all(String(jurisdiction).trim().slice(0, 5));
-        for (const r of rows) {
-          seenMap.set(String(r.permit_number || '').toUpperCase(), r.surfaced_briefing_date);
-        }
-      } catch (_err) {
-        // Ignore
-      }
+    const todayTotalVal = computeBriefingTotalValuationDollars(briefingForCheck2.cards);
+    if (todayTotalVal > 0 && trailingValuationDates.has(todayTotalVal)) {
+      matchedTotalValuationPriorDate = trailingValuationDates.get(todayTotalVal);
     }
 
-    const seenInCurrentQueue = new Set();
+    const { seenPermitDates, seenStreetDates } = loadSeenLedgerMaps(jurisdiction);
+    const seenKeysInCurrentQueue = new Set();
+
     for (const card of briefingForCheck2.cards) {
-      const pNum = extractCardPermitNumber(card);
-      if (!pNum) continue;
-      const priorDate = seenMap.get(pNum);
-      if (priorDate && priorDate !== todayStr) {
+      const { permitKey, streetKey, addressKey, allKeys } = buildInspectorCardKeys(card);
+      const label = permitKey || streetKey || addressKey || card.id || 'unlabeled-card';
+
+      const priorPermitDate =
+        (permitKey && trailingPermitDates.get(permitKey)) ||
+        (permitKey && seenPermitDates.get(permitKey)) ||
+        (streetKey && seenPermitDates.get(`ADDR:${streetKey.toUpperCase()}`)) ||
+        null;
+      const priorStreetDate =
+        (streetKey && trailingStreetDates.get(streetKey)) ||
+        (streetKey && seenStreetDates.get(streetKey)) ||
+        null;
+      const priorDate =
+        priorPermitDate && priorPermitDate !== todayStr
+          ? priorPermitDate
+          : priorStreetDate && priorStreetDate !== todayStr
+          ? priorStreetDate
+          : null;
+
+      if (priorDate) {
         duplicatePermitsFound.push({
-          permitNumber: pNum,
-          reason: `Already surfaced on prior date (${priorDate})`
+          permitNumber: label,
+          isPriorDay: true,
+          reason: `Already surfaced within trailing 7 days / seen ledger (${priorDate})`
         });
-      } else if (seenInCurrentQueue.has(pNum)) {
+        for (const k of allKeys) priorDayDupKeySet.add(k);
+      } else if (allKeys.some((k) => seenKeysInCurrentQueue.has(k))) {
         duplicatePermitsFound.push({
-          permitNumber: pNum,
-          reason: 'Duplicate permit number within today’s queue'
+          permitNumber: label,
+          isPriorDay: false,
+          reason: 'Duplicate permit/property card within today’s queue'
         });
       }
-      seenInCurrentQueue.add(pNum);
+
+      for (const k of allKeys) {
+        seenKeysInCurrentQueue.add(k);
+      }
     }
   }
 
+  const fullQueueRefreshRequired =
+    payloadHashMatchedYesterday || Boolean(matchedTotalValuationPriorDate);
+
   if (
     duplicatePermitsFound.length > 0 ||
-    payloadHashMatchedYesterday ||
+    fullQueueRefreshRequired ||
     options.simulateUnhealableCheck2
   ) {
-    // Tier 1 Auto-Heal: Remove duplicate card(s) from today's queue and trigger injectLiveZeroApiCardsIntoBriefing() once
+    // Tier 1 Auto-Heal: Remove prior-day & intra-queue duplicate card(s) and trigger injectLiveZeroApiCardsIntoBriefing() once
     const storeHeal2 = loadStore();
     const targetB =
       storeHeal2.briefings[targetToken] || storeHeal2.briefings['demo-7am-briefing'];
-    const dupSet = new Set(duplicatePermitsFound.map((d) => d.permitNumber));
     const originalCardCount = targetB && Array.isArray(targetB.cards) ? targetB.cards.length : 9;
 
     if (targetB && Array.isArray(targetB.cards)) {
-      if (payloadHashMatchedYesterday) {
-        // Clear identical yesterday queue so all cards are refreshed with unseen permits
+      if (fullQueueRefreshRequired) {
+        // Clear identical prior-day queue / colliding total valuation sum so all cards refresh
         targetB.cards = [];
       } else {
-        const seenOnce = new Set();
-        targetB.cards = targetB.cards.filter((card) => {
-          const pNum = extractCardPermitNumber(card);
-          if (!pNum) return true;
-          if (dupSet.has(pNum) || seenOnce.has(pNum)) return false;
-          seenOnce.add(pNum);
-          return true;
+        const withoutPriorDay = targetB.cards.filter((card) => {
+          const { allKeys } = buildInspectorCardKeys(card);
+          if (allKeys.length === 0) return false;
+          return !allKeys.some((k) => priorDayDupKeySet.has(k));
         });
+        targetB.cards = dedupeInspectorCardList(withoutPriorDay, { reindex: true });
       }
       saveStore(storeHeal2);
     }
 
     const liveInjectResult = await injectLiveZeroApiCardsIntoBriefing({
       token: targetB ? targetB.magicToken : targetToken,
-      preserveExistingValidCards: !payloadHashMatchedYesterday,
+      preserveExistingValidCards: !fullQueueRefreshRequired,
+      excludePermitNumbers: [...trailing7ExcludedPermits],
+      slotOffset: fullQueueRefreshRequired ? 11 : 0,
       targetCount: Math.max(originalCardCount, 9)
     });
+
+    // Post-Heal Re-Verification & Final Idempotent Deduplication Guard
+    const postStore2 = loadStore();
+    const postB2 =
+      postStore2.briefings[targetToken] || postStore2.briefings['demo-7am-briefing'];
+    let remainingDupCount = 0;
+    if (postB2 && Array.isArray(postB2.cards) && !demoModeActive) {
+      const dedupedPostCards = dedupeInspectorCardList(postB2.cards, { reindex: true });
+      if (dedupedPostCards.length !== postB2.cards.length) {
+        postB2.cards = dedupedPostCards;
+        saveStore(postStore2);
+      }
+      const postContractor = postStore2.contractors[postB2.contractorId] || {};
+      const postJurisdiction = postContractor.baseZip || postB2.territoryZip || '78130';
+      const postTodayStr = postB2.briefingDate || getCentralDateString();
+      const {
+        trailingPermitDates: postTrailingPermits,
+        trailingStreetDates: postTrailingStreets,
+        trailingValuationDates: postTrailingVals
+      } = buildTrailing7DayMaps(
+        postB2.magicToken,
+        postTodayStr,
+        postStore2,
+        postContractor,
+        postB2
+      );
+      const { seenPermitDates: postSeenPermits } = loadSeenLedgerMaps(postJurisdiction);
+      const postQueueKeys = new Set();
+
+      for (const c of postB2.cards) {
+        const { permitKey, streetKey, allKeys } = buildInspectorCardKeys(c);
+        const pDate =
+          (permitKey && postTrailingPermits.get(permitKey)) ||
+          (permitKey && postSeenPermits.get(permitKey)) ||
+          (streetKey && postTrailingStreets.get(streetKey)) ||
+          (streetKey && postSeenPermits.get(`ADDR:${streetKey.toUpperCase()}`)) ||
+          null;
+        if ((pDate && pDate !== postTodayStr) || allKeys.some((k) => postQueueKeys.has(k))) {
+          remainingDupCount += 1;
+        }
+        for (const k of allKeys) postQueueKeys.add(k);
+      }
+
+      const postTotalVal = computeBriefingTotalValuationDollars(postB2.cards);
+      if (postTotalVal > 0 && postTrailingVals.has(postTotalVal)) {
+        remainingDupCount += 1;
+      }
+    }
 
     heals.push({
       check: 'Check 2: Day-Over-Day Duplicate Queue Check',
       action: `Removed ${
-        payloadHashMatchedYesterday ? 'full duplicate yesterday payload' : `${duplicatePermitsFound.length} prior-day duplicate permit card(s)`
+        fullQueueRefreshRequired
+          ? matchedTotalValuationPriorDate
+            ? `colliding total valuation queue (matched ${matchedTotalValuationPriorDate})`
+            : 'full duplicate prior-day payload'
+          : `${duplicatePermitsFound.length} duplicate permit/property card(s)`
       } and triggered injectLiveZeroApiCardsIntoBriefing() to pull fresh unseen permits.`,
       removedPermits: duplicatePermitsFound.map((d) => d.permitNumber),
       payloadHashMatchedYesterday,
+      matchedTotalValuationPriorDate,
       replenishedCount: liveInjectResult && liveInjectResult.cards ? liveInjectResult.cards.length : 0
     });
 
-    if (options.simulateUnhealableCheck2) {
+    if (remainingDupCount > 0 || options.simulateUnhealableCheck2) {
       failures.push({
         check: 'Check 2: Day-Over-Day Duplicate Queue Check',
-        reason: String(options.simulateUnhealableCheck2),
+        reason:
+          options.simulateUnhealableCheck2
+            ? String(options.simulateUnhealableCheck2)
+            : `${remainingDupCount} duplicate permit/street/valuation item(s) persisted after Tier 1 Auto-Heal.`,
         suspectFiles: ['db/store.js', 'workers/live-zero-api-agent.js', 'workers/orchestrator.js']
       });
       checks.push({
         id: 'day_over_day_duplicate_check',
         name: 'Check 2 — Day-Over-Day Duplicate Queue Check',
         status: 'RED_TAGGED',
-        summary: `Duplicate permits persisted after Tier 1 Auto-Heal.`
+        summary: `Duplicate permits/streets/valuations persisted after Tier 1 Auto-Heal (${remainingDupCount} remaining).`
       });
     } else {
       checks.push({
@@ -529,7 +993,9 @@ async function runPreTripInspection(options = {}) {
         name: 'Check 2 — Day-Over-Day Duplicate Queue Check',
         status: 'AUTO_HEALED',
         summary: `Removed ${
-          payloadHashMatchedYesterday ? 'duplicate yesterday queue' : `${duplicatePermitsFound.length} duplicate permit(s)`
+          fullQueueRefreshRequired
+            ? 'colliding prior-day queue'
+            : `${duplicatePermitsFound.length} duplicate permit/property card(s)`
         } & replenished unseen permits via injectLiveZeroApiCardsIntoBriefing().`
       });
     }
@@ -538,7 +1004,8 @@ async function runPreTripInspection(options = {}) {
       id: 'day_over_day_duplicate_check',
       name: 'Check 2 — Day-Over-Day Duplicate Queue Check',
       status: 'PASS',
-      summary: '100% of queued permits are unseen on prior days and distinct from yesterday’s payload hash.'
+      summary:
+        'Verified across trailing 7 days: 0 repeated permit IDs, 0 repeated street addresses, and 0 identical daily total dollar valuations.'
     });
   }
 
@@ -805,7 +1272,7 @@ async function runPreTripInspection(options = {}) {
       smsReceipt = await dispatchPreTripAdminSms({
         report,
         toPhone: options.toPhone,
-        baseUrl: options.baseUrl,
+        baseUrl: normalizeFleetBaseUrl(options.baseUrl),
         providerConfig: options.providerConfig,
         simulateOnly: simulateComms
       });
@@ -835,8 +1302,13 @@ if (require.main === module) {
 }
 
 module.exports = {
+  canonicalizePermitKey,
+  buildInspectorCardKeys,
+  dedupeInspectorCardList,
   inspectRecordForContamination,
   buildAntigravityRepairPrompt,
+  isProtectedVercelDeploymentUrl,
+  normalizeFleetBaseUrl,
   probeFleetEndpoint,
   runPreTripInspection
 };

@@ -17,7 +17,53 @@
  *        Twilio Subaccount / Bridge Pool.
  */
 
+const dns = require('node:dns').promises;
+const {
+  decryptSmtpSecret,
+  resolveSmtpPresetDefaults,
+  sanitizeClientEmailConfig,
+  buildClientMailHandoffLinks,
+  sendViaClientSmtp
+} = require('./client-smtp-sender');
+
 const INBOUND_REPLY_DOMAIN = process.env.RECON_INBOUND_DOMAIN || 'inbound.tiberius.ai';
+const DEFAULT_TEST_OWNER_EMAIL = process.env.ADMIN_ALERT_EMAIL || 'feedbackdaisy@gmail.com';
+
+const FICTIONAL_DEMO_EMAIL_REGEX =
+  /^(your-email@gmail\.com|you@company\.com|client@company\.com|name@company\.com)$|@(gvconcretepaving\.com|hillcountrystandingseam\.com|comalmep\.com|balconesflatwork\.com|creeksidecustompools\.com|alamoturnover\.com|apexcommercialbuilders\.com|crestviewcommercial\.com|horizoncommercialgc\.com|contractor\.com|company\.com|example\.com|tiberius\.site|gmail-demo\.com|privateestate\.org|vantageretail\.com|prescotcapital\.com|medcorebuilders\.com|ironcladindustrial\.com|austinortho\.com|spawglass\.com|r-o\.com|arlucasconstruction\.com|tsbyrne\.com|joeris\.com|bartlettcocke\.com|guidoconstruction\.com|chasco\.com|sabrecommercial\.com|lottbrothers\.com|cadencemcshane\.com|streamrealty\.com|kellermartin\.com|vaughnconstruction\.com|rcpageconstruction\.com|structurainc\.com|gwmitchell\.com|browningconstruction\.com|catamountinc\.com|embreydc\.com|whiteconst\.com|aquilacommercial\.com|metrocontracting\.com|transwestern\.com|endeavor-re\.com|lpc\.com|cbre\.com|alamohvac\.com|centexroofing\.com|brazoscommercial\.com|brazoselectric\.com|hillcountryconcrete\.com|sanantonioroofing\.com|lonestarconcrete\.com|corridorcontractors\.com|commercialcorridor\.com|stoddardconstruction\.com|faco-tx\.com|rosendin\.com|sundt\.com|hines\.com|flintco\.com|hoar\.com|beckgroup\.com|drymalla\.com)$/i;
+
+const mxValidationCache = new Map();
+
+function isFictionalEmailAddress(rawEmail) {
+  const clean = String(rawEmail || '').trim().toLowerCase();
+  if (!clean || !clean.includes('@')) return true;
+  return FICTIONAL_DEMO_EMAIL_REGEX.test(clean);
+}
+
+async function hasResolvableEmailDomain(rawEmail) {
+  const clean = String(rawEmail || '').trim().toLowerCase();
+  if (isFictionalEmailAddress(clean)) return false;
+  const domain = clean.split('@')[1] || '';
+  if (!domain) return false;
+  if (mxValidationCache.has(domain)) {
+    return mxValidationCache.get(domain);
+  }
+  try {
+    const mxRecords = await Promise.race([
+      dns.resolveMx(domain),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('DNS_TIMEOUT')), 2500))
+    ]);
+    const valid =
+      Array.isArray(mxRecords) &&
+      mxRecords.length > 0 &&
+      mxRecords.some((r) => r && r.exchange && String(r.exchange).trim().length > 0);
+    mxValidationCache.set(domain, valid);
+    return valid;
+  } catch (_err) {
+    mxValidationCache.set(domain, false);
+    return false;
+  }
+}
 
 function normalizePhoneE164(rawPhone) {
   const digits = String(rawPhone || '').replace(/\D/g, '');
@@ -126,17 +172,21 @@ async function dispatchViaResendEmail({
   const emailSubject =
     subject || `Quick question regarding your project permit (${contractor.companyName || 'Local Bid'})`;
 
-  const replyToList = contractor.workEmail
-    ? [replyToAddress, contractor.workEmail]
-    : [replyToAddress];
+  const replyToList =
+    contractor.workEmail && !isFictionalEmailAddress(contractor.workEmail)
+      ? [replyToAddress, contractor.workEmail]
+      : [replyToAddress];
 
   let providerError = null;
-  const isFictionalDemoRecipient =
-    /@(apexcommercialbuilders\.com|crestviewcommercial\.com|horizoncommercialgc\.com|contractor\.com|gmail-demo\.com|privateestate\.org|vantageretail\.com|prescotcapital\.com|medcorebuilders\.com|ironcladindustrial\.com|austinortho\.com|spawglass\.com|r-o\.com|arlucasconstruction\.com|tsbyrne\.com|joeris\.com|bartlettcocke\.com|guidoconstruction\.com|chasco\.com|sabrecommercial\.com|lottbrothers\.com|cadencemcshane\.com|streamrealty\.com|kellermartin\.com|vaughnconstruction\.com|rcpageconstruction\.com|structurainc\.com|gwmitchell\.com|browningconstruction\.com|catamountinc\.com|embreydc\.com|whiteconst\.com|aquilacommercial\.com|metrocontracting\.com|transwestern\.com|endeavor-re\.com|lpc\.com|cbre\.com)$/i.test(
-      String(recipientEmail || '').trim()
-    );
+  const simulateTestMode = process.env.TIBERIUS_TEST_SIMULATE_EMAIL === '1';
+  const isFictionalDemoRecipient = isFictionalEmailAddress(recipientEmail);
+  const canDeliverMx =
+    !simulateTestMode &&
+    !isFictionalDemoRecipient &&
+    Boolean(resendApiKey && recipientEmail) &&
+    (await hasResolvableEmailDomain(recipientEmail));
 
-  if (resendApiKey && recipientEmail && !isFictionalDemoRecipient) {
+  if (canDeliverMx) {
     const candidateFromAddresses = [
       ...new Set([fromEmail, 'recon@send.tiberius.ai', 'onboarding@resend.dev'])
     ];
@@ -197,10 +247,135 @@ async function dispatchViaResendEmail({
     providerError,
     providerMessageId: `re_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
     from: `${senderDisplay} <${fromEmail}>`,
-    to: recipientEmail || 'verified-prospect@contractor.com',
+    to: recipientEmail || DEFAULT_TEST_OWNER_EMAIL,
     recipientName: recipientName || 'Prospect',
     subject: emailSubject,
     replyToAddress,
+    dispatchedAt: new Date().toISOString()
+  };
+}
+
+/**
+ * Dispatches client-owned outreach email WITHOUT ever touching Tiberius AI's Resend account:
+ *   - Tier B (`CLIENT_SMTP`): If the contractor configured their own Shop SMTP credentials in Command
+ *     Settings (and channel isn't explicitly forcing `NATIVE_EMAIL` / `GMAIL_WEB` / `OUTLOOK_WEB`),
+ *     dispatches 1-tap directly through their own mailbox.
+ *   - Tier A (`NATIVE_APP` Day-1 Default): Returns `mailtoUri`, `gmailWebUri`, `outlookWebUri`, and
+ *     `preferredComposeUri` so the client's device/browser opens their own email app pre-filled.
+ */
+async function dispatchClientOwnedEmail({
+  contractor = {},
+  recipientEmail,
+  recipientName,
+  subject,
+  bodyText,
+  token = 'demo-7am-briefing',
+  threadId = 'thread-deal-1',
+  requestedChannel = 'CLIENT_EMAIL'
+} = {}) {
+  const replyToAddress = buildThreadReplyToAddress(token, threadId);
+  const senderName = `${contractor.ownerName || 'Estimator'} (${
+    contractor.companyName || 'Local Trade Partner'
+  })`;
+  const shopEmail = String(contractor.workEmail || '').trim();
+  const cleanBody = String(bodyText || '').replace(/^"|"$/g, '').trim();
+  const emailSubject =
+    subject ||
+    `Quick question regarding your project permit (${contractor.companyName || 'Local Bid'})`;
+
+  const rawClientCfg = contractor.clientEmailConfig || {};
+  const sanitizedCfg = sanitizeClientEmailConfig(rawClientCfg, shopEmail);
+
+  let effectiveTarget = sanitizedCfg.preferredComposeTarget || 'MAILTO';
+  if (requestedChannel === 'GMAIL_WEB') effectiveTarget = 'GMAIL_WEB';
+  if (requestedChannel === 'OUTLOOK_WEB') effectiveTarget = 'OUTLOOK_WEB';
+  if (requestedChannel === 'NATIVE_EMAIL') effectiveTarget = 'MAILTO';
+
+  const handoffLinks = buildClientMailHandoffLinks({
+    toEmail: recipientEmail,
+    subject: emailSubject,
+    bodyText: cleanBody,
+    preferredComposeTarget: effectiveTarget
+  });
+
+  const forceNativeHandoff = ['NATIVE_EMAIL', 'GMAIL_WEB', 'OUTLOOK_WEB'].includes(
+    String(requestedChannel || '').toUpperCase()
+  );
+
+  let smtpError = null;
+  if (!forceNativeHandoff && sanitizedCfg.isSmtpReady && recipientEmail) {
+    const resolved = resolveSmtpPresetDefaults(
+      rawClientCfg.providerPreset,
+      rawClientCfg.smtpHost,
+      rawClientCfg.smtpPort
+    );
+    const smtpPass =
+      decryptSmtpSecret(rawClientCfg.smtpPassEncrypted) || String(rawClientCfg.smtpPass || '').trim();
+    const isLocalSmtp = resolved.host === '127.0.0.1' || resolved.host === 'localhost';
+    const canDeliverRecipient =
+      isLocalSmtp ||
+      (!isFictionalEmailAddress(recipientEmail) && (await hasResolvableEmailDomain(recipientEmail)));
+
+    if (smtpPass && canDeliverRecipient) {
+      const replyToList =
+        shopEmail && !isFictionalEmailAddress(shopEmail)
+          ? [shopEmail, replyToAddress]
+          : [replyToAddress];
+
+      const smtpResult = await sendViaClientSmtp({
+        smtpHost: resolved.host,
+        smtpPort: resolved.port,
+        smtpUser: sanitizedCfg.smtpUser,
+        smtpPass,
+        fromName: senderName,
+        fromEmail: sanitizedCfg.fromEmail || sanitizedCfg.smtpUser,
+        toEmail: recipientEmail,
+        replyToAddresses: replyToList,
+        subject: emailSubject,
+        bodyText: cleanBody,
+        headers: {
+          'X-Tiberius-Token': String(token),
+          'X-Tiberius-Thread-Id': String(threadId)
+        }
+      });
+
+      if (smtpResult.ok) {
+        return {
+          ok: true,
+          liveDispatched: true,
+          handoffRequired: false,
+          provider: 'CLIENT_SMTP_LIVE',
+          deliveryStatus: 'SENT_VIA_CLIENT_OWN_SMTP',
+          providerMessageId: smtpResult.messageId,
+          from: smtpResult.from,
+          to: recipientEmail,
+          recipientName: recipientName || 'Prospect',
+          subject: emailSubject,
+          replyToAddress,
+          ...handoffLinks,
+          dispatchedAt: smtpResult.dispatchedAt
+        };
+      }
+      smtpError = smtpResult.error;
+    }
+  }
+
+  return {
+    ok: true,
+    liveDispatched: false,
+    handoffRequired: true,
+    provider: 'CLIENT_NATIVE_EMAIL_HANDOFF',
+    deliveryStatus: smtpError
+      ? `HANDOFF_TO_CLIENT_EMAIL_APP (SMTP Fallback: ${smtpError})`
+      : 'HANDOFF_TO_CLIENT_EMAIL_APP',
+    smtpError,
+    providerMessageId: `client_mail_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+    from: shopEmail ? `${senderName} <${shopEmail}>` : senderName,
+    to: recipientEmail || '',
+    recipientName: recipientName || 'Prospect',
+    subject: emailSubject,
+    replyToAddress,
+    ...handoffLinks,
     dispatchedAt: new Date().toISOString()
   };
 }
@@ -429,6 +604,42 @@ async function sendMasterTwilioSmsToContractor({ toPhone, bodyText, providerConf
  *    ("Your Digital Scout pulled 3 new commercial permits overnight—tap here to review & send").
  *    Runs 100% under Tiberius AI LLC's Master A2P registration (zero client subaccount needed).
  */
+function extractSmsValuationSummary(cards = []) {
+  const list = Array.isArray(cards) ? cards : [];
+  const unlocked = list.filter((c) => c && !c.isLockedOverflow);
+  const pool = unlocked.length > 0 ? unlocked : list;
+  const parseVal = (card) => {
+    if (!card || typeof card !== 'object') return 0;
+    const direct = Number(card.valuationNumeric || card.valuation || card.estimatedValuation || 0);
+    if (Number.isFinite(direct) && direct > 0) return Math.round(direct);
+    for (const f of [card.pillText, card.headline, card.draftSubject, card.cadCallout]) {
+      if (!f) continue;
+      const m = String(f).match(/\$([0-9,]+(?:\.[0-9]+)?)\s*([KM])?\b/i);
+      if (m && m[1]) {
+        const base = parseFloat(m[1].replace(/,/g, ''));
+        if (!Number.isFinite(base) || base <= 0) continue;
+        const unit = String(m[2] || '').toUpperCase();
+        const mult = unit === 'M' ? 1000000 : unit === 'K' ? 1000 : 1;
+        return Math.round(base * mult);
+      }
+    }
+    return 0;
+  };
+  const fmtCompact = (num) => {
+    if (num >= 1000000) return `$${(num / 1000000).toFixed(2).replace(/\.?0+$/, '')}M`;
+    return `$${Math.round(num / 1000)}K`;
+  };
+  const vals = pool.map(parseVal).filter((v) => v > 0);
+  if (vals.length === 0) return '$350K to $890K';
+  const minVal = Math.min(...vals);
+  const maxVal = Math.max(...vals);
+  const minStr = fmtCompact(minVal);
+  const maxStr = fmtCompact(maxVal);
+  return minStr === maxStr
+    ? `${maxStr} • $${maxVal.toLocaleString()} top permit`
+    : `${minStr} to ${maxStr} • $${maxVal.toLocaleString()} top permit`;
+}
+
 async function dispatchScoutMorningAlertSms({
   contractor = {},
   briefing = {},
@@ -445,18 +656,12 @@ async function dispatchScoutMorningAlertSms({
     : 3;
   const zip = briefing.territoryZip || contractor.baseZip || '78130';
   const trade = briefing.tradeName || contractor.primaryTrade || 'Commercial';
+  const valSummaryLabel = extractSmsValuationSummary(briefing.cards);
 
-  const bodyText = `☕ Good morning ${ownerFirst}: your Tiberius Digital Scout pulled ${unlockedCount} new ${trade} permits in ${zip} overnight ($240K–$410K). Tap here to review & 1-tap send: ${briefingUrl}`;
-
-  const rawTargetPhone = overridePhone || contractor.mobilePhone || '';
-  const isFictionalTarget = /^\+?1?\d{3}555\d{4}$/.test(String(rawTargetPhone).replace(/\D/g, ''));
-  const resolvedTargetPhone =
-    !rawTargetPhone || isFictionalTarget
-      ? process.env.ADMIN_ALERT_PHONE || process.env.MASTER_ADMIN_PHONE || '(830) 481-0653'
-      : rawTargetPhone;
+  const bodyText = `☕ Good morning ${ownerFirst}: your Tiberius Digital Scout pulled ${unlockedCount} new ${trade} permits in ${zip} overnight (${valSummaryLabel}). Tap here to review & 1-tap send: ${briefingUrl}`;
 
   const receipt = await sendMasterTwilioSmsToContractor({
-    toPhone: resolvedTargetPhone,
+    toPhone: overridePhone || contractor.mobilePhone || '(830) 555-0194',
     bodyText,
     providerConfig
   });
@@ -502,15 +707,8 @@ async function dispatchContractorHotReplyAlertSms({
     snippet.length >= 95 ? '...' : ''
   }" • Tap to reply in Conversation Room: ${inboxUrl}`;
 
-  const rawTargetPhone = overridePhone || contractor.mobilePhone || '';
-  const isFictionalTarget = /^\+?1?\d{3}555\d{4}$/.test(String(rawTargetPhone).replace(/\D/g, ''));
-  const resolvedTargetPhone =
-    !rawTargetPhone || isFictionalTarget
-      ? process.env.ADMIN_ALERT_PHONE || process.env.MASTER_ADMIN_PHONE || '(830) 481-0653'
-      : rawTargetPhone;
-
   const receipt = await sendMasterTwilioSmsToContractor({
-    toPhone: resolvedTargetPhone,
+    toPhone: overridePhone || contractor.mobilePhone || '(830) 555-0194',
     bodyText,
     providerConfig
   });
@@ -822,8 +1020,89 @@ async function dispatchPreTripAdminSms({
 }
 
 /**
- * Formats the Admin SMS + Email notification payload for any Smart Site or Recon
- * Lead, Free Trial Application, Checkout Click, or Confirmed Sale.
+ * Fires an instant "Prospect Is Looking at Their Preview Right Now" Radar SMS
+ * to the Tiberius founder via Master A2P Twilio whenever a prospect opens their
+ * personalized `/recon/briefing?token=preview-...` or `/recon/watch?token=preview-...`,
+ * or interacts with a sample permit card.
+ */
+async function dispatchProspectPreviewRadarSms({
+  prospect = {},
+  eventType = 'PREVIEW_BRIEFING_OPENED',
+  deviceHint = 'Web',
+  previewUrl = '',
+  baseUrl = 'https://www.tiberius.ai',
+  overridePhone,
+  providerConfig = {}
+} = {}) {
+  const cleanBase = String(baseUrl || 'https://www.tiberius.ai').replace(/\/$/, '');
+  const token = String(prospect.previewToken || 'demo-7am-briefing').trim();
+  const company = String(prospect.companyName || 'Local Prospect').trim();
+  const contact = String(prospect.contactName || '').trim();
+  const whoLabel =
+    contact && contact.toLowerCase() !== company.toLowerCase() && !/^shop owner$/i.test(contact)
+      ? `${contact} (${company})`
+      : company;
+  const zip = String(prospect.zipCode || '78130').trim();
+  const rawProspectPhone = String(prospect.phone || '').replace(/\D/g, '');
+  const telUri =
+    rawProspectPhone.length >= 10 ? `tel:${normalizePhoneE164(rawProspectPhone)}` : '';
+
+  const upperEvent = String(eventType || 'PREVIEW_BRIEFING_OPENED').toUpperCase();
+  let actionPhrase = `just opened their ${zip} Preview Briefing`;
+  let emoji = '👀';
+  if (upperEvent === 'PREVIEW_CARD_APPROVED' || upperEvent === 'PREVIEW_CARD_INTERACTED') {
+    actionPhrase = `just tapped Approve & Send on a sample permit in their ${zip} Preview`;
+    emoji = '🔥';
+  } else if (upperEvent === 'PREVIEW_CAD_XRAY_CLICKED') {
+    actionPhrase = `just inspected a CAD Tax Roll X-Ray in their ${zip} Preview`;
+    emoji = '🛰️';
+  } else if (upperEvent === 'VIDEO_PLAYED' || upperEvent === 'VIDEO_OPENED') {
+    actionPhrase = `just clicked Play on their ${zip} Recon Loom Walkthrough`;
+    emoji = '🎬';
+  } else if (upperEvent === 'WATCHED_50_PCT') {
+    actionPhrase = `watched 50%+ of their ${zip} Recon Loom Walkthrough`;
+    emoji = '🔥';
+  }
+
+  const resolvedUrl =
+    previewUrl ||
+    (upperEvent.includes('VIDEO') || upperEvent.includes('WATCH')
+      ? `${cleanBase}/recon/watch?token=${encodeURIComponent(token)}`
+      : `${cleanBase}/recon/briefing?token=${encodeURIComponent(token)}`);
+
+  const deviceTag = deviceHint ? ` on ${deviceHint}` : '';
+  const callPrompt = telUri ? ` Call while they're on the page: ${telUri} •` : '';
+  const bodyText = `${emoji} LIVE RECON RADAR: ${whoLabel} ${actionPhrase}${deviceTag}.${callPrompt} Live View: ${resolvedUrl}`;
+
+  const targetFounderPhone =
+    overridePhone ||
+    process.env.ADMIN_ALERT_PHONE ||
+    process.env.TIBERIUS_FOUNDER_ALERT_PHONE ||
+    '(830) 481-0653';
+
+  const receipt = await sendMasterTwilioSmsToContractor({
+    toPhone: targetFounderPhone,
+    bodyText,
+    providerConfig
+  });
+
+  return {
+    ...receipt,
+    alertType: 'PROSPECT_PREVIEW_RADAR_SMS',
+    eventType: upperEvent,
+    a2pCampaignModel: 'MASTER_TIBERIUS_A2P_10DLC',
+    fromMasterNumber: receipt.fromNumber,
+    smsBody: bodyText,
+    telUri,
+    previewUrl: resolvedUrl,
+    prospectCompany: company,
+    prospectContact: contact
+  };
+}
+
+/**
+ * Formats the Admin SMS + Email notification payload for any Lead, Free Trial Application,
+ * Checkout Click, or Confirmed Sale.
  */
 function formatAdminLeadAndSaleNotification({
   lead = {},
@@ -863,9 +1142,8 @@ function formatAdminLeadAndSaleNotification({
   const amountPaid = String(lead.amountPaid || '').trim();
   const timestamp = lead.timestamp || new Date().toISOString();
 
-  // Classify event badge & email header styling
-  let badge = '🚨 NEW PAGE 1 SMART SITE LEAD';
-  let subjectPrefix = '[🚨 NEW SMART SITE LEAD]';
+  let badge = '🚨 NEW PAGE 1 LEAD';
+  let subjectPrefix = '[🚨 NEW LEAD]';
   let headerBg = '#FEF3C7';
   let headerColor = '#B45309';
 
@@ -887,8 +1165,6 @@ function formatAdminLeadAndSaleNotification({
   } else if (source === 'nb-guinea-pig-survey') {
     badge = '🔥 30-DAY NB GUINEA PIG TRIAL';
     subjectPrefix = '[🔥 30-DAY NB TRIAL APPLICATION]';
-    headerBg = '#FEF3C7';
-    headerColor = '#B45309';
   } else if (source === 'nb-runner-up-special') {
     badge = '💰 NB $197/MO RUNNER-UP CLAIM';
     subjectPrefix = '[💰 NB RUNNER-UP CLAIM]';
@@ -908,9 +1184,8 @@ function formatAdminLeadAndSaleNotification({
   }
 
   const whoLabel = [name, businessName].filter(Boolean).join(' @ ') || phone || email || 'New Prospect';
-  const subject = `${subjectPrefix} ${whoLabel} — ${plan || industry || 'Tiberius Smart Sites'}`;
+  const subject = `${subjectPrefix} ${whoLabel} • ${plan || industry || 'Tiberius AI'}`;
 
-  // Concise high-signal SMS body for admin cell
   const smsParts = [`${badge}: ${whoLabel}`];
   if (phone) smsParts.push(`📞 ${phone}`);
   if (email) smsParts.push(`✉️ ${email}`);
@@ -944,14 +1219,13 @@ function formatAdminLeadAndSaleNotification({
     ['Submitted At', timestamp]
   ].filter(([, val]) => Boolean(val && String(val).trim()));
 
-  const textLines = [
-    `TIBERIUS SMART SITES™ — INSTANT LEAD / TRIAL / SALE NOTIFICATION`,
+  const text = [
+    `TIBERIUS AI — INSTANT LEAD / TRIAL / SALE NOTIFICATION`,
     `================================================================`,
     ...rows.map(([label, val]) => `${label}: ${val}`),
     `================================================================`,
     `Open 3-Pane Conversation Room: ${inboxUrl}`
-  ];
-  const text = textLines.join('\n');
+  ].join('\n');
 
   const escapeHtml = (str) =>
     String(str || '')
@@ -998,7 +1272,7 @@ function formatAdminLeadAndSaleNotification({
   <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:680px;margin:0 auto;padding:24px;background:#FFFFFF;border:1px solid #E2E8F0;border-radius:12px;color:#0F172A;">
     <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid #0F172A;padding-bottom:12px;margin-bottom:16px;">
       <div>
-        <div style="font-family:monospace;font-size:11px;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:0.08em;">Tiberius Smart Sites™ • Real-Time Alert</div>
+        <div style="font-family:monospace;font-size:11px;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:0.08em;">Tiberius AI • Real-Time Alert</div>
         <h2 style="margin:4px 0 0;font-size:20px;color:#0F172A;">${escapeHtml(whoLabel)}</h2>
       </div>
       <span style="background:${headerBg};color:${headerColor};padding:6px 12px;border-radius:6px;font-family:monospace;font-size:12px;font-weight:800;">
@@ -1011,11 +1285,6 @@ function formatAdminLeadAndSaleNotification({
     <table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:16px;border:1px solid #E2E8F0;border-radius:8px;overflow:hidden;">
       <tbody>${tableRowsHtml}</tbody>
     </table>
-    <div style="margin-top:16px;padding-top:12px;border-top:1px solid #E2E8F0;font-size:12px;color:#64748B;">
-      Hit <strong>Reply</strong> in your email client to reply directly to the lead, or manage the 2-way SMS thread in the <a href="${escapeHtml(
-        inboxUrl
-      )}" style="color:#D97706;font-weight:700;">Tiberius Conversation Room</a>.
-    </div>
   </div>`;
 
   return {
@@ -1029,11 +1298,6 @@ function formatAdminLeadAndSaleNotification({
   };
 }
 
-/**
- * Dispatches BOTH an instant Admin SMS (to `process.env.ADMIN_ALERT_PHONE || '(830) 481-0653'`)
- * AND an Admin Email (to `process.env.ADMIN_ALERT_EMAIL || 'feedbackdaisy@gmail.com'`)
- * whenever a Page 1 Lead, 30-Day Free Trial, 7-Day Recon Trial, or Stripe Sale occurs.
- */
 async function dispatchAdminLeadAndSaleNotification({
   lead = {},
   eventCategory = 'LEAD',
@@ -1080,7 +1344,7 @@ async function dispatchAdminLeadAndSaleNotification({
     dispatchViaResendEmail({
       contractor: {
         ownerName: 'Tiberius Lead & Sale Alerts',
-        companyName: 'Tiberius Smart Sites',
+        companyName: 'Tiberius AI',
         workEmail: formatted.leadEmail || 'recon@send.tiberius.ai'
       },
       recipientEmail: adminEmail,
@@ -1103,24 +1367,35 @@ async function dispatchAdminLeadAndSaleNotification({
     adminEmail,
     subject: formatted.subject,
     smsBody: formatted.smsBody,
-    adminSmsReceipt: smsOutcome.status === 'fulfilled' ? smsOutcome.value : { ok: false, error: smsOutcome.reason?.message },
-    adminEmailReceipt: emailOutcome.status === 'fulfilled' ? emailOutcome.value : { ok: false, error: emailOutcome.reason?.message },
+    adminSmsReceipt:
+      smsOutcome.status === 'fulfilled'
+        ? smsOutcome.value
+        : { ok: false, error: smsOutcome.reason?.message },
+    adminEmailReceipt:
+      emailOutcome.status === 'fulfilled'
+        ? emailOutcome.value
+        : { ok: false, error: emailOutcome.reason?.message },
     dispatchedAt: new Date().toISOString()
   };
 }
 
 module.exports = {
   INBOUND_REPLY_DOMAIN,
+  DEFAULT_TEST_OWNER_EMAIL,
+  isFictionalEmailAddress,
+  hasResolvableEmailDomain,
   normalizePhoneE164,
   buildThreadReplyToAddress,
   parseThreadReplyToAddress,
   stripQuotedEmailChain,
   buildNativeSimSmsUri,
   dispatchViaResendEmail,
+  dispatchClientOwnedEmail,
   getContractorTwilioA2PState,
   sendMasterTwilioSmsToContractor,
   dispatchScoutMorningAlertSms,
   dispatchContractorHotReplyAlertSms,
+  dispatchProspectPreviewRadarSms,
   formatPreTripEmailManifest,
   dispatchPreTripManifestEmail,
   dispatchPreTripAdminSms,

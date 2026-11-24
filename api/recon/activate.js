@@ -211,9 +211,7 @@ module.exports = async function handler(req, res) {
         email: activation.contractor.workEmail || '',
         cleanEmail: activation.contractor.workEmail || '',
         industry: activation.contractor.primaryTrade || '',
-        ownershipPreference: `${activation.contractor.tierLevel || 'Tier 2'}${
-          ''
-        }`,
+        ownershipPreference: `${activation.contractor.tierLevel || 'Tier 2'}`,
         websiteOrGbp: activation.contractor.websiteUrl || kb.websiteUrl || '',
         serviceArea: `${activation.briefing.territoryZip} (${activation.briefing.metroCity})`,
         yearsInBusiness: kb.yearsInBusiness || '',
