@@ -77,9 +77,182 @@
       text-align: center;
       margin-bottom: 12px;
     }
+    /* Black Friday - Cyber Monday Auto-Expiring Announcement Bar (compact, non-sticky per content-first-noise-reduction) */
+    .bfcm-top-banner {
+      position: relative;
+      z-index: 95;
+      background: linear-gradient(90deg, #120C06 0%, #1E1308 50%, #120C06 100%);
+      border-bottom: 1px solid rgba(245, 158, 11, 0.48);
+      color: #FFFFFF;
+      padding: 8px 14px;
+      font-size: 13.5px;
+      line-height: 1.35;
+    }
+    .bfcm-banner-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: nowrap;
+    }
+    .bfcm-kicker-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #F59E0B;
+      color: #0B0F17;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .bfcm-banner-text {
+      color: #F8FAFC;
+      font-weight: 600;
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .bfcm-banner-text strong {
+      color: #FBBF24;
+      font-weight: 800;
+    }
+    .bfcm-countdown-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: rgba(245, 158, 11, 0.14);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      color: #FDE68A;
+      font-size: 12px;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .bfcm-banner-cta {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 12px;
+      border-radius: 999px;
+      border: 1px solid #FBBF24;
+      background: rgba(245, 158, 11, 0.2);
+      color: #FEF08A;
+      font-size: 12.5px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .bfcm-banner-cta:hover {
+      background: #F59E0B;
+      color: #0B0F17;
+    }
+    .bfcm-banner-dismiss {
+      background: transparent;
+      border: none;
+      color: #94A3B8;
+      font-size: 14px;
+      line-height: 1;
+      padding: 4px 6px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .bfcm-banner-dismiss:hover {
+      color: #FFFFFF;
+    }
+    .modal-bfcm-bonus-pill {
+      margin: 0 0 12px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background: #FFFBEB;
+      border: 1px solid #F59E0B;
+      color: #92400E;
+      font-size: 12.5px;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.4;
+    }
+    .modal-bfcm-bonus-pill strong {
+      color: #78350F;
+      font-weight: 800;
+    }
+    @media (max-width: 900px) {
+      .bfcm-countdown-chip {
+        display: none;
+      }
+    }
+    @media (max-width: 640px) {
+      .bfcm-top-banner {
+        padding: 7px 10px;
+        font-size: 12px;
+      }
+      .bfcm-kicker-pill {
+        padding: 2px 7px;
+        font-size: 10px;
+      }
+      .bfcm-banner-text {
+        white-space: normal;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        text-align: left;
+      }
+      .bfcm-banner-cta {
+        padding: 4px 9px;
+        font-size: 11.5px;
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- Auto-Expiring Black Friday – Cyber Monday Offer Bar (Hides automatically after Nov 30, 2026 11:59:59 PM America/Chicago) -->
+  <div class="bfcm-top-banner" id="bfcm-2026-banner" role="region" aria-label="Black Friday Cyber Monday Special Offer">
+    <div class="bfcm-banner-inner">
+      <span class="bfcm-kicker-pill">🔥 Black Friday</span>
+      <span class="bfcm-banner-text">
+        Claim a $0-Setup Smart Site &amp; get <strong>1 Full Year of Your Own Tiberius AI Agent FREE</strong>
+      </span>
+      <span class="bfcm-countdown-chip" id="bfcm-2026-countdown">Ends Cyber Monday</span>
+      <button type="button" class="bfcm-banner-cta js-open-modal" data-trigger-source="bfcm-2026-top-banner">
+        Claim Bonus →
+      </button>
+      <button type="button" class="bfcm-banner-dismiss" id="bfcm-2026-dismiss" aria-label="Close announcement">✕</button>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var banner = document.getElementById('bfcm-2026-banner');
+      if (!banner) return;
+      var params = new URLSearchParams(window.location.search);
+      var forceExpired = params.get('bfcm') === 'expired';
+      var fallbackCutoffMs = Date.parse('2026-11-30T23:59:59-06:00');
+      if (forceExpired || Date.now() > fallbackCutoffMs) {
+        banner.hidden = true;
+        window.__BFCM_2026_EXPIRED__ = true;
+        return;
+      }
+      if (sessionStorage.getItem('tiberius_bfcm_2026_dismissed') === '1') {
+        banner.hidden = true;
+      }
+      var dismissBtn = document.getElementById('bfcm-2026-dismiss');
+      if (dismissBtn) {
+        dismissBtn.addEventListener('click', function () {
+          banner.hidden = true;
+          try { sessionStorage.setItem('tiberius_bfcm_2026_dismissed', '1'); } catch (_e) {}
+        });
+      }
+    })();
+  </script>
   <!-- Subtle Top Utility / Brand Header (Mobile: Centered Full White Logo Only | Desktop: White Logo + Nav + CTA) -->
   <header class="site-header">
     <div class="container header-inner">
@@ -518,6 +691,11 @@
         <em class="modal-headline-price">$297/month</em>
       </h2>
 
+      <!-- Auto-Expiring Black Friday Bonus Confirmation Badge -->
+      <div class="modal-bfcm-bonus-pill" id="bfcm-2026-modal-pill">
+        🔥 Black Friday Bonus Included: <strong>+1 Full Year of Tiberius AI Agent FREE</strong> (Ends Cyber Monday)
+      </div>
+
       <!-- Animated Green-Striped Progress Bar (50% on Slide 1 -> 85% on Slide 2) -->
       <div class="modal-progress-track" aria-label="Completion Progress">
         <div class="modal-progress-fill" id="modal-progress-fill" style="width: 50%;">
@@ -688,6 +866,58 @@
     </div>
   </div>
 
+  <script type="module">
+    (async () => {
+      const banner = document.getElementById('bfcm-2026-banner');
+      const modalPill = document.getElementById('bfcm-2026-modal-pill');
+      const countdownEl = document.getElementById('bfcm-2026-countdown');
+      if (window.__BFCM_2026_EXPIRED__) {
+        if (modalPill) modalPill.hidden = true;
+        return;
+      }
+      if (typeof Temporal === 'undefined') {
+        try {
+          const mod = await import('https://esm.sh/temporal-polyfill');
+          globalThis.Temporal = mod.Temporal;
+        } catch (_err) {
+          // Keep ISO offset fallback if CDN is blocked
+        }
+      }
+      const getCutoffEpochMs = () => {
+        if (typeof Temporal !== 'undefined' && Temporal.ZonedDateTime) {
+          const zdt = Temporal.ZonedDateTime.from('2026-11-30T23:59:59[America/Chicago]', {
+            disambiguation: 'compatible'
+          });
+          return zdt.epochMilliseconds;
+        }
+        return Date.parse('2026-11-30T23:59:59-06:00');
+      };
+      const cutoffMs = getCutoffEpochMs();
+      const tick = () => {
+        const diffMs = cutoffMs - Date.now();
+        if (diffMs <= 0) {
+          if (banner) banner.hidden = true;
+          if (modalPill) modalPill.hidden = true;
+          return false;
+        }
+        if (countdownEl) {
+          const totalMins = Math.floor(diffMs / 60000);
+          const days = Math.floor(totalMins / 1440);
+          const hours = Math.floor((totalMins % 1440) / 60);
+          const mins = totalMins % 60;
+          countdownEl.textContent = days > 0
+            ? `Ends Mon 11:59 PM CT (${days}d ${hours}h)`
+            : `Ends Tonight (${hours}h ${mins}m)`;
+        }
+        return true;
+      };
+      if (tick()) {
+        const timer = setInterval(() => {
+          if (!tick()) clearInterval(timer);
+        }, 30000);
+      }
+    })();
+  </script>
   <script src="/app.js"></script>
 </body>
 </html>
